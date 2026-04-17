@@ -1047,6 +1047,55 @@ body.auth-welcome-active .auth-gate-card {
 }
 .auth-feedback.error { color: #A85348; }
 .auth-feedback.success { color: #2F7A52; }
+.auth-guest-section {
+  margin-top: 10px;
+  padding: 11px 12px;
+  border-radius: 14px;
+  border: 1px solid var(--field-border);
+  background: var(--field-bg-soft);
+  text-align: left;
+}
+.auth-guest-title {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-mid);
+  letter-spacing: 0.01em;
+}
+.auth-guest-copy {
+  margin-top: 4px;
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--text-dim);
+}
+.auth-guest-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 10px;
+}
+.auth-guest-timer {
+  font-size: 11.5px;
+  color: var(--text-muted);
+}
+.auth-guest-btn {
+  border: 1px solid rgba(200,118,106,0.26);
+  border-radius: 999px;
+  padding: 8px 12px;
+  background: color-mix(in srgb, var(--field-bg) 88%, white 12%);
+  color: var(--rose-deep);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease;
+}
+.auth-guest-btn:hover {
+  transform: translateY(-1px);
+  border-color: rgba(200,118,106,0.56);
+  box-shadow: var(--glow-rose-sm);
+}
 .auth-help-row {
   display: flex;
   justify-content: flex-end;
@@ -4831,6 +4880,14 @@ body::before { animation: ambientDrift 18s ease-in-out infinite; }
       </div>
     </form>
     <div class="auth-feedback" id="authFeedback"></div>
+    <div class="auth-guest-section" id="authGuestSection">
+      <div class="auth-guest-title">Browse as a guest</div>
+      <div class="auth-guest-copy" id="authGuestCopy">Try COVE's free experience for 10 minutes. Anything you add stays in this browser and will merge into your account once you sign up or log in.</div>
+      <div class="auth-guest-actions">
+        <button class="auth-guest-btn" id="authGuestBtn" type="button" onclick="beginGuestBrowse()">Browse as guest</button>
+        <span class="auth-guest-timer" id="authGuestTimer">10:00 free preview</span>
+      </div>
+    </div>
     <div class="auth-gate-note" id="authGateNote">For the dreams you haven't said out loud yet.</div>
   </div>
 </div>
@@ -6186,6 +6243,111 @@ function getAuthWelcomeLine(prefix='Welcome'){
   return displayName ? `${prefix}, ${displayName}` : prefix;
 }
 
+function getGuestPreviewRemainingMs(){
+  if(!guestPreviewStartedAt || supabaseUser)return 0;
+  return Math.max(0, GUEST_PREVIEW_MS - (Date.now() - guestPreviewStartedAt));
+}
+
+function isGuestPreviewActive(){
+  return Boolean(!supabaseUser && getGuestPreviewRemainingMs() > 0);
+}
+
+function getGuestPreviewLabel(){
+  const remainingMs=getGuestPreviewRemainingMs();
+  if(remainingMs<=0)return 'Preview ended';
+  const totalSeconds=Math.ceil(remainingMs/1000);
+  const minutes=Math.floor(totalSeconds/60);
+  const seconds=totalSeconds%60;
+  return `${String(minutes).padStart(2,'0')}:${String(seconds).padStart(2,'0')} left`;
+}
+
+function updateGuestPreviewUi(){
+  const section=getUI('authGuestSection');
+  const timer=getUI('authGuestTimer');
+  const copy=getUI('authGuestCopy');
+  const btn=getUI('authGuestBtn');
+  if(!section || !timer || !copy || !btn)return;
+  if(authGateMode==='reset'){
+    section.style.display='none';
+    return;
+  }
+  section.style.display='';
+  const active=isGuestPreviewActive();
+  if(active){
+    timer.textContent=getGuestPreviewLabel();
+    copy.textContent='Guest preview is active. Keep exploring the free experience. Your changes stay in this browser and merge once you log in or create an account.';
+    btn.textContent='Continue guest preview';
+  }else{
+    timer.textContent=guestPreviewStartedAt ? 'Preview ended' : '10:00 free preview';
+    copy.textContent='Try COVE\'s free experience for 10 minutes. Anything you add stays in this browser and will merge into your account once you sign up or log in.';
+    btn.textContent='Browse as guest';
+  }
+}
+
+function clearGuestPreviewState(){
+  if(guestPreviewTimer){
+    clearTimeout(guestPreviewTimer);
+    guestPreviewTimer=0;
+  }
+  guestPreviewStartedAt=0;
+  guestPreviewExpiryNoticeShown=false;
+  safeLocalStorageSet(STORAGE_KEY_GUEST_STARTED_AT,'0');
+  updateGuestPreviewUi();
+}
+
+function enforceGuestPreviewExpiry(){
+  if(supabaseUser)return;
+  if(getGuestPreviewRemainingMs()>0){
+    scheduleGuestPreviewEnforcement();
+    return;
+  }
+  if(guestPreviewTimer){
+    clearTimeout(guestPreviewTimer);
+    guestPreviewTimer=0;
+  }
+  guestPreviewStartedAt=0;
+  safeLocalStorageSet(STORAGE_KEY_GUEST_STARTED_AT,'0');
+  updateGuestPreviewUi();
+  if(!guestPreviewExpiryNoticeShown){
+    showToast('Your 10-minute guest preview ended. Sign in or create an account to keep using COVE.', 'warning');
+    guestPreviewExpiryNoticeShown=true;
+  }
+  updateAuthGate('Your 10-minute guest preview ended. Sign in or create an account to keep using COVE.', { force:true });
+  setAuthFeedback('Sign in or create an account to keep going. Your guest progress is saved and will merge once you log in.', 'error');
+}
+
+function scheduleGuestPreviewEnforcement(){
+  if(guestPreviewTimer){
+    clearTimeout(guestPreviewTimer);
+    guestPreviewTimer=0;
+  }
+  if(supabaseUser || !guestPreviewStartedAt)return;
+  const remainingMs=getGuestPreviewRemainingMs();
+  if(remainingMs<=0){
+    enforceGuestPreviewExpiry();
+    return;
+  }
+  guestPreviewTimer=setTimeout(()=>enforceGuestPreviewExpiry(), remainingMs + 64);
+  updateGuestPreviewUi();
+}
+
+function beginGuestBrowse(){
+  if(supabaseUser){
+    unlockAuthenticatedApp(true);
+    return;
+  }
+  if(!isGuestPreviewActive()){
+    guestPreviewStartedAt=Date.now();
+    safeLocalStorageSet(STORAGE_KEY_GUEST_STARTED_AT,String(guestPreviewStartedAt));
+    guestPreviewExpiryNoticeShown=false;
+    showToast('Guest preview started. You have 10 minutes to browse the free version.', 'success');
+  }
+  setAuthFeedback('Guest preview is active. Your progress is saved locally and will merge after you sign in.', 'success');
+  unlockAuthenticatedApp(true);
+  scheduleGuestPreviewEnforcement();
+  syncCloudUi('Guest preview is active for 10 minutes. Sign in anytime to sync and back up your progress.');
+}
+
 var uiThemeMode = document.documentElement.dataset.uiThemeMode || 'auto';
 
 function normalizeUiThemeMode(mode='auto'){
@@ -6469,7 +6631,7 @@ async function saveNicknameFromSettings(){
 
   if(!supabaseUser){
     setRecSettingsStatus('Log in first to save a nickname.', 'error');
-    focusAuthForm();
+    focusAuthForm(true);
     return;
   }
 
@@ -6725,8 +6887,8 @@ function showAuthWelcome(kind='login'){
 applyUiTimeTheme();
 setInterval(()=>applyUiTimeTheme(), 10 * 60 * 1000);
 
-function focusAuthForm(){
-  updateAuthGate();
+function focusAuthForm(force=false){
+  updateAuthGate('',{ force });
   const target=authGateMode==='reset' ? getUI('authPassword') : getUI('authEmail');
   if(target){
     setTimeout(()=>target.focus(), 30);
@@ -6749,7 +6911,7 @@ function openSignupScreen(){
   if(consent)consent.checked=false;
   updateAuthGate('Create your account to save your dreams and keep them in sync.');
   setAuthFeedback('A few quick details and you are in.', 'success');
-  focusAuthForm();
+  focusAuthForm(true);
 }
 
 function goBackToLoginScreen(){
@@ -6762,7 +6924,7 @@ function goBackToLoginScreen(){
   if(consent)consent.checked=false;
   updateAuthGate('Welcome back. Log in to continue.');
   setAuthFeedback('');
-  focusAuthForm();
+  focusAuthForm(true);
 }
 
 function openLegalDoc(kind='privacy',event){
@@ -6827,7 +6989,8 @@ function startPasswordRecoveryMode(message=''){
   focusAuthForm();
 }
 
-function updateAuthGate(message=''){
+function updateAuthGate(message='', options={}){
+  const force=Boolean(options?.force);
   const gate=getUI('authGate');
   const title=getUI('authGateTitle');
   const text=getUI('authGateMessage');
@@ -6854,7 +7017,15 @@ function updateAuthGate(message=''){
   const isResetMode=authGateMode==='reset';
   const isSignupMode=authGateMode==='signup';
 
+  updateGuestPreviewUi();
+
+  if(!force && isGuestPreviewActive() && !isResetMode){
+    unlockAuthenticatedApp(true);
+    return;
+  }
+
   if(supabaseUser && !isResetMode){
+    clearGuestPreviewState();
     unlockAuthenticatedApp(false);
     passwordInput.value='';
     confirmInput.value='';
@@ -6885,11 +7056,12 @@ function updateAuthGate(message=''){
   signupBtn.textContent='Create account';
   signupBtn.onclick=()=>openSignupScreen();
   signupBtn.style.display='';
+  updateGuestPreviewUi();
 
   if(!hasSupabaseKeys()){
     title.textContent='Login setup needed';
     text.textContent=message || 'A secure login still needs to be connected before this dream space can open.';
-    note.textContent='Once Supabase is ready, people can sign in here with email and password.';
+    note.textContent='You can still browse as a guest, and create an account later once Supabase is ready.';
     loginBtn.disabled=true;
     signupBtn.disabled=true;
     setAuthFeedback('');
@@ -7056,6 +7228,7 @@ async function submitPasswordAuth(mode='login'){
   const nickname=String(nicknameInput?.value || '').trim();
   const password=String(passwordInput?.value || '');
   const confirmPassword=String(confirmInput?.value || '');
+  const hadGuestDraftBeforeAuth = Boolean((guestPreviewStartedAt || isGuestPreviewActive()) && snapshotHasMeaningfulSyncData(buildCloudSyncSnapshot()));
 
   if(!email || !password){
     setAuthFeedback('Enter both your email and password.', 'error');
@@ -7102,8 +7275,11 @@ async function submitPasswordAuth(mode='login'){
         showAuthWelcome('signup');
         syncCloudUi(`${getAuthWelcomeLine('Welcome')}. Your dream space is ready. Checking for cloud data now.`);
         if(!cloudSyncHydrated)await loadCloudSyncSnapshot();
+        clearGuestPreviewState();
         maybeShowCheckin(2200);
-        setAuthFeedback('Welcome in. Your account is ready and you’re signed in.', 'success');
+        setAuthFeedback(hadGuestDraftBeforeAuth
+          ? 'Welcome in. Your guest progress was merged into this account.'
+          : 'Welcome in. Your account is ready and you’re signed in.', 'success');
       }else{
         syncCloudUi('Account created. If email confirmation is still turned on in Supabase, you can disable it later or confirm once and come back.');
         setAuthFeedback('Account created. If Supabase still asks for email confirmation, you can leave that for later and keep the flow simple when you are ready.', 'success');
@@ -7116,8 +7292,11 @@ async function submitPasswordAuth(mode='login'){
       showAuthWelcome('login');
       syncCloudUi(`${getAuthWelcomeLine(getTimeOfDayGreeting())}. Checking for your cloud dreams now.`);
       if(!cloudSyncHydrated)await loadCloudSyncSnapshot();
+      clearGuestPreviewState();
       maybeShowCheckin(2200);
-      setAuthFeedback(`${getTimeOfDayGreeting()}. You’re logged in.`, 'success');
+      setAuthFeedback(hadGuestDraftBeforeAuth
+        ? `${getTimeOfDayGreeting()}. You’re logged in and your guest progress was merged.`
+        : `${getTimeOfDayGreeting()}. You’re logged in.`, 'success');
     }
     if(passwordInput)passwordInput.value='';
     if(confirmInput)confirmInput.value='';
@@ -7805,6 +7984,7 @@ async function initSupabaseSync(){
     try{
       supabaseClient.auth.onAuthStateChange(async (event, sessionData) => {
         supabaseUser=sessionData?.user||null;
+        if(supabaseUser)clearGuestPreviewState();
         if(isOwnerUser())initDebug();
         if(event==='PASSWORD_RECOVERY'){
           startPasswordRecoveryMode('You’re in the right place. Choose a new password whenever you’re ready.');
@@ -7814,6 +7994,7 @@ async function initSupabaseSync(){
           resetAuthUiState(event==='SIGNED_OUT');
         }
         syncCloudUi();
+        scheduleGuestPreviewEnforcement();
         if(event==='SIGNED_IN' && supabaseUser){
           await loadCloudSyncSnapshot();
           maybeShowCheckin(2200);
@@ -7824,9 +8005,11 @@ async function initSupabaseSync(){
     }
 
     if(supabaseUser && !cloudSyncHydrated){
+      clearGuestPreviewState();
       await loadCloudSyncSnapshot();
       maybeShowCheckin(2200);
     }
+    scheduleGuestPreviewEnforcement();
     return true;
   }catch(err){
     supabaseClient=null;
@@ -7879,6 +8062,7 @@ const STORAGE_KEY_SYNTHESIS_COUNT = 'qSynthesisCount9';
 const STORAGE_KEY_FIRST_SESSION_AT = 'qFirstSessionAt9';
 const STORAGE_KEY_SESSION_END_DREAMS = 'qSessionEndDreamCount9';
 const STORAGE_KEY_SESSION_END_AT = 'qSessionEndAt9';
+const STORAGE_KEY_GUEST_STARTED_AT = 'qGuestStartedAt9';
 const STORAGE_KEY_CHAPTER_OPENED = 'qChapterOpenedThisSession9';
 const STORAGE_KEY_SYNTHESIS_SEEN = 'qSynthesisSeenThisSession9';
 const STORAGE_KEY_MICRO_INSIGHT_SEEN = 'qMicroInsightSeenThisSession9';
@@ -7897,6 +8081,7 @@ const STORAGE_MEDIA_DATA_URL_MAX = 700 * 1024;
 const STORAGE_IMAGE_DATA_URL_MAX = 900 * 1024;
 const STORAGE_IMAGE_SCAN_MAX = 12;
 const STORAGE_CHAT_ENTRY_MAX_CHARS = 1800;
+const GUEST_PREVIEW_MS = 10 * 60 * 1000;
 
 const DAILY_PULSE_QUESTIONS = [
   { category:'present', question:'What is the emotional weather inside you today?' },
@@ -8536,6 +8721,9 @@ let synthesisCount = Math.max(0, parseInt(safeLocalStorageGet(STORAGE_KEY_SYNTHE
 let firstSessionAt = String(safeLocalStorageGet(STORAGE_KEY_FIRST_SESSION_AT,'')||'').trim();
 let sessionEndDreamCount = Math.max(0, parseInt(safeLocalStorageGet(STORAGE_KEY_SESSION_END_DREAMS,'0')||'0',10)||0);
 let sessionEndAt = String(safeLocalStorageGet(STORAGE_KEY_SESSION_END_AT,'')||'').trim();
+let guestPreviewStartedAt = Math.max(0, parseInt(safeLocalStorageGet(STORAGE_KEY_GUEST_STARTED_AT,'0')||'0',10)||0);
+let guestPreviewTimer = 0;
+let guestPreviewExpiryNoticeShown = false;
 let adminPreviewMode = 'paid';
 if(!firstSessionAt){
   firstSessionAt=new Date().toISOString();
@@ -15072,6 +15260,7 @@ document.addEventListener('keydown',e=>{
 (async function bootApp(){
   await initSupabaseSync();
   syncCloudUi();
+  scheduleGuestPreviewEnforcement();
   render();
   showOnboarding();
   maybeShowCheckin();
