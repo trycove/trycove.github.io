@@ -551,11 +551,6 @@ body::after {
   text-shadow: 0 1px 18px rgba(12,14,22,0.24);
 }
 
-:root[data-ui-theme="night"] .auth-q-logo-shell {
-  background: transparent;
-  box-shadow: none;
-}
-
 body.auth-gate-active .app-wrapper {
   filter: blur(14px) saturate(0.9);
   transform: scale(1.012);
@@ -821,30 +816,6 @@ body.auth-welcome-active .auth-gate-card {
   filter: blur(0);
   transform: translateY(0) scale(1);
 }
-.auth-q-logo-shell {
-  position: relative;
-  width: 72px;
-  height: 72px;
-  margin: 0 auto 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: transparent;
-  box-shadow: none;
-}
-.auth-q-logo-shell::before {
-  display: none;
-}
-.auth-q-logo {
-  position: relative;
-  z-index: 1;
-  width: 66px;
-  height: 66px;
-  display: block;
-  object-fit: contain;
-  object-position: center;
-  filter: none;
-}
 .auth-gate-kicker {
   display: inline-flex;
   align-items: center;
@@ -864,16 +835,39 @@ body.auth-welcome-active .auth-gate-card {
 .auth-gate-title {
   font-family: 'Lora', serif;
   font-size: clamp(30px, 4.2vw, 38px);
-  line-height: 1.02;
+  line-height: 1;
   letter-spacing: -0.04em;
-  margin-bottom: 10px;
-  background: var(--auth-title-gradient);
-  background-size: 220% 100%;
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  filter: drop-shadow(0 4px 12px rgba(192,74,102,0.18));
+  margin: 0 0 10px;
+  text-align: center;
+  width: 100%;
+  color: var(--rose);
   animation: shimmer 5.2s ease-in-out infinite;
+}
+.auth-gate-title-lockup {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+}
+.auth-gate-title-c {
+  width: 1.02em;
+  height: 1.02em;
+  display: block;
+  flex-shrink: 0;
+  transform: translateY(0.04em);
+  color: #c47e76;
+  filter: none;
+  margin-right: 0;
+}
+.auth-gate-title.logo-only {
+  margin: 0 0 12px;
+  animation: none;
+}
+.auth-gate-title.logo-only .auth-gate-title-c {
+  width: 70px;
+  height: 70px;
+  transform: none;
+  color: #E8A89E;
 }
 .auth-gate-message {
   max-width: 34ch;
@@ -1426,7 +1420,7 @@ body.auth-welcome-active .auth-gate-card {
 @keyframes inputShake { 0%,100%{transform:translateX(0);} 33%{transform:translateX(4px);} 66%{transform:translateX(-4px);} }
 
 /* ── WORDMARK ── */
-.wordmark { display:flex;align-items:center;gap:9px;margin-bottom:44px;opacity:0;animation:riseIn 0.6s 0.05s cubic-bezier(.16,1,.3,1) forwards; }
+.wordmark { display:flex;align-items:center;gap:5px;margin-bottom:44px;opacity:0;animation:riseIn 0.6s 0.05s cubic-bezier(.16,1,.3,1) forwards; }
 .wm-logo {
   width: 24px;
   height: 24px;
@@ -4829,22 +4823,23 @@ body::before { animation: ambientDrift 18s ease-in-out infinite; }
 
 <div class="auth-gate show" id="authGate" role="dialog" aria-modal="true" aria-labelledby="authGateTitle" aria-live="polite">
   <div class="auth-gate-card">
-    <div class="auth-q-logo-shell" aria-hidden="true">
-      <!-- Logo SVG only, no text below -->
-      <svg class="auth-q-logo" xmlns="http://www.w3.org/2000/svg" viewBox="-8 -8 116 116" width="66" height="66" style="width:66px;height:66px;display:block;margin:0 auto;" aria-hidden="true">
-        <path fill="none" stroke="#c47e76" stroke-width="10" stroke-linecap="round" d="M 68 27 A 32 32 0 1 0 40 67"></path>
-      </svg>
-    </div>
-    <!-- Remove the COVE text under the logo -->
-    <h1 class="auth-gate-title" id="authGateTitle" style="display:flex;align-items:center;justify-content:center;gap:2px;">
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="-8 -8 116 116" 
-       style="width:0.82em;height:0.82em;display:inline-block;vertical-align:middle;flex-shrink:0;" 
-       aria-hidden="true">
-    <path fill="none" stroke="#c47e76" stroke-width="10" stroke-linecap="round" 
-          d="M 68 27 A 32 32 0 1 0 40 67"/>
-  </svg>
-  <span style="letter-spacing:-0.04em;">OVE</span>
-</h1>
+    <h1 class="auth-gate-title logo-only" id="authGateTitle" aria-label="COVE">
+      <span class="auth-gate-title-lockup">
+        <svg class="auth-gate-title-c" viewBox="-8 -8 116 116" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <defs>
+            <linearGradient id="authLogoChrome" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stop-color="#E3AAA0"></stop>
+              <stop offset="28%" stop-color="#E9B5AC"></stop>
+              <stop offset="50%" stop-color="#F0C7C0"></stop>
+              <stop offset="72%" stop-color="#E7B3A8"></stop>
+              <stop offset="100%" stop-color="#E3AAA0"></stop>
+              <animateTransform attributeName="gradientTransform" type="translate" values="-1 0;1 0;-1 0" dur="7.5s" repeatCount="indefinite"></animateTransform>
+            </linearGradient>
+          </defs>
+          <path fill="none" stroke="url(#authLogoChrome)" stroke-width="10" stroke-linecap="round" d="M 68 27 A 32 32 0 1 0 40 67"></path>
+        </svg>
+      </span>
+    </h1>
 
     <p class="auth-gate-message" id="authGateMessage"></p>
     <form class="auth-gate-form" aria-label="Sign in or create a COVE account" onsubmit="handleAuthSubmit(); return false;">
@@ -5073,7 +5068,7 @@ body::before { animation: ambientDrift 18s ease-in-out infinite; }
     <p>We aim to keep COVE available and working well, but we cannot guarantee uninterrupted access. The service may be updated, paused, or changed at any time. We will try to give notice for significant changes.</p>
 
     <h3>Free and paid tiers</h3>
-    <p>COVE offers a free tier with limited features and a paid tier with additional access. Paid features are noted within the app. Pricing may change over time; changes will be communicated before they take effect for existing users.</p>
+    <p>COVE has a free tier for core dream capture and a paid tier (COVE Plus) for deeper tools. Paid features are clearly labeled in the app before use. Some paid features may include a one-time free preview so you can decide without feeling locked in after an emotional session. Pricing may change over time; changes will be communicated before they take effect for existing users.</p>
 
     <h3>Account deletion</h3>
     <p>You can delete your account at any time from the Settings panel inside the app. Deletion removes your cloud-synced data. We do not offer refunds for unused portions of a paid period unless required by applicable law.</p>
@@ -5216,8 +5211,18 @@ body::before { animation: ambientDrift 18s ease-in-out infinite; }
 
   <div class="wordmark">
     <div class="wm-logo" aria-hidden="true">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="24" height="24" style="width:24px;height:24px;object-fit:contain;object-position:center;" aria-hidden="true">
-        <path fill="none" stroke="#c47e76" stroke-width="10" stroke-linecap="round" d="M 68 27 A 32 32 0 1 0 40 67"></path>
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="-8 -8 116 116" width="24" height="24" style="width:24px;height:24px;object-fit:contain;object-position:center;" aria-hidden="true">
+        <defs>
+          <linearGradient id="wmLogoChrome" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#E3AAA0"></stop>
+            <stop offset="28%" stop-color="#E9B5AC"></stop>
+            <stop offset="50%" stop-color="#F0C7C0"></stop>
+            <stop offset="72%" stop-color="#E7B3A8"></stop>
+            <stop offset="100%" stop-color="#E3AAA0"></stop>
+            <animateTransform attributeName="gradientTransform" type="translate" values="-1 0;1 0;-1 0" dur="7.5s" repeatCount="indefinite"></animateTransform>
+          </linearGradient>
+        </defs>
+        <path fill="none" stroke="url(#wmLogoChrome)" stroke-width="10" stroke-linecap="round" d="M 68 27 A 32 32 0 1 0 40 67"></path>
       </svg>
     </div>
     <span class="wm-brand">COVE</span>
@@ -7005,6 +7010,35 @@ function startPasswordRecoveryMode(message=''){
   focusAuthForm();
 }
 
+function createAuthCoveLockup(){
+  const wrap=document.createElement('span');
+  wrap.className='auth-gate-title-lockup';
+  wrap.setAttribute('aria-label','COVE');
+  wrap.innerHTML='<svg class="auth-gate-title-c" viewBox="-8 -8 116 116" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs><linearGradient id="authLogoChrome" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#E3AAA0"></stop><stop offset="28%" stop-color="#E9B5AC"></stop><stop offset="50%" stop-color="#F0C7C0"></stop><stop offset="72%" stop-color="#E7B3A8"></stop><stop offset="100%" stop-color="#E3AAA0"></stop><animateTransform attributeName="gradientTransform" type="translate" values="-1 0;1 0;-1 0" dur="7.5s" repeatCount="indefinite"></animateTransform></linearGradient></defs><path fill="none" stroke="url(#authLogoChrome)" stroke-width="10" stroke-linecap="round" d="M 68 27 A 32 32 0 1 0 40 67"></path></svg>';
+  return wrap;
+}
+
+function setAuthGateTitle(value=''){
+  const title=getUI('authGateTitle');
+  if(!title)return;
+  const text=String(value || '');
+  title.classList.remove('logo-only');
+  title.removeAttribute('aria-label');
+  title.textContent='';
+  if(!text.includes('COVE')){
+    title.textContent=text;
+    if(text)title.setAttribute('aria-label', text);
+    return;
+  }
+  title.setAttribute('aria-label', text);
+  const parts=text.split('COVE');
+  for(let i=0;i<parts.length;i++){
+    if(parts[i])title.appendChild(document.createTextNode(parts[i]));
+    if(i<parts.length-1)title.appendChild(createAuthCoveLockup());
+  }
+  if(text.trim()==='COVE')title.classList.add('logo-only');
+}
+
 function updateAuthGate(message='', options={}){
   const force=Boolean(options?.force);
   const gate=getUI('authGate');
@@ -7075,7 +7109,7 @@ function updateAuthGate(message='', options={}){
   updateGuestPreviewUi();
 
   if(!hasSupabaseKeys()){
-    title.textContent='Login setup needed';
+    setAuthGateTitle('Login setup needed');
     text.textContent=message || 'A secure login still needs to be connected before this dream space can open.';
     note.textContent='You can still browse as a guest, and create an account later once Supabase is ready.';
     loginBtn.disabled=true;
@@ -7088,7 +7122,7 @@ function updateAuthGate(message='', options={}){
   signupBtn.disabled=false;
 
   if(isSignupMode){
-    title.textContent='Create your COVE account';
+    setAuthGateTitle('Create your COVE account');
     text.textContent=message || 'Set up your account so your dreams and reflections stay with you across devices.';
     note.textContent='A real name helps with warmer welcome messages. You can change it later in settings.';
     nicknameField.classList.remove('hidden');
@@ -7107,7 +7141,7 @@ function updateAuthGate(message='', options={}){
   }
 
   if(isResetMode){
-    title.textContent='Reset your COVE password';
+    setAuthGateTitle('Reset your COVE password');
     text.textContent=message || 'Take a breath. Create a fresh password for COVE, and continue whenever you’re ready.';
     note.textContent='Your COVE account and saved progress will still be here for you.';
     emailField.classList.add('hidden');
@@ -7124,7 +7158,7 @@ function updateAuthGate(message='', options={}){
     return;
   }
 
-  title.textContent='COVE';
+  setAuthGateTitle('COVE');
   text.textContent=message || '';
 
   // Show "continue locally" only when local dreams exist and Supabase hasn't resolved yet
@@ -8074,6 +8108,7 @@ const STORAGE_KEY_LAST_DREAMBOX_OPENED = 'qLastDreamboxOpened9';
 const STORAGE_KEY_CLOUD_PLAN = 'qCloudPlan9';
 const STORAGE_KEY_AHA_AT = 'qAhaAt9';
 const STORAGE_KEY_PAYWALL_SHOWN = 'qPaywallShownCount';
+const STORAGE_KEY_FREE_PREVIEW_USES = 'qFreePreviewUses9';
 const STORAGE_KEY_SYNTHESIS_COUNT = 'qSynthesisCount9';
 const STORAGE_KEY_FIRST_SESSION_AT = 'qFirstSessionAt9';
 const STORAGE_KEY_SESSION_END_DREAMS = 'qSessionEndDreamCount9';
@@ -8983,7 +9018,7 @@ function openPaywallPricing(){
   openPaywallModal({
     kicker:'Upgrade',
     title:'Unlock full COVE tools',
-    copy:'Paid plans unlock deeper reflection tools like extra Deep Dives, Daily Pulse reflections, and later Life Capsule reveals. $8 / month or $60 / year. Cancel anytime.',
+    copy:'Core dream capture is always free. COVE Plus unlocks deeper reflection tools like extra Deep Dives, Daily Pulse reflections, and later Life Capsule reveals. $8 / month or $60 / year. Cancel anytime.',
     mode:'pricing'
   });
 }
@@ -9014,41 +9049,37 @@ function toggleAdminPerspective(){
 }
 
 function canShowPaywallGate(){
-  return dreams.length>=3 && (Date.now()-appStartedAt)>=5*60*1000;
+  return true;
 }
 
 function showAhaNudgeForGate(featureLabel='this feature'){
   if(isOwnerUser()&&adminPreviewMode==='paid')return;
   const note=getUI('firstDreamNote');
   if(note){
-    note.textContent=`Unlock ${featureLabel}: add 3 dreams, open a chapter, and read one reflection first.`;
+    note.textContent=`${featureLabel} is part of COVE Plus. You can still keep capturing dreams for free.`;
     note.classList.remove('aha-link');
     note.classList.add('visible');
     if(firstDreamNoteTimer)clearTimeout(firstDreamNoteTimer);
     firstDreamNoteTimer=setTimeout(()=>hideFirstDreamNote(),5200);
     return;
   }
-  showToast(`Unlock ${featureLabel} by adding 3 dreams, opening a chapter card, and reading one reflection first.`, 'error');
+  showToast(`${featureLabel} is part of COVE Plus. Core dream capture stays free.`, 'info');
 }
 
-function tryOpenPaidGate(featureLabel='this feature'){
+function tryOpenPaidGate(featureLabel='this feature', featureKey=''){
   if(isOwnerUser()&&adminPreviewMode==='paid')return true;
   if(isPaid())return true;
-  if(!canShowPaywallGate()){
-    showAhaNudgeForGate(featureLabel);
-    return false;
-  }
-  if(!hasAha()){
-    showAhaNudgeForGate(featureLabel);
-    return false;
+  const key=String(featureKey||'').trim();
+  if(key&&isFeatureAllowed(key)){
+    return true;
   }
   paywallTriggerCount+=1;
   safeLocalStorageSet(STORAGE_KEY_PAYWALL_SHOWN,String(paywallTriggerCount));
   if(paywallTriggerCount===1){
     const firstPaywall={
-      kicker:'Locked feature',
-      title:`${featureLabel} is part of the paid plan`,
-      copy:'Core dream capture stays free. Some deeper reflection tools are paid. If you are in the middle of a reflective session, we will wait until you are finished before showing upgrade options.',
+      kicker:'COVE Plus feature',
+      title:`${featureLabel} is available in COVE Plus`,
+      copy:'Core dream capture is always free. Deeper tools are clearly marked as COVE Plus so you can choose before getting pulled in. If you are in a reflective flow, we wait until you finish before showing upgrade options.',
       mode:'intro'
     };
     if(isReflectionFlowOpen())queueDeferredPaywall(firstPaywall);
@@ -9065,8 +9096,34 @@ function tryOpenPaidGate(featureLabel='this feature'){
   return false;
 }
 
+function getFreePreviewUses(){
+  try{
+    const parsed=JSON.parse(safeLocalStorageGet(STORAGE_KEY_FREE_PREVIEW_USES,'{}')||'{}');
+    return parsed&&typeof parsed==='object'?parsed:{};
+  }catch(_){
+    return {};
+  }
+}
+
 function isFeatureAllowed(feature=''){
   if(isPaid())return true;
+  const normalizedFeature=String(feature||'').toLowerCase();
+  if(normalizedFeature==='pulse-reflection'||normalizedFeature==='life-capsule-reveal'||normalizedFeature==='life-letter'){
+    const freePreviewLabels={
+      'pulse-reflection':'Daily Pulse reflection',
+      'life-capsule-reveal':'Life Capsule reveal',
+      'life-letter':'Life Letter'
+    };
+    const current=getFreePreviewUses();
+    const previewUses=parseInt(current[normalizedFeature]||0,10)||0;
+    if(previewUses<1){
+      current[normalizedFeature]=previewUses+1;
+      safeLocalStorageSet(STORAGE_KEY_FREE_PREVIEW_USES,JSON.stringify(current));
+      showToast(`Your first ${freePreviewLabels[normalizedFeature]||'premium feature'} is included on the free plan.`, 'info');
+      return true;
+    }
+    return false;
+  }
   if(feature==='deep-dive'){
     const guidedCount=deepDiveSessions.filter(session=>String(session?.type||'deepdive')==='deepdive').length;
     return guidedCount<1;
@@ -9079,7 +9136,7 @@ function isFeatureAllowed(feature=''){
 
 function guardPaidFeature(feature='', featureLabel='this feature'){
   if(isFeatureAllowed(feature))return true;
-  return tryOpenPaidGate(featureLabel);
+  return tryOpenPaidGate(featureLabel, feature);
 }
 
 function getUI(id){
@@ -10364,7 +10421,7 @@ function setCapsuleNowResponse(index,value){
 }
 function openCapsuleRevealFlow(info=getPendingCapsuleRevealInfo()){ 
   if(!info||!hasLifeCapsule())return false;
-  if((info.days===90||info.days===180)&&!tryOpenPaidGate('Life Capsule reveals'))return false;
+  if((info.days===90||info.days===180)&&!guardPaidFeature('life-capsule-reveal','Life Capsule reveals'))return false;
   const existing=normalizeCapsuleReflectionEntry(lifeCapsule?.[info.reflectionKey])||null;
   capsuleRevealState.open=true;
   capsuleRevealState.days=info.days;
@@ -11028,7 +11085,7 @@ function setPulseHistoryView(view='recent'){
     return;
   }
   if(next==='reflect'&&!isPaid()){
-    tryOpenPaidGate('Daily Pulse reflection');
+    guardPaidFeature('pulse-reflection','Daily Pulse reflection');
     pulseHistoryView='recent';
     renderPulseHistorySection();
     return;
@@ -11289,7 +11346,7 @@ function canRefreshPulseReflection(){
 
 async function generatePulseReflection(forceRefresh=false){
   if(!isPaid()){
-    tryOpenPaidGate('Daily Pulse reflection');
+    guardPaidFeature('pulse-reflection','Daily Pulse reflection');
     return;
   }
   if(pulseReflectionLoading)return;
@@ -15043,7 +15100,7 @@ function exportData(){
 // LIFE LETTER
 // ═══════════════════════════════════════════════════
 async function openLifeLetter(){
-  if(!tryOpenPaidGate('Life Letter'))return;
+  if(!guardPaidFeature('life-letter','Life Letter'))return;
   document.getElementById('llOverlay').classList.add('open');
   document.body.style.overflow='hidden';
   const txt=document.getElementById('llText');
