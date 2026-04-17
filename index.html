@@ -857,23 +857,7 @@ body.auth-welcome-active .auth-gate-card {
   stroke: rgba(168,83,72,0.58);
 }
 .auth-reel-path-shimmer {
-  stroke-dasharray: 52 220;
-  stroke-dashoffset: 0;
-  animation: authReelSweep 5s ease-in-out infinite;
-}
-@keyframes authReelSweep {
-  0% {
-    stroke-dashoffset: 0;
-    opacity: 0.84;
-  }
-  50% {
-    stroke-dashoffset: -132;
-    opacity: 1;
-  }
-  100% {
-    stroke-dashoffset: -264;
-    opacity: 0.84;
-  }
+  opacity: 0.98;
 }
 .auth-gate-kicker {
   display: inline-flex;
@@ -4996,7 +4980,7 @@ body::before { animation: ambientDrift 18s ease-in-out infinite; }
             <stop offset="55%" stop-color="#FAEDE9"></stop>
             <stop offset="75%" stop-color="#E8A89E"></stop>
             <stop offset="100%" stop-color="#A85348"></stop>
-            <animateTransform attributeName="gradientTransform" type="translate" values="-120 0;120 0;-120 0" dur="5s" calcMode="spline" keyTimes="0;0.5;1" keySplines="0.42 0 0.58 1;0.42 0 0.58 1" repeatCount="indefinite"></animateTransform>
+            <animateTransform attributeName="gradientTransform" type="translate" values="-140 0;140 0;-140 0" dur="5s" calcMode="spline" keyTimes="0;0.5;1" keySplines="0.42 0 0.58 1;0.42 0 0.58 1" repeatCount="indefinite"></animateTransform>
           </linearGradient>
         </defs>
         <path class="auth-reel-path auth-reel-path-base" fill="none" stroke-width="10" stroke-linecap="round" d="M 68 27 A 32 32 0 1 0 40 67"></path>
