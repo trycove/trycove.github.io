@@ -1,0 +1,14 @@
+# Environment variable files — keep secrets out of git
+.env
+.env.local
+.env.*.local
+
+# macOS metadata
+.DS_Store
+
+# Editor directories
+.vscode/
+.idea/
+
+# Node dependencies (if a build step is added later)
+node_modules/
