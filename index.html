@@ -811,29 +811,37 @@ body.auth-welcome-active .auth-gate-card {
   filter: blur(0);
   transform: translateY(0) scale(1);
 }
-.auth-q-logo-shell {
+.auth-reel-c {
   position: relative;
-  width: 72px;
-  height: 72px;
-  margin: 0 auto 10px;
+  width: 44px;
+  height: 44px;
+  margin: 0 auto 14px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: transparent;
-  box-shadow: none;
+  line-height: 0;
 }
-.auth-q-logo-shell::before {
-  display: none;
+.auth-reel-c::before {
+  content: '';
+  position: absolute;
+  inset: -28px;
+  border-radius: 999px;
+  background:
+    radial-gradient(ellipse 70% 48% at 20% 12%, rgba(200,118,106,0.22) 0%, transparent 64%),
+    radial-gradient(ellipse 62% 52% at 82% 90%, rgba(168,83,72,0.15) 0%, transparent 58%),
+    radial-gradient(ellipse 44% 34% at 52% 50%, rgba(232,168,158,0.10) 0%, transparent 72%);
+  filter: blur(9px);
+  pointer-events: none;
 }
-.auth-q-logo {
+.auth-reel-c svg {
   position: relative;
   z-index: 1;
-  width: 66px;
-  height: 66px;
+  width: 44px;
+  height: 44px;
   display: block;
-  object-fit: contain;
-  object-position: center;
-  filter: none;
+}
+.auth-reel-path {
+  filter: drop-shadow(0 0 10px rgba(232,168,158,0.26));
 }
 .auth-gate-kicker {
   display: inline-flex;
@@ -864,6 +872,9 @@ body.auth-welcome-active .auth-gate-card {
   color: transparent;
   filter: drop-shadow(0 4px 12px rgba(192,74,102,0.18));
   animation: shimmer 5.2s ease-in-out infinite;
+}
+.auth-gate-title:empty {
+  display: none;
 }
 .auth-gate-message {
   max-width: 34ch;
@@ -1047,54 +1058,98 @@ body.auth-welcome-active .auth-gate-card {
 }
 .auth-feedback.error { color: #A85348; }
 .auth-feedback.success { color: #2F7A52; }
+.auth-or-divider {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 8px;
+  color: var(--text-muted);
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+.auth-or-divider::before,
+.auth-or-divider::after {
+  content: '';
+  height: 1px;
+  background: color-mix(in srgb, var(--border) 68%, transparent 32%);
+  flex: 1;
+}
+.auth-or-divider span {
+  flex-shrink: 0;
+}
 .auth-guest-section {
-  margin-top: 10px;
-  padding: 11px 12px;
-  border-radius: 14px;
-  border: 1px solid var(--field-border);
-  background: var(--field-bg-soft);
-  text-align: left;
+  margin-top: 8px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
-.auth-guest-title {
-  font-size: 12px;
-  font-weight: 700;
-  color: var(--text-mid);
+.auth-guest-launch {
+  border: none;
+  background: transparent;
+  padding: 0;
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 11px;
+  font-weight: 600;
   letter-spacing: 0.01em;
+  cursor: pointer;
+  text-decoration: none;
+  opacity: 0.82;
 }
-.auth-guest-copy {
-  margin-top: 4px;
-  font-size: 12.5px;
+.auth-guest-launch:hover {
+  color: var(--text-dim);
+  opacity: 1;
+}
+.auth-guest-confirm {
+  margin-top: 10px;
+  padding: 8px 0 0;
+  border: none;
+  background: transparent;
+  width: min(100%, 320px);
+}
+.auth-guest-confirm-copy {
+  font-size: 11.5px;
   line-height: 1.5;
   color: var(--text-dim);
 }
-.auth-guest-actions {
+.auth-guest-confirm-actions {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
+  gap: 8px;
   margin-top: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
 }
-.auth-guest-timer {
-  font-size: 11.5px;
-  color: var(--text-muted);
-}
-.auth-guest-btn {
-  border: 1px solid rgba(200,118,106,0.26);
+.auth-guest-confirm-btn {
+  border: 1px solid color-mix(in srgb, var(--border-hi) 85%, transparent 15%);
   border-radius: 999px;
-  padding: 8px 12px;
-  background: color-mix(in srgb, var(--field-bg) 88%, white 12%);
-  color: var(--rose-deep);
-  font-size: 11px;
+  padding: 6px 10px;
+  background: transparent;
+  color: var(--text-dim);
+  font-size: 10px;
   font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  text-transform: none;
   cursor: pointer;
-  transition: transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease;
+  transition: color 160ms ease, border-color 160ms ease, transform 160ms ease;
 }
-.auth-guest-btn:hover {
+.auth-guest-confirm-btn:hover {
   transform: translateY(-1px);
-  border-color: rgba(200,118,106,0.56);
-  box-shadow: var(--glow-rose-sm);
+  color: var(--rose);
+  border-color: rgba(200,118,106,0.36);
+}
+.auth-guest-confirm-btn.primary {
+  color: var(--rose-deep);
+}
+.auth-guest-confirm-btn:disabled {
+  opacity: 0.58;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
 }
 .auth-help-row {
   display: flex;
@@ -1482,9 +1537,76 @@ body.auth-welcome-active .auth-gate-card {
   white-space:nowrap;
 }
 .cloud-sync-btn:hover { border-color:var(--rose);color:var(--rose);box-shadow:var(--glow-rose-sm); }
+.guest-auth-strip {
+  display: none;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin: -20px 0 14px;
+  padding: 8px 10px;
+  border: 1px solid color-mix(in srgb, var(--border) 72%, transparent 28%);
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--surface) 84%, transparent 16%);
+  box-shadow: none;
+  animation: fadeDown 220ms ease;
+}
+.guest-auth-copy {
+  min-width: 0;
+  display: grid;
+  gap: 1px;
+}
+.guest-auth-kicker {
+  font-size: 8.5px;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  font-weight: 700;
+}
+.guest-auth-status {
+  font-size: 10.5px;
+  color: var(--text-dim);
+  line-height: 1.35;
+}
+.guest-auth-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+.guest-auth-btn {
+  border: none;
+  border-radius: 999px;
+  padding: 5px 8px;
+  background: transparent;
+  color: var(--text-dim);
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: none;
+  cursor: pointer;
+  transition: color 160ms ease, opacity 160ms ease, transform 160ms ease;
+}
+.guest-auth-btn:hover {
+  transform: translateY(-1px);
+  color: var(--rose);
+  box-shadow: none;
+}
+.guest-auth-btn:disabled {
+  opacity: 0.54;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
 @media (max-width:640px) {
   .cloud-sync-bar { flex-direction:column;align-items:flex-start; }
   .cloud-sync-btn { width:100%; }
+  .guest-auth-strip {
+    flex-direction: column;
+    align-items: flex-start;
+    margin: -14px 0 12px;
+  }
+  .guest-auth-actions { width: 100%; flex-wrap: wrap; }
+  .guest-auth-btn { padding-left: 0; padding-right: 0; }
 }
 
 /* ── RETURN GREETING ── */
@@ -2607,6 +2729,20 @@ body.auth-welcome-active .auth-gate-card {
   font-size: 12px;
   color: var(--text-mid);
   line-height: 1.6;
+}
+.rec-settings-auth-block {
+  border-radius: 12px;
+  border: 1px solid rgba(78,126,168,0.22);
+  background: linear-gradient(180deg, color-mix(in srgb, var(--blue) 8%, var(--surface2)), color-mix(in srgb, var(--blue) 4%, var(--surface)));
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.rec-settings-auth-status {
+  font-size: 12px;
+  color: var(--text-mid);
+  line-height: 1.55;
 }
 .rec-settings-input {
   width: 100%;
@@ -4819,26 +4955,26 @@ body::before { animation: ambientDrift 18s ease-in-out infinite; }
 
 <div class="auth-gate show" id="authGate" role="dialog" aria-modal="true" aria-labelledby="authGateTitle" aria-live="polite">
   <div class="auth-gate-card">
-    <div class="auth-q-logo-shell" aria-hidden="true">
-      <!-- Logo SVG only, no text below -->
-      <svg class="auth-q-logo" xmlns="http://www.w3.org/2000/svg" viewBox="-8 -8 116 116" width="66" height="66" style="width:66px;height:66px;display:block;margin:0 auto;" aria-hidden="true">
-        <path fill="none" stroke="#c47e76" stroke-width="10" stroke-linecap="round" d="M 68 27 A 32 32 0 1 0 40 67"></path>
+    <div class="auth-reel-c" aria-hidden="true">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="-8 -8 116 116" aria-hidden="true">
+        <defs>
+          <linearGradient id="authReelShimmerGradient" gradientUnits="userSpaceOnUse" x1="-8" y1="0" x2="108" y2="0">
+            <stop offset="0%" stop-color="#C8766A"></stop>
+            <stop offset="45%" stop-color="#E8A89E"></stop>
+            <stop offset="55%" stop-color="#FAEDE9"></stop>
+            <stop offset="75%" stop-color="#E8A89E"></stop>
+            <stop offset="100%" stop-color="#A85348"></stop>
+            <animateTransform attributeName="gradientTransform" type="translate" values="-120 0;120 0;-120 0" dur="5.2s" repeatCount="indefinite"></animateTransform>
+          </linearGradient>
+        </defs>
+        <path class="auth-reel-path" fill="none" stroke="url(#authReelShimmerGradient)" stroke-width="10" stroke-linecap="round" d="M 68 27 A 32 32 0 1 0 40 67"></path>
       </svg>
     </div>
-    <!-- Remove the COVE text under the logo -->
-    <h1 class="auth-gate-title" id="authGateTitle" style="display:flex;align-items:center;justify-content:center;gap:2px;">
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="-8 -8 116 116" 
-       style="width:0.82em;height:0.82em;display:inline-block;vertical-align:middle;flex-shrink:0;" 
-       aria-hidden="true">
-    <path fill="none" stroke="#c47e76" stroke-width="10" stroke-linecap="round" 
-          d="M 68 27 A 32 32 0 1 0 40 67"/>
-  </svg>
-  <span style="letter-spacing:-0.04em;">OVE</span>
-</h1>
+    <h1 class="auth-gate-title" id="authGateTitle">Welcome back</h1>
 
     <p class="auth-gate-message" id="authGateMessage"></p>
     <form class="auth-gate-form" onsubmit="handleAuthSubmit(); return false;">
-      <div class="auth-mode-card" id="authModeCard">Take a breath. Choose a new password for COVE, and we’ll take care of the rest.</div>
+      <div class="auth-mode-card" id="authModeCard">Take a breath. Choose a new password, and we’ll take care of the rest.</div>
       <div class="auth-field" id="authEmailField">
         <div class="auth-field-head">
           <label class="auth-field-label" for="authEmail">Email</label>
@@ -4854,7 +4990,7 @@ body::before { animation: ambientDrift 18s ease-in-out infinite; }
           <label class="auth-field-label" for="authNickname">Name</label>
           <span class="auth-help-tip" aria-label="Why we ask for your name">
             <button class="auth-help-tip-btn" type="button" tabindex="0" aria-label="Why we ask for your name">?</button>
-            <span class="auth-help-tip-text">Your name helps COVE personalize your welcome and reflections so the experience feels more human from day one.</span>
+            <span class="auth-help-tip-text">Your name helps personalize your welcome and reflections so the experience feels more human from day one.</span>
           </span>
         </div>
         <input class="auth-input" id="authNickname" type="text" autocomplete="nickname" placeholder="Your name" />
@@ -4878,16 +5014,19 @@ body::before { animation: ambientDrift 18s ease-in-out infinite; }
         <button class="auth-gate-btn" id="authLoginBtn" type="submit">Log in</button>
         <button class="auth-secondary-btn" id="authSignupBtn" type="button" onclick="openSignupScreen()">Create account</button>
       </div>
+      <div class="auth-or-divider" aria-hidden="true"><span>OR</span></div>
+      <div class="auth-guest-section" id="authGuestSection">
+        <button class="auth-guest-launch" id="authGuestBtn" type="button" onclick="openGuestBrowsePrompt()">Browse as a guest</button>
+        <div class="auth-guest-confirm" id="authGuestPrompt" hidden>
+          <div class="auth-guest-confirm-copy" id="authGuestPromptCopy">Guest mode gives you 10 minutes in this browser. Anything you add stays local and will merge once you log in or create an account.</div>
+          <div class="auth-guest-confirm-actions">
+            <button class="auth-guest-confirm-btn primary" id="authGuestContinueBtn" type="button" onclick="confirmGuestBrowse()">Continue</button>
+            <button class="auth-guest-confirm-btn" id="authGuestBackBtn" type="button" onclick="closeGuestBrowsePrompt()">Go back</button>
+          </div>
+        </div>
+      </div>
     </form>
     <div class="auth-feedback" id="authFeedback"></div>
-    <div class="auth-guest-section" id="authGuestSection">
-      <div class="auth-guest-title">Browse as a guest</div>
-      <div class="auth-guest-copy" id="authGuestCopy">Try COVE's free experience for 10 minutes. Anything you add stays in this browser and will merge into your account once you sign up or log in.</div>
-      <div class="auth-guest-actions">
-        <button class="auth-guest-btn" id="authGuestBtn" type="button" onclick="beginGuestBrowse()">Browse as guest</button>
-        <span class="auth-guest-timer" id="authGuestTimer">10:00 free preview</span>
-      </div>
-    </div>
     <div class="auth-gate-note" id="authGateNote">For the dreams you haven't said out loud yet.</div>
   </div>
 </div>
@@ -5175,10 +5314,19 @@ body::before { animation: ambientDrift 18s ease-in-out infinite; }
         </div>
         <div class="rec-settings-actions">
           <button class="rec-settings-save" id="recNicknameSaveBtn" type="button" onclick="saveNicknameFromSettings()">Save nickname</button>
-          <button class="rec-settings-save secondary" id="recLogoutBtn" type="button" onclick="handleSettingsLogout()" style="display:none;">Log out</button>
           <button class="rec-settings-save secondary" id="delete-account-btn" type="button" onclick="confirmDeleteAccount()" style="display:none;">Delete account</button>
         </div>
         <div class="rec-settings-status" id="recSettingsStatus"></div>
+      </div>
+      <div class="rec-settings-section">
+        <div class="rec-settings-kicker">Sign in & session</div>
+        <div class="rec-settings-auth-block">
+          <div class="rec-settings-auth-status" id="recAuthStatus">You are currently signed out in this browser.</div>
+          <div class="rec-settings-actions">
+            <button class="rec-settings-save" id="recLoginBtn" type="button" onclick="handleSettingsLoginAction()">Log in</button>
+            <button class="rec-settings-save secondary" id="recLogoutBtn" type="button" onclick="handleSettingsLogoutAction()">Log out</button>
+          </div>
+        </div>
       </div>
       <div class="rec-settings-section">
         <div class="rec-settings-kicker">AI memory</div>
@@ -5205,6 +5353,17 @@ body::before { animation: ambientDrift 18s ease-in-out infinite; }
       </svg>
     </div>
     <span class="wm-brand">COVE</span>
+  </div>
+
+  <div class="guest-auth-strip" id="guestAuthStrip">
+    <div class="guest-auth-copy">
+      <div class="guest-auth-kicker">Guest session</div>
+      <div class="guest-auth-status" id="guestAuthStatus">Guest preview is active.</div>
+    </div>
+    <div class="guest-auth-actions">
+      <button class="guest-auth-btn" id="guestAuthLoginBtn" type="button" onclick="handleSettingsLoginAction()">Log in</button>
+      <button class="guest-auth-btn" id="guestAuthLogoutBtn" type="button" onclick="handleSettingsLogoutAction()">Log out</button>
+    </div>
   </div>
 
   <div class="cloud-sync-bar" id="cloudSyncBar">
@@ -6244,7 +6403,7 @@ function getAuthWelcomeLine(prefix='Welcome'){
 }
 
 function getGuestPreviewRemainingMs(){
-  if(!guestPreviewStartedAt || supabaseUser)return 0;
+  if(guestPreviewLocked || !guestPreviewStartedAt || supabaseUser)return 0;
   return Math.max(0, GUEST_PREVIEW_MS - (Date.now() - guestPreviewStartedAt));
 }
 
@@ -6263,25 +6422,82 @@ function getGuestPreviewLabel(){
 
 function updateGuestPreviewUi(){
   const section=getUI('authGuestSection');
-  const timer=getUI('authGuestTimer');
-  const copy=getUI('authGuestCopy');
   const btn=getUI('authGuestBtn');
-  if(!section || !timer || !copy || !btn)return;
+  const prompt=getUI('authGuestPrompt');
+  const promptCopy=getUI('authGuestPromptCopy');
+  const continueBtn=getUI('authGuestContinueBtn');
+  const backBtn=getUI('authGuestBackBtn');
+  const appStrip=getUI('guestAuthStrip');
+  const appStatus=getUI('guestAuthStatus');
+  const appLoginBtn=getUI('guestAuthLoginBtn');
+  const appLogoutBtn=getUI('guestAuthLogoutBtn');
+  if(!section || !btn)return;
+  const signedIn=Boolean(supabaseUser);
+  if(appLoginBtn)appLoginBtn.disabled=signedIn;
+  if(appLogoutBtn)appLogoutBtn.disabled=!signedIn;
+
+  const active=isGuestPreviewActive();
+  if(appStrip){
+    const showInAppGuestControls=Boolean(!signedIn && (active || guestPreviewLocked || guestPreviewStartedAt));
+    appStrip.style.display=showInAppGuestControls ? 'flex' : 'none';
+  }
+  if(appStatus){
+    if(guestPreviewLocked){
+      appStatus.textContent='Guest preview was used on this browser. Log in to keep going.';
+    }else if(active){
+      appStatus.textContent=`Guest preview active: ${getGuestPreviewLabel()}`;
+    }else if(guestPreviewStartedAt){
+      appStatus.textContent='Guest preview ended. Log in to continue.';
+    }else{
+      appStatus.textContent='Not signed in. Log in to sync your progress.';
+    }
+  }
+
   if(authGateMode==='reset'){
     section.style.display='none';
     return;
   }
   section.style.display='';
-  const active=isGuestPreviewActive();
-  if(active){
-    timer.textContent=getGuestPreviewLabel();
-    copy.textContent='Guest preview is active. Keep exploring the free experience. Your changes stay in this browser and merge once you log in or create an account.';
-    btn.textContent='Continue guest preview';
-  }else{
-    timer.textContent=guestPreviewStartedAt ? 'Preview ended' : '10:00 free preview';
-    copy.textContent='Try COVE\'s free experience for 10 minutes. Anything you add stays in this browser and will merge into your account once you sign up or log in.';
-    btn.textContent='Browse as guest';
+  const promptOpen=Boolean(prompt && !prompt.hasAttribute('hidden'));
+  btn.disabled=guestPreviewLocked;
+  if(prompt){
+    if(guestPreviewLocked){
+      promptCopy.textContent='This browser already used the 10-minute guest experience. Sign in or create an account to keep going and keep your progress.';
+      if(continueBtn)continueBtn.disabled=true;
+      if(backBtn)backBtn.textContent='Close';
+    }else if(active){
+      promptCopy.textContent='Guest mode is active for 10 minutes in this browser. Anything you add stays local and will merge once you log in or create an account.';
+      if(continueBtn)continueBtn.disabled=false;
+      if(backBtn)backBtn.textContent='Go back';
+    }else{
+      promptCopy.textContent='Guest mode gives you a 10-minute preview in this browser. You can keep exploring, then sign in or create an account to save and sync your progress.';
+      if(continueBtn)continueBtn.disabled=false;
+      if(backBtn)backBtn.textContent='Go back';
+    }
+    if(promptOpen && guestPreviewLocked && continueBtn)continueBtn.disabled=true;
   }
+}
+
+function openGuestBrowsePrompt(){
+  if(guestPreviewLocked){
+    updateGuestPreviewUi();
+    return;
+  }
+  const prompt=getUI('authGuestPrompt');
+  if(prompt)prompt.removeAttribute('hidden');
+  updateAuthGate('', { force:true });
+  updateGuestPreviewUi();
+}
+
+function closeGuestBrowsePrompt(){
+  const prompt=getUI('authGuestPrompt');
+  if(prompt)prompt.setAttribute('hidden','');
+  updateGuestPreviewUi();
+}
+
+function confirmGuestBrowse(){
+  closeGuestBrowsePrompt();
+  beginGuestBrowse();
 }
 
 function clearGuestPreviewState(){
@@ -6305,6 +6521,8 @@ function enforceGuestPreviewExpiry(){
     clearTimeout(guestPreviewTimer);
     guestPreviewTimer=0;
   }
+  guestPreviewLocked=true;
+  safeLocalStorageSet(STORAGE_KEY_GUEST_LOCKED,'1');
   guestPreviewStartedAt=0;
   safeLocalStorageSet(STORAGE_KEY_GUEST_STARTED_AT,'0');
   updateGuestPreviewUi();
@@ -6334,6 +6552,12 @@ function scheduleGuestPreviewEnforcement(){
 function beginGuestBrowse(){
   if(supabaseUser){
     unlockAuthenticatedApp(true);
+    return;
+  }
+  if(guestPreviewLocked){
+    updateAuthGate('This browser already used the 10-minute guest experience. Sign in or create an account to keep using COVE.', { force:true });
+    setAuthFeedback('Guest preview is no longer available on this browser. Sign in or create an account to continue.', 'error');
+    showToast('Guest preview already used on this browser. Sign in to continue.', 'warning');
     return;
   }
   if(!isGuestPreviewActive()){
@@ -6488,6 +6712,8 @@ function renderRecSettings(){
   const nickEl=getUI('recCurrentNickname');
   const input=getUI('recNicknameInput');
   const saveBtn=getUI('recNicknameSaveBtn');
+  const authStatusEl=getUI('recAuthStatus');
+  const loginBtn=getUI('recLoginBtn');
   const logoutBtn=getUI('recLogoutBtn');
   const deleteBtn=getUI('delete-account-btn');
   const syncEl=getUI('recCloudSyncStatus');
@@ -6503,7 +6729,13 @@ function renderRecSettings(){
   nickEl.textContent=displayName || 'Not set yet';
   input.disabled=!signedIn;
   saveBtn.disabled=!signedIn;
-  if(logoutBtn)logoutBtn.style.display=signedIn ? '' : 'none';
+  if(loginBtn)loginBtn.disabled=signedIn;
+  if(logoutBtn)logoutBtn.disabled=!signedIn;
+  if(authStatusEl){
+    authStatusEl.textContent=signedIn
+      ? 'You are signed in. Logging out will keep local data in this browser but stop cloud sync until you sign in again.'
+      : 'You are currently signed out in this browser. Log in to sync and back up your dreams across devices.';
+  }
   if(deleteBtn){
     deleteBtn.style.display=signedIn ? '' : 'none';
     deleteBtn.disabled=!signedIn;
@@ -6543,10 +6775,17 @@ function openRecSettingsPanel(){
   recPanelOpen=true;
   recSettingsOpen=true;
   syncRecPanelState();
-  requestAnimationFrame(()=>document.getElementById('recNicknameInput')?.focus());
+  requestAnimationFrame(()=>{
+    if(supabaseUser)document.getElementById('recNicknameInput')?.focus();
+    else document.getElementById('recLoginBtn')?.focus();
+  });
 }
 
-function handleSettingsLogout(){
+function handleSettingsLoginAction(){
+  focusAuthForm(true);
+}
+
+function handleSettingsLogoutAction(){
   if(!supabaseUser)return;
   handleCloudSyncAction();
 }
@@ -7072,7 +7311,7 @@ function updateAuthGate(message='', options={}){
   signupBtn.disabled=false;
 
   if(isSignupMode){
-    title.textContent='Create your COVE account';
+    title.textContent='Create your account';
     text.textContent=message || 'Set up your account so your dreams and reflections stay with you across devices.';
     note.textContent='A real name helps with warmer welcome messages. You can change it later in settings.';
     nicknameField.classList.remove('hidden');
@@ -7091,15 +7330,15 @@ function updateAuthGate(message='', options={}){
   }
 
   if(isResetMode){
-    title.textContent='Reset your COVE password';
-    text.textContent=message || 'Take a breath. Create a fresh password for COVE, and continue whenever you’re ready.';
-    note.textContent='Your COVE account and saved progress will still be here for you.';
+    title.textContent='Reset your password';
+    text.textContent=message || 'Take a breath. Create a fresh password and continue whenever you’re ready.';
+    note.textContent='Your account and saved progress will still be here for you.';
     emailField.classList.add('hidden');
     nicknameField.classList.add('hidden');
     passwordConfirmField.classList.remove('hidden');
     helpRow.classList.add('hidden');
     modeCard.classList.add('show');
-    modeCard.textContent='This only takes a moment. Pick something new for COVE, and we’ll tuck the rest into place.';
+    modeCard.textContent='This only takes a moment. Pick something new, and we’ll tuck the rest into place.';
     passwordInput.placeholder='New password';
     passwordInput.autocomplete='new-password';
     loginBtn.textContent='Save new password';
@@ -7108,12 +7347,12 @@ function updateAuthGate(message='', options={}){
     return;
   }
 
-  title.textContent='COVE';
+  title.textContent='';
   text.textContent=message || '';
 
   // Show "continue locally" only when local dreams exist and Supabase hasn't resolved yet
   const _localDreams = (() => { try { return JSON.parse(localStorage.getItem('qDreams9')||'[]').length; } catch { return 0; } })();
-  if(_localDreams > 0 && !supabaseUser){
+  if(_localDreams > 0 && !supabaseUser && isGuestPreviewActive()){
     const _skipId = 'authSkipLocal';
     if(!document.getElementById(_skipId)){
       const _skipBtn = document.createElement('button');
@@ -8063,6 +8302,7 @@ const STORAGE_KEY_FIRST_SESSION_AT = 'qFirstSessionAt9';
 const STORAGE_KEY_SESSION_END_DREAMS = 'qSessionEndDreamCount9';
 const STORAGE_KEY_SESSION_END_AT = 'qSessionEndAt9';
 const STORAGE_KEY_GUEST_STARTED_AT = 'qGuestStartedAt9';
+const STORAGE_KEY_GUEST_LOCKED = 'qGuestPreviewLocked9';
 const STORAGE_KEY_CHAPTER_OPENED = 'qChapterOpenedThisSession9';
 const STORAGE_KEY_SYNTHESIS_SEEN = 'qSynthesisSeenThisSession9';
 const STORAGE_KEY_MICRO_INSIGHT_SEEN = 'qMicroInsightSeenThisSession9';
@@ -8722,6 +8962,7 @@ let firstSessionAt = String(safeLocalStorageGet(STORAGE_KEY_FIRST_SESSION_AT,'')
 let sessionEndDreamCount = Math.max(0, parseInt(safeLocalStorageGet(STORAGE_KEY_SESSION_END_DREAMS,'0')||'0',10)||0);
 let sessionEndAt = String(safeLocalStorageGet(STORAGE_KEY_SESSION_END_AT,'')||'').trim();
 let guestPreviewStartedAt = Math.max(0, parseInt(safeLocalStorageGet(STORAGE_KEY_GUEST_STARTED_AT,'0')||'0',10)||0);
+let guestPreviewLocked = safeLocalStorageGet(STORAGE_KEY_GUEST_LOCKED,'0') === '1';
 let guestPreviewTimer = 0;
 let guestPreviewExpiryNoticeShown = false;
 let adminPreviewMode = 'paid';
