@@ -6910,6 +6910,29 @@ function updateAuthGate(message=''){
 
   title.textContent='COVE';
   text.textContent=message || '';
+
+  // Show "continue locally" only when local dreams exist and Supabase hasn't resolved yet
+  const _localDreams = (() => { try { return JSON.parse(localStorage.getItem('qDreams9')||'[]').length; } catch { return 0; } })();
+  if(_localDreams > 0 && !supabaseUser){
+    const _skipId = 'authSkipLocal';
+    if(!document.getElementById(_skipId)){
+      const _skipBtn = document.createElement('button');
+      _skipBtn.id = _skipId;
+      _skipBtn.type = 'button';
+      _skipBtn.className = 'auth-text-link';
+      _skipBtn.style.cssText = 'display:block;margin:8px auto 0;font-size:12px;color:var(--text-muted);';
+      _skipBtn.textContent = `Continue with your ${_localDreams} local dream${_localDreams !== 1 ? 's' : ''} →`;
+      _skipBtn.onclick = () => {
+        unlockAuthenticatedApp(true);
+        document.body.classList.remove('auth-gate-active');
+        render(true);
+      };
+      gate.querySelector('.auth-gate-card')?.appendChild(_skipBtn);
+    }
+  } else {
+    document.getElementById('authSkipLocal')?.remove();
+  }
+
   note.innerHTML='For the dreams you haven\'t said out loud yet. <a href="/privacy" target="_blank" rel="noopener" onclick="return openLegalDoc(\'privacy\', event)" style="color:inherit;text-decoration:underline;text-underline-offset:2px;">Privacy</a> · <a href="/terms" target="_blank" rel="noopener" onclick="return openLegalDoc(\'terms\', event)" style="color:inherit;text-decoration:underline;text-underline-offset:2px;">Terms</a>';
   syncSignupConsentState();
   if(!message || /welcome back|dream|simple for now|password help|qonsensus/i.test(message)){
@@ -9495,7 +9518,9 @@ function getResourcesForCountry(countryCode) {
 }
 
 function checkForCrisisLanguage(text) {
-  return false;
+  if (!text) return false;
+  const normalised = String(text).toLowerCase().replace(/[^\w\s]/g, ' ');
+  return CRISIS_PATTERNS.some(pattern => pattern.test(normalised));
 }
 
 function checkAndHandleCrisisText(text, { sourceEl = null, clear = false, source = 'unknown' } = {}) {
@@ -11474,7 +11499,9 @@ function renderSynGate(){
   if(!gate)return;
   const wantsLocked=dreams.length<3;
   const gateShowsLocked=gate.querySelector('.syn-locked')!==null;
-  if(dreams.length===lastSynGateDreamsCount&&gate.innerHTML.trim()&&gateShowsLocked===wantsLocked)return;
+  const paidNow = isPaid();
+  if(dreams.length===lastSynGateDreamsCount&&gate.innerHTML.trim()&&gateShowsLocked===wantsLocked&&gate.dataset.paidState===String(paidNow))return;
+  gate.dataset.paidState = String(paidNow);
   if(dreams.length>=3){
     const freeUsed=!isPaid()&&synthesisCount>=1;
     const weekCard=buildWeekVariantCard();
@@ -11866,7 +11893,7 @@ function buildDreamRowHTML(d,dom,now){
             <span class="cdr-text" id="text-${d.id}">${esc(d.text)}</span>
             ${woopComplete?`<button class="cdr-woop-indicator" type="button" onclick="event.stopPropagation();openDreamDashboard('${d.id}','woop')">WOOP ✓</button>`:''}
             ${isStale?'<span class="stale-label">30d+</span>':''}
-            <button class="cdr-del-btn" onclick="event.stopPropagation();removeDream('${d.id}','${d.domain}')" title="Remove">✕</button>
+            <button class="cdr-del-btn" data-dream-id="${esc(d.id)}" data-dream-domain="${esc(d.domain)}" onclick="event.stopPropagation();removeDreamFromBtn(this)" title="Remove">✕</button>
           </div>
           ${attachmentSummary}
           <div class="cdr-bottom">
@@ -11916,7 +11943,7 @@ function buildDreamRowHTML(d,dom,now){
               </div>
             </div>
             <div class="cdr-bottom-actions">
-              <button class="cdr-edit-btn" onclick="event.stopPropagation();openEditRow('${d.id}','${d.text.replace(/'/g,"\\'")}')">edit</button>
+              <button class="cdr-edit-btn" data-dream-id="${esc(d.id)}" data-dream-text="${esc(d.text)}" onclick="event.stopPropagation();openEditRowFromBtn(this)">edit</button>
             </div>
           </div>
         </div>
@@ -12108,12 +12135,21 @@ function render(rebuildTabs=true){
   updateSummaryBar();
   rendercoverage();
   if(daysSinceFirst>=3){
-    queueAiCall(()=>computeGapInsight()).catch(err=>{
-      reportDebug('info','Deferred gap insight queue failed',{error:err?.message});
-    });
-    queueAiCall(()=>maybeSurfaceTension()).catch(err=>{
-      reportDebug('info','Deferred tension queue failed',{error:err?.message});
-    });
+    // Only re-queue if dream count or statuses changed since last AI analysis
+    const _gapKey = dreams.map(d=>d.domain).sort().join(',');
+    const _tensionKey = dreams.map(d=>d.id+d.status).join(',');
+    if(render._lastGapKey!==_gapKey){
+      render._lastGapKey=_gapKey;
+      queueAiCall(()=>computeGapInsight()).catch(err=>{
+        reportDebug('info','Deferred gap insight queue failed',{error:err?.message});
+      });
+    }
+    if(render._lastTensionKey!==_tensionKey&&dreams.length>=8){
+      render._lastTensionKey=_tensionKey;
+      queueAiCall(()=>maybeSurfaceTension()).catch(err=>{
+        reportDebug('info','Deferred tension queue failed',{error:err?.message});
+      });
+    }
   }else{
     getUI('gapInsight')?.classList.remove('visible','gap-insight-dismissing');
     hideTensionCard(true);
@@ -13033,8 +13069,9 @@ function startPreMortem(dreamId){
   clearDeepDiveAutoAdvance();
   document.getElementById('deepDiveOverlay')?.classList.add('open');
   document.body.style.overflow='hidden';
+  deepDiveState.stepIndex = -1;  // ensure intro always shows, even if reopened
   renderDeepDiveOverlay();
-  requestAnimationFrame(()=>document.getElementById('deepDiveInput')?.focus());
+  // don't auto-focus on intro screen — focus happens when user clicks Begin
 }
 
 function finishPreMortem(nextActionSet=false){
@@ -13663,6 +13700,16 @@ function openEditRow(id,cur){
   inp.value=cur;wrap.classList.add('open');
   if(row)row.style.display='none';
   inp.focus();inp.setSelectionRange(inp.value.length,inp.value.length);
+}
+function openEditRowFromBtn(btn) {
+  const id = btn.dataset.dreamId;
+  const text = btn.dataset.dreamText; // already HTML-decoded by the browser
+  if (id && text !== undefined) openEditRow(id, text);
+}
+function removeDreamFromBtn(btn) {
+  const id = btn.dataset.dreamId;
+  const domain = btn.dataset.dreamDomain;
+  if (id) removeDream(id, domain || '');
 }
 function cancelEdit(id){document.getElementById(`edit-${id}`)?.classList.remove('open');const r=document.getElementById(`row-${id}`);if(r)r.style.display='';}
 function cancelAllEdits(){document.querySelectorAll('.cdr-edit-wrap.open').forEach(w=>cancelEdit(w.id.replace('edit-','')));}
@@ -15391,6 +15438,21 @@ document.addEventListener('keydown',e=>{
   });
 
   window.addEventListener('resize', handleResize, { passive: true });
+
+  // Pause animation loop when tab is hidden, resume when visible again
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'hidden') {
+      if (rafId) {
+        cancelAnimationFrame(rafId);
+        rafId = 0;
+      }
+    } else {
+      if (!rafId) {
+        lastFrame = 0; // reset so dt doesn't spike on resume
+        rafId = requestAnimationFrame(animate);
+      }
+    }
+  });
 })();
 </script>
 </body>
