@@ -6153,6 +6153,14 @@ function getAuthDisplayName(){
     .replace(/\b\w/g, ch=>ch.toUpperCase());
 }
 
+function getTimeOfDayGreeting(){
+  const theme=getUiTimeTheme();
+  if(theme==='morning') return 'Good morning';
+  if(theme==='evening') return 'Good evening';
+  if(theme==='night') return 'Good night';
+  return 'Good afternoon';
+}
+
 function getAuthWelcomeLine(prefix='Welcome'){
   const displayName=getAuthDisplayName();
   return displayName ? `${prefix}, ${displayName}` : prefix;
@@ -6667,7 +6675,7 @@ function showAuthWelcome(kind='login'){
   if(!wrap || !kicker || !title || !copy)return;
 
   hydrateAuthWelcomeScene();
-  const headline = kind==='signup' ? 'Welcome' : 'Welcome back';
+  const headline = kind==='signup' ? 'Welcome' : getTimeOfDayGreeting();
   const welcomeLine=getAuthWelcomeLine(headline);
 
   kicker.textContent=headline;
@@ -7063,10 +7071,10 @@ async function submitPasswordAuth(mode='login'){
       supabaseUser=data?.user || supabaseUser;
       cloudSyncHydrated=false;
       showAuthWelcome('login');
-      syncCloudUi(`${getAuthWelcomeLine('Welcome back')}. Checking for your cloud dreams now.`);
+      syncCloudUi(`${getAuthWelcomeLine(getTimeOfDayGreeting())}. Checking for your cloud dreams now.`);
       if(!cloudSyncHydrated)await loadCloudSyncSnapshot();
       maybeShowCheckin(2200);
-      setAuthFeedback('Welcome back. You’re logged in.', 'success');
+      setAuthFeedback(`${getTimeOfDayGreeting()}. You’re logged in.`, 'success');
     }
     if(passwordInput)passwordInput.value='';
     if(confirmInput)confirmInput.value='';
@@ -9726,7 +9734,8 @@ function buildReturnGreeting(){
   const hl=document.getElementById('rgHeadline');
   const sub=document.getElementById('rgSub');
   const displayName=getAuthDisplayName();
-  const welcomeLead=displayName ? `Welcome back, ${displayName}.` : 'Welcome back.';
+  const timeGreeting=getTimeOfDayGreeting();
+  const welcomeLead=displayName ? `${timeGreeting}, ${displayName}.` : `${timeGreeting}.`;
   const groups=groupedDreams();
   const primaryGap=getPrimaryMissingDomain(groups);
   if(!rg||!hl||!sub)return;
