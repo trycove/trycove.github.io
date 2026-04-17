@@ -1,0 +1,7 @@
+.auth-q-logo {
+  filter: drop-shadow(0 0 5px rgba(232, 168, 158, 0.4)) drop-shadow(0 0 10px rgba(200, 118, 106, 0.6));
+}
+
+.auth-q-logo-shell {
+  margin-bottom: -5px;
+}
