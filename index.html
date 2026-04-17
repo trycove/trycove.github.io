@@ -823,9 +823,9 @@ body.auth-welcome-active .auth-gate-card {
 }
 .auth-reel-c {
   position: relative;
-  width: 44px;
-  height: 44px;
-  margin: 0 auto 14px;
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 18px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -846,25 +846,18 @@ body.auth-welcome-active .auth-gate-card {
 .auth-reel-c svg {
   position: relative;
   z-index: 1;
-  width: 44px;
-  height: 44px;
+  width: 64px;
+  height: 64px;
   display: block;
 }
 .auth-reel-path {
-  filter: drop-shadow(0 0 10px rgba(232,168,158,0.26));
+  filter: drop-shadow(0 0 12px rgba(232,168,158,0.32));
 }
 .auth-reel-path-base {
   stroke: rgba(168,83,72,0.58);
 }
 .auth-reel-path-shimmer {
-  stroke-dasharray: 40 220;
-  stroke-dashoffset: 0;
-  animation: authReelSweep 2.8s linear infinite;
-}
-@keyframes authReelSweep {
-  to {
-    stroke-dashoffset: -260;
-  }
+  stroke: url(#authReelShimmerGradient);
 }
 .auth-gate-kicker {
   display: inline-flex;
@@ -4984,14 +4977,14 @@ body::before { animation: ambientDrift 18s ease-in-out infinite; }
           <linearGradient id="authReelShimmerGradient" gradientUnits="userSpaceOnUse" x1="-8" y1="0" x2="108" y2="0">
             <stop offset="0%" stop-color="#C8766A"></stop>
             <stop offset="45%" stop-color="#E8A89E"></stop>
-            <stop offset="55%" stop-color="#FAEDE9"></stop>
-            <stop offset="75%" stop-color="#E8A89E"></stop>
+            <stop offset="55%" stop-color="#D4A898"></stop>
+            <stop offset="75%" stop-color="#A85348"></stop>
             <stop offset="100%" stop-color="#A85348"></stop>
-            <animateTransform attributeName="gradientTransform" type="translate" values="-120 0;120 0;-120 0" dur="5.2s" repeatCount="indefinite"></animateTransform>
+            <animateTransform attributeName="gradientTransform" type="translate" values="-120 0;120 0;-120 0" dur="5s" calcMode="spline" keyTimes="0;0.5;1" keySplines="0.42 0 0.58 1;0.42 0 0.58 1" repeatCount="indefinite"></animateTransform>
           </linearGradient>
         </defs>
         <path class="auth-reel-path auth-reel-path-base" fill="none" stroke-width="10" stroke-linecap="round" d="M 68 27 A 32 32 0 1 0 40 67"></path>
-        <path class="auth-reel-path auth-reel-path-shimmer" fill="none" stroke="url(#authReelShimmerGradient)" stroke-width="10" stroke-linecap="round" d="M 68 27 A 32 32 0 1 0 40 67"></path>
+        <path class="auth-reel-path auth-reel-path-shimmer" fill="none" stroke-width="10" stroke-linecap="round" d="M 68 27 A 32 32 0 1 0 40 67"></path>
       </svg>
     </div>
     <h1 class="auth-gate-title" id="authGateTitle">Welcome back</h1>
