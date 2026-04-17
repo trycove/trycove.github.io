@@ -3,6 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- Referrer policy controls how much URL info is sent in the Referer header.
+     For HTTP security headers (X-Content-Type-Options, X-Frame-Options, etc.) that
+     cannot be set via meta tags, configure them in your hosting provider's settings
+     (e.g. GitHub Pages custom headers, Cloudflare, or Netlify _headers file). -->
+<meta name="referrer" content="strict-origin-when-cross-origin">
 <title>COVE</title>
 
 <!-- SEO & Social Metadata -->
@@ -26,6 +31,11 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
+// Supabase anon key — this key is intentionally public (Supabase anon keys are
+// designed for client-side use and are protected by Row Level Security policies).
+// Never commit your service_role key here.
+// To override via a build step, set window.SUPABASE_URL and window.SUPABASE_ANON_KEY
+// before this script runs (e.g. from a CI-injected config snippet).
 window.SUPABASE_URL = window.SUPABASE_URL || 'https://uzuymjdlearbvciajnqr.supabase.co';
 window.SUPABASE_ANON_KEY = window.SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV6dXltamRsZWFyYnZjaWFqbnFyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU1ODQyNzEsImV4cCI6MjA5MTE2MDI3MX0.Xs5Bz7gt5_99BuJU0olO6CSV0otxm6D94UFy7ggRlQ8';
 window.__getUiTimeTheme = function(){
@@ -4973,8 +4983,13 @@ body::before { animation: ambientDrift 18s ease-in-out infinite; }
     <h1 class="auth-gate-title" id="authGateTitle">Welcome back</h1>
 
     <p class="auth-gate-message" id="authGateMessage"></p>
+<<<<<<< HEAD
     <form class="auth-gate-form" onsubmit="handleAuthSubmit(); return false;">
       <div class="auth-mode-card" id="authModeCard">Take a breath. Choose a new password, and we’ll take care of the rest.</div>
+=======
+    <form class="auth-gate-form" aria-label="Sign in or create a COVE account" onsubmit="handleAuthSubmit(); return false;">
+      <div class="auth-mode-card" id="authModeCard">Take a breath. Choose a new password for COVE, and we’ll take care of the rest.</div>
+>>>>>>> 90a333475e11e22392c52ee87483fade86264c4f
       <div class="auth-field" id="authEmailField">
         <div class="auth-field-head">
           <label class="auth-field-label" for="authEmail">Email</label>
@@ -4996,9 +5011,15 @@ body::before { animation: ambientDrift 18s ease-in-out infinite; }
         <input class="auth-input" id="authNickname" type="text" autocomplete="nickname" placeholder="Your name" />
       </div>
       <div class="auth-field" id="authPasswordField">
+        <div class="auth-field-head">
+          <label class="auth-field-label" for="authPassword">Password</label>
+        </div>
         <input class="auth-input" id="authPassword" type="password" autocomplete="current-password" placeholder="Password" />
       </div>
       <div class="auth-field hidden" id="authPasswordConfirmField">
+        <div class="auth-field-head">
+          <label class="auth-field-label" for="authPasswordConfirm">Confirm new password</label>
+        </div>
         <input class="auth-input" id="authPasswordConfirm" type="password" autocomplete="new-password" placeholder="Confirm new password" />
       </div>
       <div class="auth-help-row" id="authHelpRow">
