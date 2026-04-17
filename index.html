@@ -7014,6 +7014,29 @@ function startAmbientThemeRefresh(){
   }, 45000);
 }
 
+function initAuthReelGradientShimmer(){
+  const gradient=document.getElementById('authReelShimmerGradient');
+  if(!gradient || gradient.dataset.jsAnimated==='1')return;
+
+  const existingSmil=gradient.querySelector('animateTransform[attributeName="gradientTransform"]');
+  if(existingSmil)existingSmil.remove();
+
+  gradient.dataset.jsAnimated='1';
+  const amplitude=140;
+  const durationMs=5000;
+  const start=performance.now();
+
+  const tick=(now)=>{
+    const cycle=((now-start)%durationMs)/durationMs;
+    const eased=0.5 - 0.5*Math.cos(cycle*Math.PI*2);
+    const x=(-amplitude) + (eased*(amplitude*2));
+    gradient.setAttribute('gradientTransform', `translate(${x.toFixed(2)} 0)`);
+    window.requestAnimationFrame(tick);
+  };
+
+  window.requestAnimationFrame(tick);
+}
+
 function getTimeBasedAuthScene(date=new Date()){
   applyUiTimeTheme();
   const hours = date.getHours() + (date.getMinutes() / 60);
@@ -9581,6 +9604,7 @@ function requestWindowRerender(){
 document.addEventListener('DOMContentLoaded', () => {
   applyUiTimeTheme();
   syncUiThemeControls();
+  initAuthReelGradientShimmer();
   startAmbientThemeRefresh();
   syncRecPanelState();
   setupInputCardDragDrop();
@@ -15526,6 +15550,7 @@ document.addEventListener('keydown',e=>{
   syncCloudUi();
   scheduleGuestPreviewEnforcement();
   render();
+  initAuthReelGradientShimmer();
   showOnboarding();
   maybeShowCheckin();
   maybePromptCapsuleReveal();
