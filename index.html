@@ -4995,7 +4995,7 @@ body::before { animation: ambientDrift 18s ease-in-out infinite; }
     <p>We aim to keep COVE available and working well, but we cannot guarantee uninterrupted access. The service may be updated, paused, or changed at any time. We will try to give notice for significant changes.</p>
 
     <h3>Free and paid tiers</h3>
-    <p>COVE offers a free tier with limited features and a paid tier with additional access. Paid features are noted within the app. Pricing may change over time; changes will be communicated before they take effect for existing users.</p>
+    <p>COVE has a free tier for core dream capture and a paid tier (COVE Plus) for deeper tools. Paid features are clearly labeled in the app before use. Some paid features may include a one-time free preview so you can decide without feeling locked in after an emotional session. Pricing may change over time; changes will be communicated before they take effect for existing users.</p>
 
     <h3>Account deletion</h3>
     <p>You can delete your account at any time from the Settings panel inside the app. Deletion removes your cloud-synced data. We do not offer refunds for unused portions of a paid period unless required by applicable law.</p>
@@ -7909,6 +7909,7 @@ const STORAGE_KEY_LAST_DREAMBOX_OPENED = 'qLastDreamboxOpened9';
 const STORAGE_KEY_CLOUD_PLAN = 'qCloudPlan9';
 const STORAGE_KEY_AHA_AT = 'qAhaAt9';
 const STORAGE_KEY_PAYWALL_SHOWN = 'qPaywallShownCount';
+const STORAGE_KEY_FREE_PREVIEW_USES = 'qFreePreviewUses9';
 const STORAGE_KEY_SYNTHESIS_COUNT = 'qSynthesisCount9';
 const STORAGE_KEY_FIRST_SESSION_AT = 'qFirstSessionAt9';
 const STORAGE_KEY_SESSION_END_DREAMS = 'qSessionEndDreamCount9';
@@ -8813,7 +8814,7 @@ function openPaywallPricing(){
   openPaywallModal({
     kicker:'Upgrade',
     title:'Unlock full COVE tools',
-    copy:'Paid plans unlock deeper reflection tools like extra Deep Dives, Daily Pulse reflections, and later Life Capsule reveals. $8 / month or $60 / year. Cancel anytime.',
+    copy:'Core dream capture is always free. COVE Plus unlocks deeper reflection tools like extra Deep Dives, Daily Pulse reflections, and later Life Capsule reveals. $8 / month or $60 / year. Cancel anytime.',
     mode:'pricing'
   });
 }
@@ -8844,41 +8845,37 @@ function toggleAdminPerspective(){
 }
 
 function canShowPaywallGate(){
-  return dreams.length>=3 && (Date.now()-appStartedAt)>=5*60*1000;
+  return true;
 }
 
 function showAhaNudgeForGate(featureLabel='this feature'){
   if(isOwnerUser()&&adminPreviewMode==='paid')return;
   const note=getUI('firstDreamNote');
   if(note){
-    note.textContent=`Unlock ${featureLabel}: add 3 dreams, open a chapter, and read one reflection first.`;
+    note.textContent=`${featureLabel} is part of COVE Plus. You can still keep capturing dreams for free.`;
     note.classList.remove('aha-link');
     note.classList.add('visible');
     if(firstDreamNoteTimer)clearTimeout(firstDreamNoteTimer);
     firstDreamNoteTimer=setTimeout(()=>hideFirstDreamNote(),5200);
     return;
   }
-  showToast(`Unlock ${featureLabel} by adding 3 dreams, opening a chapter card, and reading one reflection first.`, 'error');
+  showToast(`${featureLabel} is part of COVE Plus. Core dream capture stays free.`, 'info');
 }
 
-function tryOpenPaidGate(featureLabel='this feature'){
+function tryOpenPaidGate(featureLabel='this feature', featureKey=''){
   if(isOwnerUser()&&adminPreviewMode==='paid')return true;
   if(isPaid())return true;
-  if(!canShowPaywallGate()){
-    showAhaNudgeForGate(featureLabel);
-    return false;
-  }
-  if(!hasAha()){
-    showAhaNudgeForGate(featureLabel);
-    return false;
+  const key=String(featureKey||'').trim();
+  if(key&&isFeatureAllowed(key)){
+    return true;
   }
   paywallTriggerCount+=1;
   safeLocalStorageSet(STORAGE_KEY_PAYWALL_SHOWN,String(paywallTriggerCount));
   if(paywallTriggerCount===1){
     const firstPaywall={
-      kicker:'Locked feature',
-      title:`${featureLabel} is part of the paid plan`,
-      copy:'Core dream capture stays free. Some deeper reflection tools are paid. If you are in the middle of a reflective session, we will wait until you are finished before showing upgrade options.',
+      kicker:'COVE Plus feature',
+      title:`${featureLabel} is available in COVE Plus`,
+      copy:'Core dream capture is always free. Deeper tools are clearly marked as COVE Plus so you can choose before getting pulled in. If you are in a reflective flow, we wait until you finish before showing upgrade options.',
       mode:'intro'
     };
     if(isReflectionFlowOpen())queueDeferredPaywall(firstPaywall);
@@ -8895,8 +8892,34 @@ function tryOpenPaidGate(featureLabel='this feature'){
   return false;
 }
 
+function getFreePreviewUses(){
+  try{
+    const parsed=JSON.parse(safeLocalStorageGet(STORAGE_KEY_FREE_PREVIEW_USES,'{}')||'{}');
+    return parsed&&typeof parsed==='object'?parsed:{};
+  }catch(_){
+    return {};
+  }
+}
+
 function isFeatureAllowed(feature=''){
   if(isPaid())return true;
+  const normalizedFeature=String(feature||'').toLowerCase();
+  if(normalizedFeature==='pulse-reflection'||normalizedFeature==='life-capsule-reveal'||normalizedFeature==='life-letter'){
+    const freePreviewLabels={
+      'pulse-reflection':'Daily Pulse reflection',
+      'life-capsule-reveal':'Life Capsule reveal',
+      'life-letter':'Life Letter'
+    };
+    const current=getFreePreviewUses();
+    const previewUses=parseInt(current[normalizedFeature]||0,10)||0;
+    if(previewUses<1){
+      current[normalizedFeature]=previewUses+1;
+      safeLocalStorageSet(STORAGE_KEY_FREE_PREVIEW_USES,JSON.stringify(current));
+      showToast(`Your first ${freePreviewLabels[normalizedFeature]||'premium feature'} is included on the free plan.`, 'info');
+      return true;
+    }
+    return false;
+  }
   if(feature==='deep-dive'){
     const guidedCount=deepDiveSessions.filter(session=>String(session?.type||'deepdive')==='deepdive').length;
     return guidedCount<1;
@@ -8909,7 +8932,7 @@ function isFeatureAllowed(feature=''){
 
 function guardPaidFeature(feature='', featureLabel='this feature'){
   if(isFeatureAllowed(feature))return true;
-  return tryOpenPaidGate(featureLabel);
+  return tryOpenPaidGate(featureLabel, feature);
 }
 
 function getUI(id){
@@ -10194,7 +10217,7 @@ function setCapsuleNowResponse(index,value){
 }
 function openCapsuleRevealFlow(info=getPendingCapsuleRevealInfo()){ 
   if(!info||!hasLifeCapsule())return false;
-  if((info.days===90||info.days===180)&&!tryOpenPaidGate('Life Capsule reveals'))return false;
+  if((info.days===90||info.days===180)&&!guardPaidFeature('life-capsule-reveal','Life Capsule reveals'))return false;
   const existing=normalizeCapsuleReflectionEntry(lifeCapsule?.[info.reflectionKey])||null;
   capsuleRevealState.open=true;
   capsuleRevealState.days=info.days;
@@ -10858,7 +10881,7 @@ function setPulseHistoryView(view='recent'){
     return;
   }
   if(next==='reflect'&&!isPaid()){
-    tryOpenPaidGate('Daily Pulse reflection');
+    guardPaidFeature('pulse-reflection','Daily Pulse reflection');
     pulseHistoryView='recent';
     renderPulseHistorySection();
     return;
@@ -11119,7 +11142,7 @@ function canRefreshPulseReflection(){
 
 async function generatePulseReflection(forceRefresh=false){
   if(!isPaid()){
-    tryOpenPaidGate('Daily Pulse reflection');
+    guardPaidFeature('pulse-reflection','Daily Pulse reflection');
     return;
   }
   if(pulseReflectionLoading)return;
@@ -14873,7 +14896,7 @@ function exportData(){
 // LIFE LETTER
 // ═══════════════════════════════════════════════════
 async function openLifeLetter(){
-  if(!tryOpenPaidGate('Life Letter'))return;
+  if(!guardPaidFeature('life-letter','Life Letter'))return;
   document.getElementById('llOverlay').classList.add('open');
   document.body.style.overflow='hidden';
   const txt=document.getElementById('llText');
