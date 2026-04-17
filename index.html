@@ -853,6 +853,19 @@ body.auth-welcome-active .auth-gate-card {
 .auth-reel-path {
   filter: drop-shadow(0 0 10px rgba(232,168,158,0.26));
 }
+.auth-reel-path-base {
+  stroke: rgba(168,83,72,0.58);
+}
+.auth-reel-path-shimmer {
+  stroke-dasharray: 40 220;
+  stroke-dashoffset: 0;
+  animation: authReelSweep 2.8s linear infinite;
+}
+@keyframes authReelSweep {
+  to {
+    stroke-dashoffset: -260;
+  }
+}
 .auth-gate-kicker {
   display: inline-flex;
   align-items: center;
@@ -4977,7 +4990,8 @@ body::before { animation: ambientDrift 18s ease-in-out infinite; }
             <animateTransform attributeName="gradientTransform" type="translate" values="-120 0;120 0;-120 0" dur="5.2s" repeatCount="indefinite"></animateTransform>
           </linearGradient>
         </defs>
-        <path class="auth-reel-path" fill="none" stroke="url(#authReelShimmerGradient)" stroke-width="10" stroke-linecap="round" d="M 68 27 A 32 32 0 1 0 40 67"></path>
+        <path class="auth-reel-path auth-reel-path-base" fill="none" stroke-width="10" stroke-linecap="round" d="M 68 27 A 32 32 0 1 0 40 67"></path>
+        <path class="auth-reel-path auth-reel-path-shimmer" fill="none" stroke="url(#authReelShimmerGradient)" stroke-width="10" stroke-linecap="round" d="M 68 27 A 32 32 0 1 0 40 67"></path>
       </svg>
     </div>
     <h1 class="auth-gate-title" id="authGateTitle">Welcome back</h1>
