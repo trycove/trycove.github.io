@@ -2426,6 +2426,8 @@ body.auth-welcome-active .auth-gate-card {
   color: var(--text);
   margin-bottom: 4px;
   letter-spacing: -0.01em;
+  line-height: 1.34;
+  overflow-wrap: anywhere;
 }
 .rec-desc {
   font-family: 'Lora', Georgia, serif;
@@ -2507,6 +2509,7 @@ body.auth-welcome-active .auth-gate-card {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  max-width: 100%;
   min-height: 32px;
   font-size: 10px;
   letter-spacing: 0.08em;
@@ -2519,7 +2522,9 @@ body.auth-welcome-active .auth-gate-card {
   cursor: pointer;
   transition: all .2s;
   font-weight: 600;
-  white-space: nowrap;
+  white-space: normal;
+  text-align: center;
+  line-height: 1.25;
 }
 .rec-action:hover {
   background: color-mix(in srgb, var(--rose) 10%, transparent);
@@ -2551,6 +2556,9 @@ body.auth-welcome-active .auth-gate-card {
   background: color-mix(in srgb, var(--rose) 8%, var(--surface2));
 }
 @media (max-width:640px) {
+  .rec-title {
+    font-size: 13px;
+  }
   .rec-action {
     margin-left: 0;
     width: 100%;
@@ -3242,13 +3250,18 @@ body.auth-welcome-active .auth-gate-card {
 .cdr-next-action.visible { display:block; }
 .cna-label { font-size:8px;letter-spacing:0.18em;text-transform:uppercase;color:rgba(78,150,102,0.6);margin-bottom:8px; }
 .cna-input-row { display:flex;align-items:center;gap:8px; }
-.cna-input { flex:1;background:transparent;border:none;border-bottom:1px solid var(--border);outline:none;font-family:'Lora',Georgia,serif;font-size:13px;font-style:italic;color:var(--text);padding:3px 0;transition:border-color .2s; }
+.cna-input { flex:1;min-width:160px;background:transparent;border:none;border-bottom:1px solid var(--border);outline:none;font-family:'Lora',Georgia,serif;font-size:13px;font-style:italic;color:var(--text);padding:3px 0;transition:border-color .2s; }
 .cna-input::placeholder { color:var(--text-faint); }
 .cna-input:focus { border-color:var(--green);box-shadow:0 2px 0 rgba(78,150,102,0.2); }
 .cna-save { font-size:9px;letter-spacing:0.08em;text-transform:uppercase;padding:5px 10px;border-radius:4px;background:transparent;border:1px solid rgba(78,150,102,0.35);color:var(--green);cursor:pointer;transition:all .2s;white-space:nowrap;font-weight:500; }
 .cna-save:hover { background:rgba(78,150,102,0.07);box-shadow:var(--glow-green); }
 .cna-saved { font-family:'Lora',Georgia,serif;font-size:13px;font-style:italic;color:var(--green);display:none;opacity:0.7; }
 .cna-saved.show { display:block; }
+@media (max-width:640px) {
+  .cna-input-row { align-items:stretch;flex-wrap:wrap; }
+  .cna-input { min-width:0;width:100%; }
+  .cna-save { width:100%;padding:7px 10px; }
+}
 
 .cdr-edit-wrap { display:none;padding:10px 16px;gap:8px;align-items:center;border-bottom:1px solid var(--border);background:var(--surface2); }
 .cdr-edit-wrap.open { display:flex; }
@@ -12286,6 +12299,21 @@ function openTimelineFromRecommendation(){
   }
 }
 
+function openNextActionFromRecommendation(dreamId){
+  const dream=dreams.find(d=>d.id===dreamId);
+  if(!dream)return;
+  setView('chapters');
+  requestAnimationFrame(()=>{
+    const card=document.querySelector(`.cat-card[data-domkey="${dream.domain}"]`);
+    if(card&&!card.classList.contains('expanded'))card.classList.add('expanded');
+    markChapterOpenedInSession();
+    const row=document.getElementById(`na-${dream.id}`)||document.getElementById(`row-${dream.id}`);
+    if(row)row.scrollIntoView({behavior:'smooth',block:'center'});
+    const input=document.getElementById(`na-inp-${dream.id}`);
+    if(input&&input.offsetParent!==null)input.focus();
+  });
+}
+
 function toggleRecPanel(){
   const sidePanel=document.getElementById('sidePanel');
   const isMobile=window.innerWidth<=1023;
@@ -12328,6 +12356,8 @@ function buildDreamProfile(){
   const weeklyDreams=[];
   let recentDream=null;
   let dreamingDream=null;
+  let stepReadyDream=null;
+  let savedNextActionDream=null;
 
   dreams.forEach(d=>{
     if(!d)return;
@@ -12341,6 +12371,8 @@ function buildDreamProfile(){
     if(createdAt>=weekCutoff)weeklyDreams.push(d);
     if(!recentDream||createdAt>new Date(recentDream.createdAt||0).getTime())recentDream=d;
     if(d.status==='dreaming'&&(!dreamingDream||createdAt>new Date(dreamingDream.createdAt||0).getTime()))dreamingDream=d;
+    if((d.status==='active'||d.status==='done')&&(!stepReadyDream||createdAt>new Date(stepReadyDream.createdAt||0).getTime()))stepReadyDream=d;
+    if((d.status==='active'||d.status==='done')&&String(d.nextAction||'').trim()&&d.nextActionSaved&&(!savedNextActionDream||createdAt>new Date(savedNextActionDream.createdAt||0).getTime()))savedNextActionDream=d;
   });
 
   const presentDomains=Object.entries(domainCounts)
@@ -12355,6 +12387,8 @@ function buildDreamProfile(){
     missingDomains,
     recentDream,
     dreamingDream:dreamingDream||recentDream,
+    stepReadyDream,
+    savedNextActionDream,
     weeklyCount:weeklyDreams.length,
     weeklyDomainCount,
     thisYearRatio:(horizonCounts['this year']||0)/Math.max(1,dreams.length),
@@ -12455,18 +12489,19 @@ function renderRecommendations(){
     note:'These are reflective prompts, not truths. Keep what fits and ignore what doesn’t.'
   }));
 
-  const next=profile.dreamingDream;
+  const next=profile.savedNextActionDream||profile.stepReadyDream;
   if(next&&cards.length<3){
     const snippet=next.text.length>72?`${next.text.slice(0,72)}…`:next.text;
+    const hasSaved=Boolean(profile.savedNextActionDream&&profile.savedNextActionDream.id===next.id&&String(next.nextAction||'').trim());
     cards.push(createRecommendationCardMarkup({
       icon:'→',
       tone:'action',
-      title:'One dream looks ready for a small step',
+      title:hasSaved?'One dream already has a clear next step':'One dream looks ready for a small step',
       featuredText:snippet,
       desc:'This feels like a good place for one low-pressure next step this week. Even ten focused minutes counts.',
       cues:['This week','Low pressure'],
-      actionLabel:'Set next action →',
-      actionHandler:`document.getElementById('na-inp-${next.id}')?.focus()`,
+      actionLabel:hasSaved?'See next action →':'Set next action →',
+      actionHandler:`openNextActionFromRecommendation('${next.id}')`,
       why:'Small, specific actions usually create steadier progress than pressure or streak-chasing.'
     }));
   }
