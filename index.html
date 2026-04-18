@@ -8,7 +8,7 @@
      cannot be set via meta tags, configure them in your hosting provider's settings
      (e.g. GitHub Pages custom headers, Cloudflare, or Netlify _headers file). -->
 <meta name="referrer" content="strict-origin-when-cross-origin">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net 'unsafe-inline'; style-src 'self' https://fonts.googleapis.com 'unsafe-inline'; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob: https:; media-src 'self' data: blob: https:; connect-src 'self' https://*.supabase.co https://curly-rice-3072.vineet-s.workers.dev https://api.open-meteo.com https://ipapi.co; frame-src 'self' data: blob: https:; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; upgrade-insecure-requests">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net https://js.stripe.com 'unsafe-inline'; style-src 'self' https://fonts.googleapis.com 'unsafe-inline'; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob: https:; media-src 'self' data: blob: https:; connect-src 'self' https://*.supabase.co https://curly-rice-3072.vineet-s.workers.dev https://api.open-meteo.com https://ipapi.co https://api.stripe.com; frame-src 'self' data: blob: https://js.stripe.com https://hooks.stripe.com; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; upgrade-insecure-requests">
 <title>COVE</title>
 
 <!-- SEO & Social Metadata -->
@@ -31,6 +31,7 @@
 <meta name="twitter:image" content="https://trycove.app/og-image.png">
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://js.stripe.com/v3"></script>
 <script>
 // Supabase anon key — this key is intentionally public (Supabase anon keys are
 // designed for client-side use and are protected by Row Level Security policies).
@@ -5156,8 +5157,8 @@ body::before { animation: ambientDrift 18s ease-in-out infinite; }
 <template id="privacyDocTemplate">
   <div class="legal-doc">
     <p class="legal-effective"><strong>Privacy Policy</strong></p>
-    <p class="legal-effective">Effective date: May 2026 · Operated by Vineet Singh / Qonsensus</p>
-    <p>COVE is built around private, honest reflection. We collect as little as possible and never sell or share your data with advertisers.</p>
+    <p class="legal-effective">Effective date: April 2026 · Operated by Vineet Singh / Qonsensus</p>
+    <p>COVE is built around private, honest reflection. We collect as little as possible and never sell or share your data with advertisers. When you buy a plan or the Unplugged bundle, we use Stripe to process the payment and only keep the minimum information needed to manage your subscription or fulfill your order.</p>
     <p class="legal-scroll-hint">Scroll to read the full document.</p>
     <div class="legal-divider"></div>
     <div class="legal-toc">
@@ -5183,7 +5184,8 @@ body::before { animation: ambientDrift 18s ease-in-out infinite; }
       <li>App preferences (theme, horizon settings)</li>
       <li>AI session memory tied to your account (used to personalise coaching context)</li>
     </ul>
-    <p>We do not collect your name, phone number, payment information, or any information beyond what you actively type into the app.</p>
+    <p>We do not collect your name, phone number, or any information beyond what you actively type into the app. If you purchase a paid plan or the Unplugged bundle, Stripe processes your payment details and we may receive transaction metadata, billing status, customer identifiers, and plan selection so we can unlock features, handle billing, and support refunds or disputes. We do not store full card numbers or CVV codes.</p>
+    <p>If you buy the Unplugged bundle, we also collect the shipping name and address you provide so the journal can be delivered to you. We use that information only for fulfillment, support, and legally required record keeping.</p>
 
     <h3 id="privacy-ai">How AI works in COVE</h3>
     <p>COVE uses Claude (by Anthropic) to generate reflections, coaching responses, and image insights. When you interact with an AI feature, the relevant content (your dream text, a question you asked, or an image you uploaded) is sent to Anthropic's API to generate a response. Anthropic's own privacy policy governs how they handle that data.</p>
@@ -5203,14 +5205,15 @@ body::before { animation: ambientDrift 18s ease-in-out infinite; }
       <li>Supabase — cloud database and authentication. Data is stored on Supabase servers.</li>
       <li>Anthropic — AI responses. Content you send to AI features is processed by Anthropic.</li>
       <li>Cloudflare — API proxy and rate limiting. Requests pass through a Cloudflare Worker.</li>
+      <li>Stripe — payment processing, billing, subscription management, and checkout.</li>
     </ul>
 
     <h3>Your rights</h3>
-    <p>You can delete your account at any time from Settings inside the app. This removes your synced cloud data. You can also clear your local data by clearing your browser's storage for this site.</p>
+    <p>You can delete your account at any time from Settings inside the app. This removes your synced cloud data. If you have an active subscription, you must also cancel it through the billing portal or account settings to stop future charges. You can also clear your local data by clearing your browser's storage for this site.</p>
     <p>If you want a copy of your data or have questions about what we hold, email vineet-s@outlook.com.</p>
 
     <h3>Data retention</h3>
-    <p>Your data is kept for as long as you have an active account. When you delete your account, your cloud data is deleted. Local browser data persists until you clear it yourself.</p>
+    <p>Your data is kept for as long as you have an active account. When you delete your account, your cloud data is deleted. Local browser data persists until you clear it yourself. We may retain limited billing, tax, refund, dispute, and shipping records for as long as required by law or for legitimate accounting and fulfillment purposes.</p>
 
     <h3>Children</h3>
     <p>COVE is intended for people 16 and older. We do not knowingly collect data from anyone under 16.</p>
@@ -5233,6 +5236,9 @@ body::before { animation: ambientDrift 18s ease-in-out infinite; }
 
     <h3 id="privacy-jurisdiction">Jurisdiction</h3>
     <p>COVE is operated from Ontario, Canada. Your data is governed by Canadian federal privacy law (PIPEDA). If you are located outside Canada and choose to use COVE, you acknowledge that your data will be processed in Canada.</p>
+
+    <h3>Payments and fulfillment</h3>
+    <p>Stripe handles payment processing for subscriptions and physical product purchases. Stripe may collect and process payment information, subscription details, and billing-related data according to its own privacy practices. For physical products like the Unplugged journal, we use the shipping information you provide to create and deliver the order. We do not sell shipping information or payment data.</p>
 
     <h3>How to make a data request</h3>
     <p>You can request a copy of your data, ask us to delete your data, or ask what information we hold about you by emailing vineet-s@outlook.com. Please include the email address associated with your COVE account in your message. We will respond within 30 days. In some cases we may need to verify your identity before fulfilling the request.</p>
@@ -5266,8 +5272,8 @@ body::before { animation: ambientDrift 18s ease-in-out infinite; }
 <template id="termsDocTemplate">
   <div class="legal-doc">
     <p class="legal-effective"><strong>Terms of Service</strong></p>
-    <p class="legal-effective">Effective date: June 2025 · Operated by Vineet Singh / Qonsensus</p>
-    <p>These terms are written plainly. By using COVE, you agree to them. If something isn't clear, email us.</p>
+    <p class="legal-effective">Effective date: April 2026 · Operated by Vineet Singh / Qonsensus</p>
+    <p>These terms are written plainly. By using COVE, you agree to them. If something isn't clear, email us. These terms also cover any paid subscription, checkout flow, or physical product you buy through COVE.</p>
     <p class="legal-scroll-hint">Scroll to read the full document.</p>
     <div class="legal-divider"></div>
     <div class="legal-toc">
@@ -5305,16 +5311,27 @@ body::before { animation: ambientDrift 18s ease-in-out infinite; }
     <p>We aim to keep COVE available and working well, but we cannot guarantee uninterrupted access. The service may be updated, paused, or changed at any time. We will try to give notice for significant changes.</p>
 
     <h3>Free and paid tiers</h3>
-    <p>COVE offers a free tier with limited features and a paid tier with additional access. Paid features are noted within the app. Pricing may change over time; changes will be communicated before they take effect for existing users.</p>
+    <p>COVE offers a free tier with limited features and paid offerings with additional access. Paid features are noted within the app. Pricing may change over time; changes will be communicated before they take effect for existing users.</p>
+
+    <h3>Purchases and subscriptions</h3>
+    <p>Some COVE features require a recurring subscription. Subscriptions renew automatically until canceled. By starting a paid plan, you authorize us and our payment processor to charge the payment method you provide on the schedule shown at checkout. You can manage or cancel your subscription from the Settings panel or billing portal. Cancellation stops future renewals but does not automatically refund amounts already charged unless required by applicable law.</p>
+    <p>We may change prices, plan names, or included features from time to time. If we do, we will give reasonable notice before the new price takes effect for existing subscribers.</p>
 
     <h3>Account deletion</h3>
-    <p>You can delete your account at any time from the Settings panel inside the app. Deletion removes your cloud-synced data. We do not offer refunds for unused portions of a paid period unless required by applicable law.</p>
+    <p>You can delete your account at any time from the Settings panel inside the app. Deletion removes your cloud-synced data. You remain responsible for canceling any active subscription before or after deleting your account. We do not offer refunds for unused portions of a paid period unless required by applicable law.</p>
+
+    <h3>Physical products</h3>
+    <p>Some paid offerings may include a physical item, such as the Unplugged journal. If you purchase a physical product, you must provide accurate shipping information. We may use a third-party payment processor and fulfillment workflow to complete the order. Risk of loss transfers when the item is handed to the carrier, unless applicable law requires otherwise.</p>
+    <p>Shipping estimates, if shown at checkout, are only estimates. Delivery times may vary. We are not responsible for delays caused by carriers, customs, or inaccurate address information provided by you.</p>
 
     <h3>Limitation of liability</h3>
     <p>COVE is provided as-is. To the fullest extent permitted by law, Vineet Singh / Qonsensus is not liable for any indirect, incidental, or consequential damages arising from your use of the app. Our total liability to you for any claim arising out of your use of COVE shall not exceed the amount you paid us in the 12 months preceding the claim, or CAD $50, whichever is greater.</p>
 
     <h3>Governing law</h3>
     <p>These terms are governed by the laws of Ontario, Canada. Any disputes will be resolved in the courts of Ontario.</p>
+
+    <h3>Refunds and chargebacks</h3>
+    <p>Refunds are limited to what is required by applicable law. If you believe there is a billing error, contact us first so we can review it. Chargebacks or payment disputes may result in suspension of the associated account while we investigate.</p>
 
     <h3 id="terms-cookies">Local storage and cookies</h3>
     <p>By using COVE, you acknowledge that the app uses browser local storage to save your data on your device and that Supabase sets authentication cookies when you are signed in. These are necessary for the app to function. You can clear this data at any time through your browser settings.</p>
@@ -5327,7 +5344,7 @@ body::before { animation: ambientDrift 18s ease-in-out infinite; }
     <p>We reserve the right to include crisis resource prompts within the app experience where we reasonably believe a user may be in distress. This is a safeguard, not a guarantee of safety.</p>
 
     <h3 id="terms-subscriptions">Subscription and refunds</h3>
-    <p>Where COVE offers paid features, subscriptions are billed on a recurring basis (monthly or annually, depending on the plan you choose). You may cancel your subscription at any time through your account settings. Cancellation takes effect at the end of the current billing period.</p>
+    <p>Where COVE offers paid features, subscriptions are billed on a recurring basis (monthly or annually, depending on the plan you choose). You may cancel your subscription at any time through your account settings or the billing portal. Cancellation takes effect at the end of the current billing period.</p>
     <p>Payments are generally non-refundable except where required by applicable law, including the Ontario Consumer Protection Act. If you believe you are entitled to a refund under applicable law, contact vineet-s@outlook.com within 30 days of the charge.</p>
     <p>We reserve the right to change pricing with reasonable notice. Existing subscribers will be notified at least 30 days before any price increase takes effect.</p>
 
@@ -5435,6 +5452,19 @@ body::before { animation: ambientDrift 18s ease-in-out infinite; }
             <button class="rec-settings-save" id="recLoginBtn" type="button" onclick="handleSettingsLoginAction()">Log in</button>
             <button class="rec-settings-save secondary" id="recLogoutBtn" type="button" onclick="handleSettingsLogoutAction()">Log out</button>
           </div>
+        </div>
+      </div>
+      <div class="rec-settings-section">
+        <div class="rec-settings-kicker">Subscription</div>
+        <div class="rec-settings-account">
+          <div class="rec-settings-row">
+            <span class="rec-settings-key">Plan</span>
+            <span class="rec-settings-value" id="recPlanValue">Free</span>
+          </div>
+        </div>
+        <div class="rec-settings-note" id="recBillingStatus">Log in to manage your subscription and billing.</div>
+        <div class="rec-settings-actions">
+          <button class="rec-settings-save" id="recBillingManageBtn" type="button" onclick="openSubscriptionSettingsTab()">Manage subscription</button>
         </div>
       </div>
       <div class="rec-settings-section">
@@ -5925,7 +5955,8 @@ body::before { animation: ambientDrift 18s ease-in-out infinite; }
     <div class="paywall-title" id="paywallTitle">This feature uses more of your history.</div>
     <div class="paywall-copy" id="paywallCopy">You've unlocked something that needs more of you.</div>
     <div class="paywall-actions" id="paywallActions">
-      <button class="paywall-btn primary" type="button" onclick="openPaywallPricing()">Learn more</button>
+      <button class="paywall-btn primary" type="button" onclick="openPaywallPricingWithUnplugged()">Learn more</button>
+      <button class="paywall-btn" type="button" onclick="openPaywallPricingWithUnplugged()">See Unplugged bundle</button>
     </div>
   </div>
 </div>
@@ -6838,6 +6869,9 @@ function renderRecSettings(){
   const loginBtn=getUI('recLoginBtn');
   const logoutBtn=getUI('recLogoutBtn');
   const deleteBtn=getUI('delete-account-btn');
+  const planEl=getUI('recPlanValue');
+  const billingStatusEl=getUI('recBillingStatus');
+  const billingManageBtn=getUI('recBillingManageBtn');
   const syncEl=getUI('recCloudSyncStatus');
   const memorySummary=getUI('recMemorySummary');
   if(!emailEl || !nickEl || !input || !saveBtn)return;
@@ -6857,6 +6891,18 @@ function renderRecSettings(){
     authStatusEl.textContent=signedIn
       ? 'You are signed in. Logging out will keep local data in this browser but stop cloud sync until you sign in again.'
       : 'You are currently signed out in this browser. Log in to sync and back up your dreams across devices.';
+  }
+  if(planEl)planEl.textContent=isPaid() ? 'Paid' : 'Free';
+  if(billingStatusEl){
+    billingStatusEl.textContent=signedIn
+      ? (isPaid()
+          ? 'Your paid plan is active. Manage billing or cancellation in Stripe.'
+          : 'You are on the free plan. Upgrade to unlock paid features.')
+      : 'Log in to manage your subscription and billing.';
+  }
+  if(billingManageBtn){
+    billingManageBtn.disabled=!signedIn || stripePortalBusy;
+    billingManageBtn.textContent=stripePortalBusy ? 'Opening billing…' : 'Manage subscription';
   }
   if(deleteBtn){
     deleteBtn.style.display=signedIn ? '' : 'none';
@@ -9115,6 +9161,16 @@ let authGateMode = 'login';
 let authWelcomeTimer = null;
 let authWelcomeSceneLoaded = false;
 let cloudPlan = 'free';
+const WORKER_BASE_URL = 'https://curly-rice-3072.vineet-s.workers.dev';
+const STRIPE_PUBLISHABLE_KEY = String(window.STRIPE_PUBLISHABLE_KEY || '').trim();
+const STRIPE_CHECKOUT_ENDPOINT = String(window.STRIPE_CHECKOUT_ENDPOINT || `${WORKER_BASE_URL}/create-checkout-session`).trim();
+const STRIPE_PORTAL_ENDPOINT = String(window.STRIPE_PORTAL_ENDPOINT || `${WORKER_BASE_URL}/create-portal-session`).trim();
+const STRIPE_PRICE_MONTHLY = String(window.STRIPE_PRICE_MONTHLY || '').trim();
+const STRIPE_PRICE_YEARLY = String(window.STRIPE_PRICE_YEARLY || '').trim();
+const STRIPE_PRICE_UNPLUGGED = String(window.STRIPE_PRICE_UNPLUGGED || '').trim();
+let stripeClientPromise = null;
+let stripeCheckoutBusy = false;
+let stripePortalBusy = false;
 let ahaAt = String(safeLocalStorageGet(STORAGE_KEY_AHA_AT,'')||'').trim();
 let paywallTriggerCount = Math.max(0, parseInt(safeLocalStorageGet(STORAGE_KEY_PAYWALL_SHOWN,'0')||'0',10)||0);
 let synthesisCount = Math.max(0, parseInt(safeLocalStorageGet(STORAGE_KEY_SYNTHESIS_COUNT,'0')||'0',10)||0);
@@ -9337,11 +9393,188 @@ function openPaywallModal({title='',copy='',kicker='Keep going',mode='intro'}={}
     if(mode==='intro'){
       actions.innerHTML='<button class="paywall-btn primary" type="button" onclick="openPaywallPricing()">Learn more</button>';
     }else{
-      actions.innerHTML='<a class="paywall-btn primary" href="#upgrade" onclick="closePaywallModal()">Upgrade</a><button class="paywall-btn" type="button" onclick="closePaywallModal()">Not now</button>';
+      const stripeReady=Boolean(STRIPE_PUBLISHABLE_KEY && STRIPE_CHECKOUT_ENDPOINT);
+      actions.innerHTML=stripeReady
+        ? '<button class="paywall-btn primary" id="paywallStripeMonthly" type="button" onclick="startStripeCheckout(\'monthly\')">Monthly · $8</button><button class="paywall-btn primary" id="paywallStripeYearly" type="button" onclick="startStripeCheckout(\'yearly\')">Yearly · $60</button><button class="paywall-btn" type="button" onclick="closePaywallModal()">Not now</button>'
+        : '<button class="paywall-btn primary" type="button" onclick="showToast(\'Payments are not configured yet. Add Stripe keys and reload.\',\'warning\')">Payments unavailable</button><button class="paywall-btn" type="button" onclick="closePaywallModal()">Not now</button>';
+      setPaywallCheckoutBusy(false);
     }
   }
   overlay.classList.add('open');
   document.body.style.overflow='hidden';
+}
+
+function getStripeSuccessUrl(){
+  return `${window.location.origin}${window.location.pathname}?checkout=success`;
+}
+
+function getStripeCancelUrl(){
+  return `${window.location.origin}${window.location.pathname}?checkout=cancel`;
+}
+
+function getCheckoutIdentity(){
+  const fallbackEmail=String(safeLocalStorageGet('qSupabaseEmail9','')||'').trim();
+  return {
+    userId:String(supabaseUser?.id || '').trim() || null,
+    email:String(supabaseUser?.email || fallbackEmail || '').trim() || null
+  };
+}
+
+function setPaywallCheckoutBusy(isBusy=false){
+  stripeCheckoutBusy=Boolean(isBusy);
+  const monthlyBtn=getUI('paywallStripeMonthly');
+  const yearlyBtn=getUI('paywallStripeYearly');
+  if(monthlyBtn)monthlyBtn.disabled=stripeCheckoutBusy;
+  if(yearlyBtn)yearlyBtn.disabled=stripeCheckoutBusy;
+}
+
+function setBillingPortalBusy(isBusy=false){
+  stripePortalBusy=Boolean(isBusy);
+  const btn=getUI('recBillingManageBtn');
+  if(btn)btn.disabled=stripePortalBusy || !supabaseUser;
+}
+
+async function getStripeClient(){
+  if(!STRIPE_PUBLISHABLE_KEY)throw new Error('Stripe publishable key is missing.');
+  if(!window.Stripe)throw new Error('Stripe.js failed to load.');
+  if(!stripeClientPromise){
+    stripeClientPromise=Promise.resolve(window.Stripe(STRIPE_PUBLISHABLE_KEY));
+  }
+  const stripe=await stripeClientPromise;
+  if(!stripe)throw new Error('Stripe could not be initialized.');
+  return stripe;
+}
+
+async function startStripeCheckout(plan='monthly', priceIdOverride='', requireShippingAddress=false){
+  if(stripeCheckoutBusy)return;
+  if(!STRIPE_CHECKOUT_ENDPOINT){
+    showToast('Stripe checkout endpoint is not configured yet.', 'warning');
+    return;
+  }
+  const normalizedPlan=String(plan||'monthly').toLowerCase()==='yearly'?'yearly':'monthly';
+  const identity=getCheckoutIdentity();
+  const explicitPriceId=String(priceIdOverride||'').trim();
+  const selectedPriceId=explicitPriceId || (normalizedPlan==='yearly' ? STRIPE_PRICE_YEARLY : STRIPE_PRICE_MONTHLY);
+  setPaywallCheckoutBusy(true);
+  try{
+    const r=await fetchWithRetry(STRIPE_CHECKOUT_ENDPOINT,{
+      method:'POST',
+      headers:{'Content-Type':'application/json','X-Request-Id':generateRequestId()},
+      body:JSON.stringify({
+        plan:normalizedPlan,
+        priceId:selectedPriceId || undefined,
+        requireShippingAddress:Boolean(requireShippingAddress),
+        successUrl:getStripeSuccessUrl(),
+        cancelUrl:getStripeCancelUrl(),
+        customerEmail:identity.email || undefined,
+        userId:identity.userId || undefined
+      }),
+      timeoutMs:20000
+    },1);
+
+    if(!r.ok){
+      const raw=await r.text().catch(()=>'');
+      throw new Error(raw || `Stripe checkout failed (${r.status}).`);
+    }
+
+    const payload=await r.json().catch(()=>({}));
+    const checkoutUrl=String(payload?.url || '').trim();
+    if(checkoutUrl){
+      window.location.assign(checkoutUrl);
+      return;
+    }
+
+    const sessionId=String(payload?.sessionId || '').trim();
+    if(!sessionId)throw new Error('Payments service returned no checkout session.');
+
+    const stripe=await getStripeClient();
+    const result=await stripe.redirectToCheckout({ sessionId });
+    if(result?.error)throw result.error;
+  }catch(err){
+    reportDebug('warn','Stripe checkout failed to start',{error:err?.message,plan:normalizedPlan});
+    showToast(getFriendlyError(err), 'error');
+  }finally{
+    setPaywallCheckoutBusy(false);
+  }
+}
+
+function startStripeUnpluggedCheckout(){
+  if(!STRIPE_PRICE_UNPLUGGED){
+    showToast('Unplugged bundle is not configured yet.', 'warning');
+    return;
+  }
+  return startStripeCheckout('yearly', STRIPE_PRICE_UNPLUGGED, true);
+}
+
+function handleStripeCheckoutReturn(){
+  const params=new URLSearchParams(window.location.search);
+  const state=String(params.get('checkout')||'').toLowerCase();
+  if(!state)return;
+  if(state==='success'){
+    cloudPlan='paid';
+    safeLocalStorageSet(STORAGE_KEY_CLOUD_PLAN,'paid');
+    showToast('Payment successful. Paid features unlocked for this session.', 'success');
+  }else if(state==='cancel'){
+    showToast('Checkout canceled. You can upgrade anytime.', 'info');
+  }
+  params.delete('checkout');
+  const q=params.toString();
+  const nextUrl=`${window.location.pathname}${q?`?${q}`:''}${window.location.hash||''}`;
+  window.history.replaceState({},'',nextUrl);
+  renderRecSettings();
+}
+
+async function openSubscriptionSettingsTab(){
+  if(stripePortalBusy)return;
+  if(!supabaseUser || !supabaseClient){
+    showToast('Log in first to manage your subscription.', 'warning');
+    focusAuthForm(true);
+    return;
+  }
+  if(!STRIPE_PORTAL_ENDPOINT){
+    showToast('Billing portal is not configured yet.', 'warning');
+    return;
+  }
+
+  const tab=window.open('about:blank','_blank','noopener');
+  if(!tab){
+    showToast('Popup was blocked. Allow popups for this site and try again.', 'warning');
+    return;
+  }
+
+  setBillingPortalBusy(true);
+  try{
+    const { data:{ session } } = await supabaseClient.auth.getSession();
+    const accessToken=String(session?.access_token||'').trim();
+    if(!accessToken)throw new Error('Could not verify your session. Please log in again.');
+
+    const r=await fetchWithRetry(STRIPE_PORTAL_ENDPOINT,{
+      method:'POST',
+      headers:{
+        'Content-Type':'application/json',
+        'Authorization':`Bearer ${accessToken}`,
+        'X-Request-Id':generateRequestId()
+      },
+      body:JSON.stringify({ returnUrl:`${window.location.origin}${window.location.pathname}` }),
+      timeoutMs:20000
+    },1);
+
+    if(!r.ok){
+      const raw=await r.text().catch(()=>'');
+      throw new Error(raw || `Billing portal failed (${r.status}).`);
+    }
+
+    const payload=await r.json().catch(()=>({}));
+    const portalUrl=String(payload?.url||'').trim();
+    if(!portalUrl)throw new Error('Billing portal URL was not returned.');
+    tab.location.assign(portalUrl);
+  }catch(err){
+    try{tab.close();}catch{}
+    reportDebug('warn','Billing portal open failed',{error:err?.message});
+    showToast(getFriendlyError(err), 'error');
+  }finally{
+    setBillingPortalBusy(false);
+  }
 }
 
 function isReflectionFlowOpen(){
@@ -9367,13 +9600,38 @@ function maybeOpenDeferredPaywall(){
   openPaywallModal(next);
 }
 
+function openPaywallPricingWithUnplugged() {
+  const overlay = getUI('paywallOverlay');
+  if (!overlay) return;
+  getUI('paywallKicker').textContent = 'Upgrade';
+  getUI('paywallTitle').textContent = 'Unlock full COVE';
+  getUI('paywallCopy').innerHTML = '';
+  const actions = getUI('paywallActions');
+  if (actions) {
+    actions.innerHTML = `
+      <div style="display:flex;flex-direction:column;gap:10px;width:100%;">
+        <div style="padding:14px;border-radius:12px;border:1px solid rgba(200,118,106,0.22);background:rgba(200,118,106,0.05);">
+          <div style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--rose);font-weight:700;margin-bottom:4px;">Digital</div>
+          <div style="font-size:15px;font-weight:600;color:var(--text);margin-bottom:4px;">COVE Premium - $8/mo or $60/yr</div>
+          <div style="font-family:'Lora',serif;font-size:13px;font-style:italic;color:var(--text-dim);margin-bottom:10px;">AI reflection, Deep Dives, Life Letter, Daily Pulse, Life Capsule reveals.</div>
+          <button class="paywall-btn primary" style="width:100%" type="button" onclick="openPaywallModal({kicker:'Upgrade',title:'Unlock full COVE tools',copy:'Paid plans unlock deeper reflection tools like extra Deep Dives, Daily Pulse reflections, and later Life Capsule reveals. $8 / month or $60 / year. Cancel anytime.',mode:'pricing'})">Choose Premium</button>
+        </div>
+        <div style="padding:14px;border-radius:12px;border:1px solid rgba(200,118,106,0.35);background:rgba(200,118,106,0.08);position:relative;">
+          <div style="position:absolute;top:-10px;right:14px;font-size:9px;letter-spacing:.12em;text-transform:uppercase;background:var(--rose);color:#fff;padding:3px 10px;border-radius:999px;font-weight:700;">Most complete</div>
+          <div style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--rose);font-weight:700;margin-bottom:4px;">Digital + Physical</div>
+          <div style="font-size:15px;font-weight:600;color:var(--text);margin-bottom:4px;">Premium + Unplugged - $95/yr</div>
+          <div style="font-family:'Lora',serif;font-size:13px;font-style:italic;color:var(--text-dim);margin-bottom:10px;">Everything in Premium, plus the COVE Unplugged journal shipped to your door. One time.</div>
+          <button class="paywall-btn primary" style="width:100%;border-color:var(--rose);background:rgba(200,118,106,0.12);" type="button" onclick="startStripeUnpluggedCheckout()">Choose Unplugged Bundle</button>
+        </div>
+        <button class="paywall-btn" type="button" onclick="closePaywallModal()" style="align-self:flex-end;">Not now</button>
+      </div>`;
+  }
+  overlay.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
 function openPaywallPricing(){
-  openPaywallModal({
-    kicker:'Upgrade',
-    title:'Unlock full COVE tools',
-    copy:'Paid plans unlock deeper reflection tools like extra Deep Dives, Daily Pulse reflections, and later Life Capsule reveals. $8 / month or $60 / year. Cancel anytime.',
-    mode:'pricing'
-  });
+  openPaywallPricingWithUnplugged();
 }
 
 function syncAdminPreviewBanner(){
@@ -15853,6 +16111,7 @@ document.addEventListener('keydown',e=>{
 // ═══════════════════════════════════════════════════
 (async function bootApp(){
   await initSupabaseSync();
+  handleStripeCheckoutReturn();
   syncCloudUi();
   scheduleGuestPreviewEnforcement();
   render();
