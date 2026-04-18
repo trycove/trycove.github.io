@@ -318,6 +318,92 @@ async function createPortalSession(req, env) {
   return json({ url: String(stripeJson.url) }, 200, withCorsHeaders(req, env));
 }
 
+async function findLatestStripeSubscriptionForUser(user, env) {
+  const email = String(user?.email || '').trim();
+  const userId = String(user?.id || '').trim();
+  const customerId = await getOrCreateStripeCustomer({ email, userId }, env);
+  if (!customerId) return { customerId: '', subscription: null };
+
+  const query = new URLSearchParams({
+    customer: customerId,
+    status: 'all',
+    limit: '10'
+  });
+  const listRes = await stripeRequest(env, 'GET', `/v1/subscriptions?${query.toString()}`);
+  const listJson = await listRes.json().catch(() => ({}));
+  if (!listRes.ok) {
+    throw new Error(listJson?.error?.message || `Stripe subscriptions query failed (${listRes.status})`);
+  }
+
+  const subscriptions = Array.isArray(listJson?.data) ? listJson.data : [];
+  const preferred = subscriptions.find(item => ['active', 'trialing', 'past_due', 'incomplete'].includes(String(item?.status || '').toLowerCase()));
+  return {
+    customerId,
+    subscription: preferred || subscriptions[0] || null
+  };
+}
+
+function summarizeSubscription(subscription) {
+  if (!subscription?.id) {
+    return {
+      hasSubscription: false,
+      status: 'free',
+      cancelAtPeriodEnd: false,
+      currentPeriodEnd: '',
+      planLabel: 'Free'
+    };
+  }
+
+  const price = subscription?.items?.data?.[0]?.price || {};
+  const nickname = String(price?.nickname || price?.product?.name || '').trim();
+  const interval = String(price?.recurring?.interval || '').trim();
+  const intervalCount = Number(price?.recurring?.interval_count || 1) || 1;
+  const basePlan = nickname || String(price?.id || '').trim() || 'Paid plan';
+  const planLabel = interval ? `${basePlan} (${intervalCount > 1 ? `${intervalCount} ` : ''}${interval})` : basePlan;
+
+  return {
+    hasSubscription: true,
+    subscriptionId: String(subscription?.id || '').trim(),
+    status: String(subscription?.status || 'unknown').toLowerCase(),
+    cancelAtPeriodEnd: Boolean(subscription?.cancel_at_period_end),
+    currentPeriodEnd: subscription?.current_period_end ? new Date(subscription.current_period_end * 1000).toISOString() : '',
+    priceId: String(price?.id || '').trim(),
+    planLabel
+  };
+}
+
+async function getSubscriptionSummary(req, env) {
+  const user = await verifySupabaseUserFromToken(req, env);
+  const { subscription } = await findLatestStripeSubscriptionForUser(user, env);
+  return json(summarizeSubscription(subscription), 200, withCorsHeaders(req, env));
+}
+
+async function updateSubscriptionAction(req, env) {
+  const user = await verifySupabaseUserFromToken(req, env);
+  const payload = await req.json().catch(() => ({}));
+  const action = String(payload.action || '').toLowerCase() === 'resume' ? 'resume' : 'cancel';
+  const { subscription } = await findLatestStripeSubscriptionForUser(user, env);
+
+  if (!subscription?.id) {
+    return json({ error: 'No active subscription found.' }, 404, withCorsHeaders(req, env));
+  }
+
+  const body = toFormBody({
+    cancel_at_period_end: action === 'cancel' ? 'true' : 'false'
+  });
+  const stripeRes = await stripeRequest(env, 'POST', `/v1/subscriptions/${encodeURIComponent(subscription.id)}`, body);
+  const stripeJson = await stripeRes.json().catch(() => ({}));
+  if (!stripeRes.ok) {
+    return json(
+      { error: stripeJson?.error?.message || `Stripe error (${stripeRes.status})` },
+      stripeRes.status,
+      withCorsHeaders(req, env)
+    );
+  }
+
+  return json(summarizeSubscription(stripeJson), 200, withCorsHeaders(req, env));
+}
+
 async function handleStripeWebhook(req, env) {
   const rawBody = await req.text();
   const verified = await verifyStripeWebhook(req, env, rawBody);
@@ -378,6 +464,22 @@ export default {
         return await createPortalSession(req, env);
       } catch (err) {
         return json({ error: err?.message || 'Portal session creation failed.' }, 500, withCorsHeaders(req, env));
+      }
+    }
+
+    if (url.pathname === '/subscription-summary' && req.method === 'POST') {
+      try {
+        return await getSubscriptionSummary(req, env);
+      } catch (err) {
+        return json({ error: err?.message || 'Subscription summary failed.' }, 500, withCorsHeaders(req, env));
+      }
+    }
+
+    if (url.pathname === '/subscription-action' && req.method === 'POST') {
+      try {
+        return await updateSubscriptionAction(req, env);
+      } catch (err) {
+        return json({ error: err?.message || 'Subscription action failed.' }, 500, withCorsHeaders(req, env));
       }
     }
 
