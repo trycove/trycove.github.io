@@ -1721,6 +1721,15 @@ body.auth-welcome-active .auth-gate-card {
 .h1 { font-family:'DM Sans',sans-serif;font-size:clamp(32px,6vw,54px);font-weight:600;line-height:1.08;letter-spacing:-0.03em;color:var(--text);margin-bottom:14px; }
 .h1-chrome { display:block;font-style:normal;background:var(--chrome);background-size:300% 100%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:shimmer 8s ease-in-out infinite; }
 .h-sub { font-family:'DM Sans',sans-serif;font-size:15px;font-style:normal;font-weight:400;line-height:1.7;color:var(--text-dim);max-width:560px; }
+:root[data-ui-clock-phase="late"] .h1 { font-weight:560; }
+:root[data-ui-clock-phase="late"] .h-sub { color:color-mix(in srgb, var(--text-dim) 84%, var(--surface) 16%); }
+:root[data-ui-clock-phase="late"] .section-label { color:color-mix(in srgb, var(--text-muted) 82%, var(--surface) 18%); }
+:root[data-ui-clock-phase="late"] .dream-input::placeholder { color:color-mix(in srgb, var(--text-faint) 74%, var(--surface) 26%); }
+
+:root[data-ui-clock-phase="early"] .h1 { font-weight:620; }
+:root[data-ui-clock-phase="early"] .h-sub { color:color-mix(in srgb, var(--text-dim) 92%, var(--rose) 8%); }
+:root[data-ui-clock-phase="early"] .section-label { color:color-mix(in srgb, var(--text-muted) 80%, var(--rose) 20%); }
+:root[data-ui-clock-phase="early"] .dream-input::placeholder { color:color-mix(in srgb, var(--text-faint) 72%, var(--rose) 28%); }
 .theme-mode-bar { display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:0;max-width:680px;min-width:0;flex:1 1 auto; }
 .theme-mode-label { font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:var(--text-muted);font-weight:600; }
 .theme-mode-group { display:flex;align-items:center;gap:6px;flex-wrap:wrap; }
@@ -2151,6 +2160,110 @@ body.auth-welcome-active .auth-gate-card {
 }
 .discovery-start-wrap { display:flex;justify-content:flex-start;margin:-6px 0 18px; }
 .discovery-start-btn { border-radius:999px;padding:9px 14px; }
+
+/* // ── NEW: Ambient Dream Stream ── */
+.community-dream-stream { margin:0 0 20px;opacity:0;animation:riseIn 0.8s 0.36s cubic-bezier(.16,1,.3,1) forwards; }
+.community-dream-head { display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:10px; }
+.community-dream-count-wrap { font-family:'DM Sans',sans-serif;font-size:12px;color:var(--text-dim);letter-spacing:0.01em; }
+.community-dream-count-wrap span { font-size:16px;color:var(--rose);font-weight:600;margin-right:4px; }
+.community-share-toggle { display:inline-flex;align-items:center;gap:8px;font-family:'DM Sans',sans-serif;font-size:11px;color:var(--text-muted); }
+.community-share-toggle input { accent-color:var(--rose); }
+
+.community-dream-track {
+  position:relative;
+  overflow:hidden;
+  border:1px solid var(--border);
+  border-radius:14px;
+  background:var(--surface);
+  background:color-mix(in srgb, var(--surface) 82%, var(--glass-panel-bg));
+  min-height:120px;
+  display:flex;
+  align-items:center;
+  gap:0;
+  --community-drift-duration: 160s;
+}
+.community-dream-fade {
+  position:absolute;
+  top:0;
+  bottom:0;
+  width:56px;
+  z-index:3;
+  pointer-events:none;
+}
+.community-dream-fade.left { left:0;background:linear-gradient(90deg,var(--surface) 0%,rgba(255,255,255,0) 100%); }
+.community-dream-fade.right { right:0;background:linear-gradient(270deg,var(--surface) 0%,rgba(255,255,255,0) 100%); }
+.community-dream-rail {
+  display:flex;
+  align-items:stretch;
+  gap:12px;
+  flex-shrink:0;
+  padding:14px 0;
+  width:max-content;
+  animation:communityDreamDrift var(--community-drift-duration) linear infinite;
+}
+.community-dream-rail#communityDreamRailA { padding-left:14px; }
+.community-dream-track:hover .community-dream-rail,
+.community-dream-card:hover { animation-play-state:paused; }
+.community-dream-card {
+  width:min(320px, 72vw);
+  border:1px solid var(--border);
+  border-radius:12px;
+  background:var(--surface);
+  background:color-mix(in srgb, var(--surface) 86%, var(--glass-panel-bg));
+  box-shadow:0 2px 8px rgba(0,0,0,0.04);
+  padding:12px;
+  backdrop-filter:blur(8px);
+}
+.community-dream-text { font-family:'Lora',Georgia,serif;font-size:14px;font-style:italic;line-height:1.65;color:var(--text-dim);margin-bottom:8px; }
+.community-dream-meta { display:flex;align-items:center;gap:6px;font-family:'DM Sans',sans-serif;font-size:10px;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-faint); }
+.community-dream-domain { color:var(--rose); }
+.community-dream-dot { width:3px;height:3px;border-radius:50%;background:var(--border-hi);display:inline-block; }
+
+@keyframes communityDreamDrift {
+  from { transform:translateX(0); }
+  to { transform:translateX(-100%); }
+}
+
+/* // ── NEW: Wandering Prompt ── */
+.wandering-prompt-overlay {
+  position:fixed;
+  left:0;
+  right:0;
+  bottom:20%;
+  display:flex;
+  justify-content:center;
+  pointer-events:none;
+  opacity:0;
+  transform:translateY(12px);
+  transition:opacity 0.8s ease, transform 0.8s ease;
+  z-index:320;
+  padding:0 16px;
+}
+.wandering-prompt-overlay.show { opacity:1; transform:translateY(0); pointer-events:auto; }
+.wandering-prompt-pill {
+  max-width:520px;
+  width:100%;
+  display:flex;
+  align-items:flex-start;
+  gap:12px;
+  border:1px solid var(--border);
+  border-left:2px solid var(--rose);
+  border-radius:999px;
+  background:var(--glass-panel-bg);
+  backdrop-filter:blur(12px);
+  box-shadow:0 10px 28px rgba(0,0,0,0.10);
+  padding:12px 16px 12px 18px;
+}
+.wandering-prompt-text { flex:1;font-family:'Lora',Georgia,serif;font-size:15px;font-style:italic;line-height:1.55;color:var(--text-dim); }
+.wandering-prompt-close {
+  border:none;
+  background:transparent;
+  color:var(--rose);
+  cursor:pointer;
+  font-size:12px;
+  line-height:1;
+  padding:4px;
+}
 
 /* ── MICRO INSIGHT ── */
 .micro-insight { display:flex;align-items:flex-start;gap:10px;visibility:hidden;max-height:0;overflow:hidden;opacity:0;transform:translateY(-6px);margin-bottom:0;padding:0 18px;background:var(--petal);border:0 solid var(--blush-light);border-radius:10px;animation:fadeDown 0.35s cubic-bezier(.16,1,.3,1);box-shadow:var(--glow-rose-sm);transition:opacity 200ms ease,transform 200ms ease,max-height 220ms ease,padding 220ms ease,margin-bottom 220ms ease,border-width 220ms ease; }
@@ -4292,6 +4405,18 @@ body.auth-welcome-active .auth-gate-card {
   .deepdive-card { padding:22px 18px 18px; max-height:92vh; }
   .deepdive-question { font-size:18px; }
   .capsule-reveal-title { font-size:24px; }
+  .community-dream-head { flex-direction:column; align-items:flex-start; }
+  .community-dream-track { overflow-x:auto; -webkit-overflow-scrolling:touch; scroll-snap-type:x proximity; }
+  .community-dream-rail { animation:none; padding-right:14px; }
+  .community-dream-rail#communityDreamRailB { display:none; }
+  .community-dream-card { width:min(300px,78vw); scroll-snap-align:start; }
+  .community-dream-fade { display:none; }
+  .wandering-prompt-overlay { bottom:88px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .community-dream-rail { animation:none !important; }
+  .wandering-prompt-overlay { transition:none; }
 }
 
 /* ── CRISIS OVERLAY ── */
@@ -5181,6 +5306,7 @@ body::before { animation: ambientDrift 18s ease-in-out infinite; }
       <li>Your email address</li>
       <li>A nickname, if you choose to set one</li>
       <li>Your dream entries, notes, attachments, and reflection data</li>
+      <li>If you opt in, an anonymized copy of dreams you choose to share in the Ambient Dream Stream</li>
       <li>App preferences (theme, horizon settings)</li>
       <li>AI session memory tied to your account (used to personalise coaching context)</li>
     </ul>
@@ -5196,6 +5322,7 @@ body::before { animation: ambientDrift 18s ease-in-out infinite; }
       <li>To sync your dreams and reflections across devices when you're signed in</li>
       <li>To personalise your coaching context between sessions (AI memory)</li>
       <li>To display your own data back to you</li>
+      <li>To surface opt-in anonymized dreams in the Ambient Dream Stream</li>
     </ul>
     <p>That's it. We do not analyse your data to serve ads, share it with third parties, or use it for any purpose beyond running the app for you.</p>
 
@@ -5302,6 +5429,7 @@ body::before { animation: ambientDrift 18s ease-in-out infinite; }
 
     <h3>Your content</h3>
     <p>Everything you write in COVE belongs to you. We do not claim any ownership over your dream entries, notes, or reflections. You grant us a limited licence to store and process your content solely to operate the service for you.</p>
+    <p>If you opt into the Ambient Dream Stream, you also grant us permission to store and display a sanitized, anonymized version of the dream text you choose to share in that public stream. We do not show your name or account identifiers in the stream.</p>
 
     <h3 id="terms-ai">AI-generated content</h3>
     <p>COVE uses AI (Claude by Anthropic) to generate reflections, coaching responses, and image insights. These are for personal reflection only. They are not professional advice — not mental health advice, not life coaching, not medical or financial guidance. Please treat them as prompts to think with, not conclusions to act on without your own judgment.</p>
@@ -5609,6 +5737,27 @@ body::before { animation: ambientDrift 18s ease-in-out infinite; }
       </div>
     </div>
   </div>
+
+  <!-- // ── NEW: Ambient Dream Stream ── -->
+  <section class="community-dream-stream" id="communityDreamStream" style="display:none;">
+    <div class="section-header">
+      <span class="section-label">What people are dreaming about</span>
+      <div class="section-line"></div>
+    </div>
+    <div class="community-dream-head">
+      <div class="community-dream-count-wrap"><span id="communityDreamCount">0</span> people are dreaming right now</div>
+      <label class="community-share-toggle" for="communityDreamShareToggle">
+        <input id="communityDreamShareToggle" type="checkbox" onchange="handleCommunityShareToggle(event)">
+        <span>opt in to share your dreams anonymously</span>
+      </label>
+    </div>
+    <div class="community-dream-track" id="communityDreamTrack">
+      <div class="community-dream-fade left" aria-hidden="true"></div>
+      <div class="community-dream-fade right" aria-hidden="true"></div>
+      <div class="community-dream-rail" id="communityDreamRailA"></div>
+      <div class="community-dream-rail" id="communityDreamRailB" aria-hidden="true"></div>
+    </div>
+  </section>
 
   <div class="input-section" id="inputSection">
     <div class="section-header">
@@ -5964,6 +6113,14 @@ body::before { animation: ambientDrift 18s ease-in-out infinite; }
 <button class="fab" id="fab" onclick="handleFabAction()" title="Add a dream">
   <span class="fab-icon">+</span>
 </button>
+
+<!-- // ── NEW: Wandering Prompt ── -->
+<div class="wandering-prompt-overlay" id="wanderingPromptOverlay" aria-live="polite" aria-atomic="true">
+  <div class="wandering-prompt-pill">
+    <div class="wandering-prompt-text" id="wanderingPromptText"></div>
+    <button class="wandering-prompt-close" type="button" onclick="closeWanderingPrompt()" aria-label="Dismiss prompt">✕</button>
+  </div>
+</div>
 
 <!-- DATE PICKER -->
 <div class="datepick-overlay" id="datepickOverlay" onclick="closeDatepickOnBg(event)">
@@ -6461,7 +6618,7 @@ function checkMissingDeps() {
       reportDebug('error', `Required function ${fn} is not defined`, { where: 'boot check' });
     }
   });
-  const requiredElements = ['dreamInput', 'addBtn', 'catsGrid', 'synText', 'returnGreeting', 'onboardBanner', 'mainHeader', 'inputSection', 'seedChips', 'imgResultContainer', 'microInsight', 'gapInsight', 'tensionCard', 'coverageSection', 'categoriesSection', 'emptyState', 'synSection', 'pulseCardWrap', 'pulseStreakWrap', 'pulseConfirmStrip', 'pulseHistorySection', 'covInfoPopover', 'achievedOverlay', 'checkinOverlay', 'llOverlay', 'fab', 'datepickOverlay', 'modalOverlay', 'modalMemoryDot', 'deepDiveOverlay', 'deepDiveContent', 'discoverOverlay', 'discoveryOverlay', 'discoveryContent', 'capsuleOverlay', 'capsuleContent', 'capsuleRevealOverlay', 'capsuleRevealContent', 'capsuleEmptyOverlay', 'covTooltip'];
+  const requiredElements = ['dreamInput', 'addBtn', 'catsGrid', 'synText', 'returnGreeting', 'onboardBanner', 'mainHeader', 'inputSection', 'seedChips', 'communityDreamStream', 'communityDreamCount', 'communityDreamTrack', 'communityDreamRailA', 'communityDreamRailB', 'communityDreamShareToggle', 'imgResultContainer', 'microInsight', 'gapInsight', 'tensionCard', 'coverageSection', 'categoriesSection', 'emptyState', 'synSection', 'pulseCardWrap', 'pulseStreakWrap', 'pulseConfirmStrip', 'pulseHistorySection', 'covInfoPopover', 'achievedOverlay', 'checkinOverlay', 'llOverlay', 'fab', 'datepickOverlay', 'modalOverlay', 'modalMemoryDot', 'deepDiveOverlay', 'deepDiveContent', 'discoverOverlay', 'discoveryOverlay', 'discoveryContent', 'capsuleOverlay', 'capsuleContent', 'capsuleRevealOverlay', 'capsuleRevealContent', 'capsuleEmptyOverlay', 'wanderingPromptOverlay', 'wanderingPromptText', 'covTooltip'];
   requiredElements.forEach(id => {
     if (!document.getElementById(id)) {
       reportDebug('error', `Required DOM element #${id} is missing`, { where: 'boot check' });
@@ -6504,6 +6661,40 @@ on public.dream_sync_state
 for update
 using (auth.uid() = user_id)
 with check (auth.uid() = user_id);
+
+-- Ambient Dream Stream (anonymized community feed)
+create table if not exists public.dream_stream_entries (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid not null references auth.users(id) on delete cascade,
+  dream_text text not null,
+  domain text not null,
+  tone text,
+  source text not null default 'opt_in',
+  is_anonymized boolean not null default true,
+  origin_dream_id text,
+  consented_at timestamptz not null default timezone('utc', now()),
+  created_at timestamptz not null default timezone('utc', now())
+);
+
+create index if not exists dream_stream_entries_created_at_idx
+on public.dream_stream_entries (created_at desc);
+
+alter table public.dream_stream_entries enable row level security;
+
+create policy "Anyone can read anonymized stream entries"
+on public.dream_stream_entries
+for select
+using (is_anonymized = true);
+
+create policy "Authenticated users can insert their own stream entries"
+on public.dream_stream_entries
+for insert
+to authenticated
+with check (
+  auth.uid() = user_id
+  and is_anonymized = true
+  and char_length(trim(dream_text)) > 0
+);
 
 Optional Supabase email template for a warmer signup confirmation:
 Dashboard → Authentication → Email Templates → Confirm signup
@@ -6753,6 +6944,19 @@ function getUiTimeTheme(){
   return mode==='auto' ? getAutoUiTimeTheme() : mode;
 }
 
+function getUiClockPhase(date=new Date()){
+  const hour=date.getHours();
+  if(hour >= 23 || hour < 6)return 'late';
+  if(hour >= 6 && hour < 9)return 'early';
+  return 'default';
+}
+
+function applyUiClockMood(){
+  const phase=getUiClockPhase();
+  document.documentElement.dataset.uiClockPhase=phase;
+  return phase;
+}
+
 function syncUiThemeControls(){
   const currentMode=normalizeUiThemeMode(document.documentElement.dataset.uiThemeMode || uiThemeMode || 'auto');
   const notes=document.querySelectorAll('#themeModeNote, #recThemeModeNote');
@@ -6788,6 +6992,7 @@ function applyUiTimeTheme(theme=getUiTimeTheme()){
   const resolvedTheme=normalizeUiThemeMode(theme)==='auto' ? getUiTimeTheme() : theme;
   document.documentElement.dataset.uiThemeMode=normalizeUiThemeMode(document.documentElement.dataset.uiThemeMode || uiThemeMode || 'auto');
   document.documentElement.dataset.uiTheme = resolvedTheme;
+  applyUiClockMood();
   renderAmbientThemeScene(resolvedTheme);
   if(typeof window.__bgCanvasSetTheme === 'function'){
     window.__bgCanvasSetTheme(resolvedTheme, true);
@@ -7338,7 +7543,9 @@ function showAuthWelcome(kind='login'){
 }
 
 applyUiTimeTheme();
+applyUiClockMood();
 setInterval(()=>applyUiTimeTheme(), 10 * 60 * 1000);
+setInterval(()=>applyUiClockMood(), 60 * 1000);
 
 function focusAuthForm(force=false){
   updateAuthGate('',{ force });
@@ -8665,6 +8872,8 @@ const STORAGE_KEY_SESSION_END_DREAMS = 'qSessionEndDreamCount9';
 const STORAGE_KEY_SESSION_END_AT = 'qSessionEndAt9';
 const STORAGE_KEY_GUEST_STARTED_AT = 'qGuestStartedAt9';
 const STORAGE_KEY_GUEST_LOCKED = 'qGuestPreviewLocked9';
+const STORAGE_KEY_COMMUNITY_STREAM_OPT_IN = 'qCommunityDreamStreamOptIn9';
+const STORAGE_KEY_WANDERING_PROMPT_COUNT = 'qWanderingPromptCount';
 const STORAGE_KEY_CHAPTER_OPENED = 'qChapterOpenedThisSession9';
 const STORAGE_KEY_SYNTHESIS_SEEN = 'qSynthesisSeenThisSession9';
 const STORAGE_KEY_MICRO_INSIGHT_SEEN = 'qMicroInsightSeenThisSession9';
@@ -9153,6 +9362,124 @@ const CAPSULE_PROMPTS = [
   }
 ];
 
+// ── NEW: Ambient Dream Stream ──
+const SEEDED_COMMUNITY_DREAMS = [
+  { text:'Stop dreading Sunday nights because Monday is coming', domain:'career', location:'Toronto', horizon:'this year' },
+  { text:'Make enough money that I stop doing the mental math every time I buy groceries', domain:'freedom', location:'London', horizon:'3 years' },
+  { text:'Feel excited to call someone after work instead of just collapsing into my phone', domain:'people', location:'Dublin', horizon:'this year' },
+  { text:'Sleep eight hours without waking up already in a panic about the day', domain:'growth', location:'Chicago', horizon:'this year' },
+  { text:'Write songs that sound like me and not like what I think people expect', domain:'creative', location:'Melbourne', horizon:'3 years' },
+  { text:'Read something hard and stay with it instead of pretending I am too tired', domain:'mind', location:'Berlin', horizon:'this year' },
+  { text:'Have a living room that feels safe enough to invite people into', domain:'home', location:'Vancouver', horizon:'3 years' },
+  { text:'Be with someone where silence does not feel like a test', domain:'people', location:'New York', horizon:'3 years' },
+  { text:'Stop feeling like my body is a problem I have to fix before I can live', domain:'growth', location:'Lisbon', horizon:'3 years' },
+  { text:'Quit the job that makes me feel smaller every quarter', domain:'career', location:'Manchester', horizon:'this year' },
+  { text:'Have one month where no bill arriving in the mail scares me', domain:'freedom', location:'Seattle', horizon:'this year' },
+  { text:'Finish a short film even if only six people watch it', domain:'creative', location:'Paris', horizon:'3 years' },
+  { text:'Learn enough Spanish to joke in it, not just survive a menu', domain:'mind', location:'Madrid', horizon:'3 years' },
+  { text:'Move into a place where I can open the windows without hearing traffic rage', domain:'home', location:'Amsterdam', horizon:'3 years' },
+  { text:'Find the kind of friendship where I do not have to act breezy all the time', domain:'people', location:'Edinburgh', horizon:'this year' },
+  { text:'Eat like someone who plans to be alive and okay in ten years', domain:'growth', location:'Copenhagen', horizon:'this year' },
+  { text:'Do work that is not embarrassing to explain at dinner', domain:'career', location:'Austin', horizon:'3 years' },
+  { text:'Pay off this one debt that has been living rent free in my head', domain:'freedom', location:'Bristol', horizon:'this year' },
+  { text:'Paint without immediately trying to monetize it', domain:'creative', location:'Oslo', horizon:'this year' },
+  { text:'Be curious again instead of just productive', domain:'mind', location:'Boston', horizon:'this year' },
+  { text:'Have a kitchen table I actually sit at instead of eating over the sink', domain:'home', location:'Leeds', horizon:'this year' },
+  { text:'Tell someone I love them before I have rehearsed the sentence twenty times', domain:'people', location:'San Diego', horizon:'this year' },
+  { text:'Wake up without negotiating with myself for an hour first', domain:'growth', location:'Glasgow', horizon:'this year' },
+  { text:'Stop being the reliable person in a role that has nowhere left to grow', domain:'career', location:'Philadelphia', horizon:'3 years' },
+  { text:'Build an emergency fund that means one bad week will not wreck me', domain:'freedom', location:'Birmingham', horizon:'3 years' },
+  { text:'Write the essay I keep almost opening a new doc for', domain:'creative', location:'Montreal', horizon:'this year' },
+  { text:'Take one class where I am the beginner and do not fake confidence', domain:'mind', location:'San Francisco', horizon:'this year' },
+  { text:'Make my room look like a person with taste and not a storage unit', domain:'home', location:'Sydney', horizon:'this year' },
+  { text:'Stop picking people who are emotionally unavailable and then calling it chemistry', domain:'people', location:'Los Angeles', horizon:'3 years' },
+  { text:'Move my body because I like how it feels, not because I hate how it looks', domain:'growth', location:'Calgary', horizon:'3 years' },
+  { text:'Work four focused days and still be good at my job', domain:'career', location:'Cardiff', horizon:'3 years' },
+  { text:'Get to a point where replacing a broken laptop is annoying, not devastating', domain:'freedom', location:'Detroit', horizon:'3 years' },
+  { text:'Keep a sketchbook full enough that I stop saying I am not really creative', domain:'creative', location:'Brussels', horizon:'this year' },
+  { text:'Understand one field deeply instead of consuming endless summaries', domain:'mind', location:'Munich', horizon:'3 years' },
+  { text:'Live somewhere with actual daylight and less landlord chaos', domain:'home', location:'Portland', horizon:'3 years' },
+  { text:'Have one relationship where hard conversations happen before resentment does', domain:'people', location:'Nashville', horizon:'3 years' },
+  { text:'Feel calm in my own skin at the beach and not hyperaware all day', domain:'growth', location:'Miami', horizon:'3 years' },
+  { text:'Start the side project before I have the perfect logo and perfect plan', domain:'career', location:'Atlanta', horizon:'this year' },
+  { text:'Stop lending money to my future self to survive the present month', domain:'freedom', location:'Belfast', horizon:'this year' },
+  { text:'Learn piano badly but consistently', domain:'creative', location:'Zurich', horizon:'3 years' },
+  { text:'Travel somewhere alone and trust myself to figure it out', domain:'mind', location:'Hamburg', horizon:'3 years' },
+  { text:'Create a home that smells like dinner, not stress', domain:'home', location:'Dublin', horizon:'this year' },
+  { text:'Find people who ask real questions and wait for the real answer', domain:'people', location:'Toronto', horizon:'this year' },
+  { text:'Get my anxiety from constant static down to background hum', domain:'growth', location:'London', horizon:'3 years' },
+  { text:'Feel useful at work without being online every waking minute', domain:'career', location:'Chicago', horizon:'this year' },
+  { text:'Hit the point where payday is boring, not a rescue mission', domain:'freedom', location:'Berlin', horizon:'3 years' },
+  { text:'Publish something under my own name and not disappear afterwards', domain:'creative', location:'Paris', horizon:'3 years' },
+  { text:'Read fewer hot takes and more actual books', domain:'mind', location:'Vancouver', horizon:'this year' },
+  { text:'Have a hallway I am not embarrassed by when guests come over', domain:'home', location:'New York', horizon:'this year' },
+  { text:'Be brave enough to ask for the kind of love I actually want', domain:'people', location:'Lisbon', horizon:'3 years' },
+  { text:'Build routines that survive a bad week', domain:'growth', location:'Manchester', horizon:'this year' },
+  { text:'Change careers without telling myself I am too late', domain:'career', location:'Seattle', horizon:'3 years' },
+  { text:'Save enough to take three months off and think clearly', domain:'freedom', location:'Austin', horizon:'3 years' },
+  { text:'Make a zine that feels honest and weird in the right way', domain:'creative', location:'Melbourne', horizon:'this year' },
+  { text:'Stop doom-scrolling myself into the night', domain:'mind', location:'Amsterdam', horizon:'this year' },
+  { text:'Find a neighborhood where I can walk to coffee and know a few faces', domain:'home', location:'Edinburgh', horizon:'3 years' },
+  { text:'Repair one family relationship instead of pretending distance is fine', domain:'people', location:'San Diego', horizon:'3 years' },
+  { text:'Feel physically strong enough that stairs are not a negotiation', domain:'growth', location:'Boston', horizon:'this year' },
+  { text:'Do less fake urgency and more meaningful work', domain:'career', location:'Leeds', horizon:'this year' },
+  { text:'Stop being afraid to look at my banking app', domain:'freedom', location:'San Francisco', horizon:'this year' },
+  { text:'Finish a novel draft that does not live only in my notes app', domain:'creative', location:'Montreal', horizon:'3 years' },
+  { text:'Take my own questions seriously enough to study them', domain:'mind', location:'Sydney', horizon:'3 years' },
+  { text:'Live somewhere with a tiny balcony and enough sun for plants', domain:'home', location:'Los Angeles', horizon:'3 years' },
+  { text:'Stop chasing unavailable people because available feels unfamiliar', domain:'people', location:'Calgary', horizon:'3 years' },
+  { text:'Have bloodwork that does not lecture me', domain:'growth', location:'Cardiff', horizon:'3 years' },
+  { text:'Negotiate pay without apologizing for existing', domain:'career', location:'Detroit', horizon:'this year' },
+  { text:'Go a full month without using credit to make rent work', domain:'freedom', location:'Brussels', horizon:'this year' },
+  { text:'Share my photography without deleting half of it first', domain:'creative', location:'Munich', horizon:'this year' },
+  { text:'Remember what focused attention feels like', domain:'mind', location:'Portland', horizon:'this year' },
+  { text:'Make home feel warm even when life is not sorted out', domain:'home', location:'Nashville', horizon:'this year' },
+  { text:'Have a partner who can talk about money, grief, and plans without shutting down', domain:'people', location:'Miami', horizon:'3 years' },
+  { text:'Stop using caffeine and panic as my personality', domain:'growth', location:'Atlanta', horizon:'this year' },
+  { text:'Build a calm career path that does not require me to perform burnout', domain:'career', location:'Belfast', horizon:'3 years' },
+  { text:'Save for a future that is not just me surviving one month at a time', domain:'freedom', location:'Zurich', horizon:'3 years' },
+  { text:'Return to making things with my hands when I am overwhelmed', domain:'creative', location:'Hamburg', horizon:'this year' },
+  { text:'Learn enough history to stop feeling unmoored all the time', domain:'mind', location:'Oslo', horizon:'3 years' },
+  { text:'Have a front door that feels like relief when I turn the key', domain:'home', location:'Copenhagen', horizon:'3 years' },
+  { text:'Find people who like me unpolished', domain:'people', location:'Glasgow', horizon:'this year' },
+  { text:'Get my stress from constant red alert down to manageable noise', domain:'growth', location:'Philadelphia', horizon:'3 years' },
+  { text:'Keep one promise to myself every week, even when no one sees it', domain:'growth', location:'Bristol', horizon:'this year' }
+];
+
+// ── NEW: Wandering Prompt ──
+const WANDERING_PROMPTS = [
+  'Notice what you are avoiding naming.',
+  'The dream you keep almost writing down.',
+  'What would you want if you stopped being realistic?',
+  'Some things stay half formed forever. That is allowed.',
+  'What are you waiting to feel ready for?',
+  'What do you keep calling a phase that is actually a pattern?',
+  'You do not need a five year plan to admit a want.',
+  'If fear got quieter, what sentence would appear?',
+  'What are you pretending is not important because it is inconvenient?',
+  'What does your tired self still care about?',
+  'What would you ask for if nobody rolled their eyes?',
+  'Where are you living on autopilot?',
+  'What would count as a gentle beginning?',
+  'Which want keeps returning after every distraction?',
+  'What if progress looked quieter than performance?',
+  'Which part of your life feels underfed?',
+  'What are you over explaining because you do not trust your own desire?',
+  'What would you make if no one had to approve it?',
+  'What are you carrying that is not fully yours?',
+  'Where are you asking certainty from something that needs courage?',
+  'What do your evenings reveal about what you actually value?',
+  'What truth only shows up when you are alone?',
+  'What are you postponing to a future version of yourself?',
+  'What if the next step is smaller than your anxiety says?',
+  'Where are you still waiting for permission?',
+  'What do you miss that you never talk about?',
+  'What would be enough for today?',
+  'Which dream deserves less pressure and more devotion?',
+  'What have you mistaken for discipline that is really fear?',
+  'What would change if you were kinder to your own timing?'
+];
+
 function normalizeCapsulePromptResponses(list=[]){
   const source=Array.isArray(list)?list:[];
   return CAPSULE_PROMPTS.map((item,index)=>{
@@ -9234,9 +9561,118 @@ function normalizeDreamEntry(d){
   };
 }
 
+// ── NEW: Ambient Dream Stream ──
+function getCommunityStreamOptIn(){
+  return safeLocalStorageGet(STORAGE_KEY_COMMUNITY_STREAM_OPT_IN,'0')==='1';
+}
+
+function setCommunityStreamOptIn(enabled){
+  safeLocalStorageSet(STORAGE_KEY_COMMUNITY_STREAM_OPT_IN, enabled ? '1' : '0');
+  syncCommunityStreamToggle();
+}
+
+function syncCommunityStreamToggle(){
+  const toggle=document.getElementById('communityDreamShareToggle');
+  if(toggle)toggle.checked=getCommunityStreamOptIn();
+}
+
+function buildCommunitySeedWindow(windowSize=20){
+  const source=[...SEEDED_COMMUNITY_DREAMS];
+  for(let i=source.length-1;i>0;i-=1){
+    const j=Math.floor(Math.random()*(i+1));
+    [source[i],source[j]]=[source[j],source[i]];
+  }
+  return source.slice(0,Math.max(12,windowSize));
+}
+
+function buildCommunityDreamCardHtml(item){
+  const domain=DomainRegistry.get(item.domain);
+  return `<article class="community-dream-card">
+    <div class="community-dream-text">${esc(item.text)}</div>
+    <div class="community-dream-meta">
+      <span class="community-dream-domain">${esc(domain.emoji)}</span>
+      <span>someone in ${esc(item.location)}</span>
+      <span class="community-dream-dot"></span>
+      <span>${esc(item.horizon)}</span>
+    </div>
+  </article>`;
+}
+
+function renderCommunityDreamStream(){
+  const section=document.getElementById('communityDreamStream');
+  const countEl=document.getElementById('communityDreamCount');
+  const railA=document.getElementById('communityDreamRailA');
+  const railB=document.getElementById('communityDreamRailB');
+  const track=document.getElementById('communityDreamTrack');
+  if(!section || !countEl || !railA || !railB || !track)return;
+
+  const hasDreams=dreams.length>0;
+  section.style.display=hasDreams?'block':'none';
+  if(!hasDreams)return;
+
+  countEl.textContent=String(communityDreamLiveCount);
+  const cards=buildCommunitySeedWindow(20);
+  const cardHtml=cards.map(buildCommunityDreamCardHtml).join('');
+  railA.innerHTML=cardHtml;
+  railB.innerHTML=cardHtml;
+  track.style.setProperty('--community-card-count', String(cards.length));
+  track.style.setProperty('--community-drift-duration', `${cards.length * 8}s`);
+  syncCommunityStreamToggle();
+}
+
+function tickCommunityDreamCount(){
+  const drift=Math.random()<0.5?-1:1;
+  communityDreamLiveCount=Math.max(200,Math.min(400,communityDreamLiveCount+drift));
+  const countEl=document.getElementById('communityDreamCount');
+  if(countEl)countEl.textContent=String(communityDreamLiveCount);
+  const nextMs=8000+Math.floor(Math.random()*4000);
+  if(communityDreamCountTimer)clearTimeout(communityDreamCountTimer);
+  communityDreamCountTimer=setTimeout(tickCommunityDreamCount,nextMs);
+}
+
+function handleCommunityShareToggle(event){
+  const enabled=Boolean(event?.target?.checked);
+  setCommunityStreamOptIn(enabled);
+  // TODO: When Supabase sharing is enabled, write anonymized opted-in dreams to the community stream table.
+}
+
+// ── NEW: Wandering Prompt ──
+function getWanderingPromptGate(){
+  const nextCount=(parseInt(safeLocalStorageGet(STORAGE_KEY_WANDERING_PROMPT_COUNT,'0')||'0',10)||0)+1;
+  safeLocalStorageSet(STORAGE_KEY_WANDERING_PROMPT_COUNT,String(nextCount));
+  return nextCount % 3 === 0;
+}
+
+function showWanderingPrompt(){
+  const overlay=document.getElementById('wanderingPromptOverlay');
+  const textEl=document.getElementById('wanderingPromptText');
+  if(!overlay || !textEl)return;
+  const index=Math.floor(Math.random()*WANDERING_PROMPTS.length);
+  textEl.textContent=WANDERING_PROMPTS[index];
+  overlay.classList.add('show');
+  if(wanderingPromptHideTimer)clearTimeout(wanderingPromptHideTimer);
+  wanderingPromptHideTimer=setTimeout(()=>closeWanderingPrompt(),12000);
+}
+
+function closeWanderingPrompt(){
+  const overlay=document.getElementById('wanderingPromptOverlay');
+  if(!overlay)return;
+  overlay.classList.remove('show');
+}
+
+function maybeScheduleWanderingPrompt(){
+  if(!getWanderingPromptGate())return;
+  if(wanderingPromptShowTimer)clearTimeout(wanderingPromptShowTimer);
+  wanderingPromptShowTimer=setTimeout(showWanderingPrompt,45000);
+}
+
 let dreams = JSON.parse(safeLocalStorageGet(STORAGE_KEY_DREAMS,'[]')||'[]');
 dreams = dreams.map(normalizeDreamEntry).filter(d=>String(d?.text||'').trim().length>0);
 safeLocalStorageSet(STORAGE_KEY_DREAMS,JSON.stringify(dreams));
+let communityDreamLiveCount = 200 + Math.floor(Math.random()*201);
+let communityDreamCountTimer = null;
+let wanderingPromptShowTimer = null;
+let wanderingPromptHideTimer = null;
 let chatHistories = JSON.parse(safeLocalStorageGet(STORAGE_KEY_CHATS,'{}')||'{}');
 let checkinHistory = JSON.parse(safeLocalStorageGet(STORAGE_KEY_CHECKIN,'[]')||'[]');
 let aiMemory = normalizeMemoryStore(JSON.parse(safeLocalStorageGet(STORAGE_KEY_MEMORY,'{}')||'{}'));
@@ -10750,17 +11186,22 @@ function rotateSeed(){
   const stripWrappingBraces=(raw='')=>String(raw||'').replace(/^\{+|\}+$/g,'').trim();
   const groups=groupedDreams();
   const uncovered=DomainRegistry.list.filter(domain=>!groups[domain.key]?.length);
+  const clockPhase=getUiClockPhase();
   let nextPlaceholder='';
   if(uncovered.length){
     const theme=getUiTimeTheme();
     const domain=uncovered[seedIdx%uncovered.length];
     const label=sanitizeDomainLabel(domain.label);
-    if(theme==='morning')nextPlaceholder=`What could ${label} look like this year?`;
+    if(clockPhase==='late')nextPlaceholder=`What feels quietly true in ${label} tonight?`;
+    else if(clockPhase==='early')nextPlaceholder=`What bold move in ${label} would energize today?`;
+    else if(theme==='morning')nextPlaceholder=`What could ${label} look like this year?`;
     else if(theme==='day')nextPlaceholder=`What would ${label} look like for you?`;
     else if(theme==='evening')nextPlaceholder=`What does ${label} feel like to you?`;
     else nextPlaceholder=`What does ${label} mean to you right now?`;
   }else{
-    nextPlaceholder=String(DomainRegistry.seedPrompts[seedIdx%DomainRegistry.seedPrompts.length]||'').trim();
+    if(clockPhase==='late')nextPlaceholder='What are you still carrying from today?';
+    else if(clockPhase==='early')nextPlaceholder='What would make this morning feel alive?';
+    else nextPlaceholder=String(DomainRegistry.seedPrompts[seedIdx%DomainRegistry.seedPrompts.length]||'').trim();
   }
   inp.placeholder=stripWrappingBraces(nextPlaceholder);
   seedIdx++;
@@ -13191,6 +13632,7 @@ function render(rebuildTabs=true){
   syncOnboardEntryState();
   if(dreams.length!==1)hideFirstDreamNote();
   renderImageJournal();
+  renderCommunityDreamStream();
   if(!dreams.length){
     covWeightListRendered=false;
     lastRenderedcoverage=null;
@@ -16221,6 +16663,7 @@ document.addEventListener('keydown',e=>{
     closeLegalDoc();
     if(document.activeElement?.id==='catsSearch')debounceFilterDreams();
     closeModal();closeDiscover();closeDatepick();closeLetter();closeDreamDashboard();requestCloseDiscovery();requestCloseCapsuleCreation();comeBackToCapsuleLater();
+    closeWanderingPrompt();
     document.getElementById('checkinOverlay').classList.remove('open');
     document.getElementById('achievedOverlay').classList.remove('show');
     const p=document.getElementById('covInfoPopover');
@@ -16238,6 +16681,8 @@ document.addEventListener('keydown',e=>{
   syncCloudUi();
   scheduleGuestPreviewEnforcement();
   render();
+  tickCommunityDreamCount();
+  maybeScheduleWanderingPrompt();
   initAuthReelGradientShimmer();
   initWordmarkReelGradientShimmer();
   showOnboarding();
@@ -16268,6 +16713,9 @@ window.addEventListener('storage', (event) => {
   window.__qDreamCanvasAmbientV2 = true;
 
   const THEMES = new Set(['morning', 'day', 'evening', 'night']);
+  const WEATHER_RAIN_CODES = new Set([51, 53, 55, 56, 57, 61, 63, 65, 66, 67, 80, 81, 82, 95, 96, 99]);
+  const WEATHER_CLEAR_CODES = new Set([0, 1]);
+  const WEATHER_CACHE_KEY = 'qCanvasWeatherMood9';
   const reduceMotion = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
   const rand = (min, max) => Math.random() * (max - min) + min;
   const randInt = (min, max) => Math.floor(rand(min, max + 1));
@@ -16306,6 +16754,121 @@ window.addEventListener('storage', (event) => {
   let resizeTimer = 0;
   let themeTimer = 0;
   let rafId = 0;
+  let weatherMood = 'neutral';
+  let weatherFetchInFlight = false;
+  let weatherRefreshTimer = 0;
+  let weatherFetchedAt = 0;
+
+  function getSeasonalProfile(date = new Date()) {
+    const month = date.getMonth();
+    const day = date.getDate();
+    if (month === 11 && day <= 7) return { warm: 0, cool: 0.14, dark: 0.11 };
+    if (month === 2) return { warm: 0.12, cool: 0, dark: 0 };
+    if (month === 11 || month === 0 || month === 1) return { warm: 0, cool: 0.06, dark: 0.04 };
+    if (month >= 5 && month <= 7) return { warm: 0.04, cool: 0, dark: 0 };
+    return { warm: 0, cool: 0, dark: 0 };
+  }
+
+  function applyWeatherMood(nextMood = 'neutral', persist = true) {
+    weatherMood = ['rain', 'clear', 'neutral'].includes(nextMood) ? nextMood : 'neutral';
+    document.documentElement.dataset.uiWeatherMood = weatherMood;
+    if (persist) {
+      try {
+        const payload = JSON.stringify({ mood: weatherMood, at: Date.now() });
+        localStorage.setItem(WEATHER_CACHE_KEY, payload);
+      } catch {}
+    }
+    if (scene) {
+      scene.rainDrops = weatherMood === 'rain'
+        ? Array.from({ length: reduceMotion ? 10 : randInt(16, 26) }, () => makeRainDrop())
+        : [];
+    }
+  }
+
+  function hydrateWeatherMoodCache() {
+    try {
+      const raw = localStorage.getItem(WEATHER_CACHE_KEY);
+      if (!raw) return;
+      const parsed = JSON.parse(raw);
+      const mood = String(parsed?.mood || 'neutral');
+      const at = Number(parsed?.at || 0);
+      if (!Number.isFinite(at) || Date.now() - at > 4 * 60 * 60 * 1000) return;
+      weatherFetchedAt = at;
+      applyWeatherMood(mood, false);
+    } catch {}
+  }
+
+  function makeRainDrop() {
+    return {
+      x: rand(-width * 0.06, width * 1.04),
+      y: rand(-height, height),
+      len: rand(6, 14),
+      speed: rand(0.45, 1.05),
+      drift: rand(-0.12, 0.08),
+      alpha: rand(0.035, 0.095),
+      width: rand(0.55, 1.15)
+    };
+  }
+
+  async function resolveWeatherCoordinates() {
+    if (navigator.geolocation) {
+      try {
+        if (navigator.permissions?.query) {
+          const permission = await navigator.permissions.query({ name: 'geolocation' });
+          if (permission.state === 'denied') throw new Error('geolocation-denied');
+        }
+        const position = await new Promise((resolve, reject) => {
+          navigator.geolocation.getCurrentPosition(resolve, reject, {
+            enableHighAccuracy: false,
+            timeout: 3500,
+            maximumAge: 45 * 60 * 1000
+          });
+        });
+        const lat = Number(position?.coords?.latitude);
+        const lon = Number(position?.coords?.longitude);
+        if (Number.isFinite(lat) && Number.isFinite(lon)) return { lat, lon };
+      } catch {}
+    }
+    try {
+      const response = await fetch('https://ipapi.co/json/');
+      if (!response.ok) return null;
+      const payload = await response.json();
+      const lat = Number(payload?.latitude);
+      const lon = Number(payload?.longitude);
+      return Number.isFinite(lat) && Number.isFinite(lon) ? { lat, lon } : null;
+    } catch {
+      return null;
+    }
+  }
+
+  async function refreshWeatherMood(force = false) {
+    const now = Date.now();
+    if (!force && now - weatherFetchedAt < 45 * 60 * 1000) return;
+    if (weatherFetchInFlight) return;
+    weatherFetchInFlight = true;
+    try {
+      const coords = await resolveWeatherCoordinates();
+      if (!coords) {
+        applyWeatherMood('neutral');
+      } else {
+        const response = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${coords.lat}&longitude=${coords.lon}&current=weather_code&timezone=auto`);
+        if (response.ok) {
+          const payload = await response.json();
+          const code = Number(payload?.current?.weather_code);
+          if (WEATHER_RAIN_CODES.has(code)) applyWeatherMood('rain');
+          else if (WEATHER_CLEAR_CODES.has(code)) applyWeatherMood('clear');
+          else applyWeatherMood('neutral');
+          weatherFetchedAt = now;
+        }
+      }
+    } catch {
+      applyWeatherMood('neutral');
+    } finally {
+      weatherFetchInFlight = false;
+      clearTimeout(weatherRefreshTimer);
+      weatherRefreshTimer = window.setTimeout(() => refreshWeatherMood(true), 45 * 60 * 1000);
+    }
+  }
 
   function resizeCanvas() {
     dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -16414,6 +16977,7 @@ window.addEventListener('storage', (event) => {
       rays: [],
       stars: [],
       brightStars: [],
+      rainDrops: [],
       shooting: null,
       nextShootAt: performance.now() + rand(6000, 14000)
     };
@@ -16438,6 +17002,9 @@ window.addEventListener('storage', (event) => {
 
     for (let i = 0; i < (reduceMotion ? 50 : randInt(50, 70)); i += 1) next.stars.push(makeStar('night-small'));
     for (let i = 0; i < (reduceMotion ? 3 : randInt(3, 6)); i += 1) next.brightStars.push(makeStar('night-large'));
+    if (weatherMood === 'rain') {
+      next.rainDrops = Array.from({ length: reduceMotion ? 10 : randInt(16, 26) }, () => makeRainDrop());
+    }
     return next;
   }
 
@@ -16472,6 +17039,63 @@ window.addEventListener('storage', (event) => {
       dusk.addColorStop(1, 'rgba(222, 190, 197, 0)');
       ctx.fillStyle = dusk;
       ctx.fillRect(0, 0, width, height);
+    }
+    ctx.restore();
+  }
+
+  function drawSeasonLayer(now) {
+    const seasonal = getSeasonalProfile();
+    if (!seasonal.warm && !seasonal.cool && !seasonal.dark) return;
+    const drift = 0.94 + Math.sin(now * 0.00003) * 0.06;
+    ctx.save();
+    if (seasonal.cool > 0) {
+      const coolGlow = ctx.createRadialGradient(width * 0.12, height * 0.06, 0, width * 0.12, height * 0.06, width * 0.84);
+      coolGlow.addColorStop(0, `rgba(168, 188, 216, ${(seasonal.cool * 0.50 * drift).toFixed(3)})`);
+      coolGlow.addColorStop(0.45, `rgba(156, 176, 206, ${(seasonal.cool * 0.30 * drift).toFixed(3)})`);
+      coolGlow.addColorStop(1, 'rgba(156, 176, 206, 0)');
+      ctx.fillStyle = coolGlow;
+      ctx.fillRect(0, 0, width, height);
+    }
+    if (seasonal.warm > 0) {
+      const warmGlow = ctx.createRadialGradient(width * 0.86, height * 0.10, 0, width * 0.86, height * 0.10, width * 0.78);
+      warmGlow.addColorStop(0, `rgba(242, 192, 153, ${(seasonal.warm * 0.48 * drift).toFixed(3)})`);
+      warmGlow.addColorStop(0.52, `rgba(228, 170, 136, ${(seasonal.warm * 0.28 * drift).toFixed(3)})`);
+      warmGlow.addColorStop(1, 'rgba(228, 170, 136, 0)');
+      ctx.fillStyle = warmGlow;
+      ctx.fillRect(0, 0, width, height);
+    }
+    if (seasonal.dark > 0) {
+      ctx.fillStyle = `rgba(20, 24, 30, ${(seasonal.dark * 0.42).toFixed(3)})`;
+      ctx.fillRect(0, 0, width, height);
+    }
+    ctx.restore();
+  }
+
+  function drawWeatherLayer(now) {
+    ctx.save();
+    if (weatherMood === 'clear') {
+      const warmShift = ctx.createRadialGradient(width * 0.78, height * 0.12, 0, width * 0.78, height * 0.12, width * 0.48);
+      const alphaBoost = scene?.theme === 'night' ? 0.028 : 0.052;
+      const pulse = 0.92 + Math.sin(now * 0.0004) * 0.08;
+      warmShift.addColorStop(0, `rgba(246, 205, 164, ${(alphaBoost * pulse).toFixed(3)})`);
+      warmShift.addColorStop(0.5, `rgba(238, 188, 150, ${(alphaBoost * 0.48 * pulse).toFixed(3)})`);
+      warmShift.addColorStop(1, 'rgba(238, 188, 150, 0)');
+      ctx.fillStyle = warmShift;
+      ctx.fillRect(0, 0, width, height);
+    } else if (weatherMood === 'rain') {
+      const coolVeil = ctx.createLinearGradient(0, 0, 0, height);
+      coolVeil.addColorStop(0, 'rgba(164, 178, 198, 0.05)');
+      coolVeil.addColorStop(1, 'rgba(146, 162, 184, 0.025)');
+      ctx.fillStyle = coolVeil;
+      ctx.fillRect(0, 0, width, height);
+      for (const drop of (scene?.rainDrops || [])) {
+        ctx.strokeStyle = `rgba(188, 203, 225, ${drop.alpha.toFixed(3)})`;
+        ctx.lineWidth = drop.width;
+        ctx.beginPath();
+        ctx.moveTo(drop.x, drop.y);
+        ctx.lineTo(drop.x + drop.drift * 6, drop.y + drop.len);
+        ctx.stroke();
+      }
     }
     ctx.restore();
   }
@@ -16591,6 +17215,15 @@ window.addEventListener('storage', (event) => {
       }
     });
 
+    scene.rainDrops.forEach((drop) => {
+      drop.y += drop.speed * step * 1.8;
+      drop.x += drop.drift * step * 0.28;
+      if (drop.y > height + 24 || drop.x < -32 || drop.x > width + 32) {
+        drop.x = rand(-width * 0.06, width * 1.04);
+        drop.y = rand(-height * 0.32, -8);
+      }
+    });
+
     if (scene.theme === 'night' && !reduceMotion) {
       if (!scene.shooting && now >= scene.nextShootAt) {
         scene.shooting = makeShootingStar(now);
@@ -16606,7 +17239,9 @@ window.addEventListener('storage', (event) => {
     ctx.clearRect(0, 0, width, height);
     if (!scene) return;
 
+    drawSeasonLayer(now);
     drawThemeWash(scene.theme);
+    drawWeatherLayer(now);
     scene.rays.forEach((ray) => drawRay(ray, now));
     scene.clouds.forEach(drawCloud);
     scene.birds.forEach((bird) => drawBird(bird, now));
@@ -16633,7 +17268,9 @@ window.addEventListener('storage', (event) => {
   }
 
   resizeCanvas();
+  hydrateWeatherMoodCache();
   scene = buildScene(getTheme());
+  refreshWeatherMood();
   window.__bgCanvasSetTheme = (theme, force = false) => applyTheme(theme || getTheme(), force);
   rafId = requestAnimationFrame(animate);
 
