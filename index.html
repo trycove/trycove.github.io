@@ -2243,6 +2243,7 @@ body.auth-welcome-active .auth-gate-card {
   align-items:center;
   gap:0;
   --community-drift-duration: 160s;
+  --community-drift-direction: normal;
 }
 .community-dream-fade {
   position:absolute;
@@ -2254,6 +2255,36 @@ body.auth-welcome-active .auth-gate-card {
 }
 .community-dream-fade.left { left:0;background:linear-gradient(90deg,var(--surface) 0%,rgba(255,255,255,0) 100%); }
 .community-dream-fade.right { right:0;background:linear-gradient(270deg,var(--surface) 0%,rgba(255,255,255,0) 100%); }
+.community-dream-nav {
+  position:absolute;
+  top:50%;
+  transform:translateY(-50%);
+  z-index:5;
+  width:30px;
+  height:30px;
+  border-radius:999px;
+  border:1px solid var(--border);
+  background:color-mix(in srgb, var(--surface) 88%, var(--glass-panel-bg));
+  color:var(--text-dim);
+  font-family:'DM Sans',sans-serif;
+  font-size:14px;
+  line-height:1;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  opacity:0.92;
+  transition:all .22s ease;
+}
+.community-dream-nav.left { left:8px; }
+.community-dream-nav.right { right:8px; }
+.community-dream-nav:hover,
+.community-dream-nav.active {
+  border-color:var(--rose);
+  color:var(--rose);
+  box-shadow:var(--glow-rose-sm);
+  opacity:1;
+}
 .community-dream-rail {
   display:flex;
   align-items:stretch;
@@ -2262,6 +2293,7 @@ body.auth-welcome-active .auth-gate-card {
   padding:14px 0;
   width:max-content;
   animation:communityDreamDrift var(--community-drift-duration) linear infinite;
+  animation-direction:var(--community-drift-direction);
 }
 .community-dream-rail#communityDreamRailA { padding-left:14px; }
 .community-dream-track:hover .community-dream-rail,
@@ -2275,11 +2307,57 @@ body.auth-welcome-active .auth-gate-card {
   box-shadow:0 2px 8px rgba(0,0,0,0.04);
   padding:12px;
   backdrop-filter:blur(8px);
+  cursor:grab;
 }
+.community-dream-card:active { cursor:grabbing; }
+.community-dream-card-actions { margin-top:6px;display:flex;justify-content:flex-end; }
+.community-dream-add {
+  border:1px solid var(--border);
+  border-radius:999px;
+  background:var(--surface2);
+  color:var(--text-muted);
+  font-family:'DM Sans',sans-serif;
+  font-size:10px;
+  letter-spacing:0.06em;
+  text-transform:uppercase;
+  padding:5px 9px;
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  cursor:pointer;
+  transition:all .2s ease;
+}
+.community-dream-add:hover { border-color:var(--rose);color:var(--rose);box-shadow:var(--glow-rose-sm); }
+.community-dream-add-icon { font-size:12px;line-height:1; }
 .community-dream-text { font-family:'Lora',Georgia,serif;font-size:14px;font-style:italic;line-height:1.65;color:var(--text-dim);margin-bottom:8px; }
 .community-dream-meta { display:flex;align-items:center;gap:6px;font-family:'DM Sans',sans-serif;font-size:10px;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-faint); }
 .community-dream-domain { color:var(--rose); }
 .community-dream-dot { width:3px;height:3px;border-radius:50%;background:var(--border-hi);display:inline-block; }
+.community-dream-new-hint {
+  position:absolute;
+  right:10px;
+  top:50%;
+  transform:translateY(-50%) translateX(12px);
+  border-radius:999px;
+  border:1px solid var(--blush-light);
+  background:color-mix(in srgb, var(--surface) 80%, var(--petal));
+  color:var(--rose);
+  font-family:'DM Sans',sans-serif;
+  font-size:10px;
+  letter-spacing:0.12em;
+  text-transform:uppercase;
+  padding:7px 9px;
+  z-index:4;
+  opacity:0;
+  pointer-events:none;
+  cursor:pointer;
+  transition:opacity .45s ease, transform .45s ease;
+}
+.community-dream-track.show-new-dreams-hint .community-dream-new-hint {
+  opacity:1;
+  transform:translateY(-50%) translateX(0);
+  pointer-events:auto;
+}
 
 @keyframes communityDreamDrift {
   from { transform:translateX(0); }
@@ -4473,6 +4551,8 @@ body.auth-welcome-active .auth-gate-card {
   .community-dream-rail#communityDreamRailB { display:none; }
   .community-dream-card { width:min(300px,78vw); scroll-snap-align:start; }
   .community-dream-fade { display:none; }
+  .community-dream-nav { top:auto; bottom:8px; transform:none; }
+  .community-dream-new-hint { display:none; }
   .wandering-prompt-overlay { bottom:88px; }
 }
 
@@ -5817,10 +5897,13 @@ body::before { animation: ambientDrift 18s ease-in-out infinite; }
       </label>
     </div>
     <div class="community-dream-track" id="communityDreamTrack">
+      <button class="community-dream-nav left" id="communityDreamNavLeft" type="button" aria-label="Show previous dreams" onclick="flipCommunityDreamDirection(-1)">←</button>
+      <button class="community-dream-nav right" id="communityDreamNavRight" type="button" aria-label="Show next dreams" onclick="flipCommunityDreamDirection(1)">→</button>
       <div class="community-dream-fade left" aria-hidden="true"></div>
       <div class="community-dream-fade right" aria-hidden="true"></div>
       <div class="community-dream-rail" id="communityDreamRailA"></div>
       <div class="community-dream-rail" id="communityDreamRailB" aria-hidden="true"></div>
+      <div class="community-dream-new-hint" id="communityDreamNewHint" aria-live="polite">new dreams →</div>
     </div>
   </section>
 
@@ -9484,86 +9567,86 @@ const CAPSULE_PROMPTS = [
 
 // ── NEW: Ambient Dream Stream ──
 const SEEDED_COMMUNITY_DREAMS = [
-  { text:'Stop dreading Sunday nights because Monday is coming', domain:'career', location:'Toronto', horizon:'this year' },
-  { text:'Make enough money that I stop doing the mental math every time I buy groceries', domain:'freedom', location:'London', horizon:'3 years' },
-  { text:'Feel excited to call someone after work instead of just collapsing into my phone', domain:'people', location:'Dublin', horizon:'this year' },
-  { text:'Sleep eight hours without waking up already in a panic about the day', domain:'growth', location:'Chicago', horizon:'this year' },
-  { text:'Write songs that sound like me and not like what I think people expect', domain:'creative', location:'Melbourne', horizon:'3 years' },
-  { text:'Read something hard and stay with it instead of pretending I am too tired', domain:'mind', location:'Berlin', horizon:'this year' },
-  { text:'Have a living room that feels safe enough to invite people into', domain:'home', location:'Vancouver', horizon:'3 years' },
-  { text:'Be with someone where silence does not feel like a test', domain:'people', location:'New York', horizon:'3 years' },
-  { text:'Stop feeling like my body is a problem I have to fix before I can live', domain:'growth', location:'Lisbon', horizon:'3 years' },
-  { text:'Quit the job that makes me feel smaller every quarter', domain:'career', location:'Manchester', horizon:'this year' },
-  { text:'Have one month where no bill arriving in the mail scares me', domain:'freedom', location:'Seattle', horizon:'this year' },
-  { text:'Finish a short film even if only six people watch it', domain:'creative', location:'Paris', horizon:'3 years' },
-  { text:'Learn enough Spanish to joke in it, not just survive a menu', domain:'mind', location:'Madrid', horizon:'3 years' },
-  { text:'Move into a place where I can open the windows without hearing traffic rage', domain:'home', location:'Amsterdam', horizon:'3 years' },
-  { text:'Find the kind of friendship where I do not have to act breezy all the time', domain:'people', location:'Edinburgh', horizon:'this year' },
-  { text:'Eat like someone who plans to be alive and okay in ten years', domain:'growth', location:'Copenhagen', horizon:'this year' },
-  { text:'Do work that is not embarrassing to explain at dinner', domain:'career', location:'Austin', horizon:'3 years' },
-  { text:'Pay off this one debt that has been living rent free in my head', domain:'freedom', location:'Bristol', horizon:'this year' },
-  { text:'Paint without immediately trying to monetize it', domain:'creative', location:'Oslo', horizon:'this year' },
-  { text:'Be curious again instead of just productive', domain:'mind', location:'Boston', horizon:'this year' },
-  { text:'Have a kitchen table I actually sit at instead of eating over the sink', domain:'home', location:'Leeds', horizon:'this year' },
-  { text:'Tell someone I love them before I have rehearsed the sentence twenty times', domain:'people', location:'San Diego', horizon:'this year' },
-  { text:'Wake up without negotiating with myself for an hour first', domain:'growth', location:'Glasgow', horizon:'this year' },
-  { text:'Stop being the reliable person in a role that has nowhere left to grow', domain:'career', location:'Philadelphia', horizon:'3 years' },
-  { text:'Build an emergency fund that means one bad week will not wreck me', domain:'freedom', location:'Birmingham', horizon:'3 years' },
-  { text:'Write the essay I keep almost opening a new doc for', domain:'creative', location:'Montreal', horizon:'this year' },
-  { text:'Take one class where I am the beginner and do not fake confidence', domain:'mind', location:'San Francisco', horizon:'this year' },
-  { text:'Make my room look like a person with taste and not a storage unit', domain:'home', location:'Sydney', horizon:'this year' },
-  { text:'Stop picking people who are emotionally unavailable and then calling it chemistry', domain:'people', location:'Los Angeles', horizon:'3 years' },
-  { text:'Move my body because I like how it feels, not because I hate how it looks', domain:'growth', location:'Calgary', horizon:'3 years' },
-  { text:'Work four focused days and still be good at my job', domain:'career', location:'Cardiff', horizon:'3 years' },
-  { text:'Get to a point where replacing a broken laptop is annoying, not devastating', domain:'freedom', location:'Detroit', horizon:'3 years' },
-  { text:'Keep a sketchbook full enough that I stop saying I am not really creative', domain:'creative', location:'Brussels', horizon:'this year' },
-  { text:'Understand one field deeply instead of consuming endless summaries', domain:'mind', location:'Munich', horizon:'3 years' },
-  { text:'Live somewhere with actual daylight and less landlord chaos', domain:'home', location:'Portland', horizon:'3 years' },
-  { text:'Have one relationship where hard conversations happen before resentment does', domain:'people', location:'Nashville', horizon:'3 years' },
-  { text:'Feel calm in my own skin at the beach and not hyperaware all day', domain:'growth', location:'Miami', horizon:'3 years' },
-  { text:'Start the side project before I have the perfect logo and perfect plan', domain:'career', location:'Atlanta', horizon:'this year' },
-  { text:'Stop lending money to my future self to survive the present month', domain:'freedom', location:'Belfast', horizon:'this year' },
+  { text:'Not get the Sunday scaries, like, every single week', domain:'career', location:'Toronto', horizon:'this year' },
+  { text:'Buy groceries without doing calculator math in my head', domain:'freedom', location:'London', horizon:'3 years' },
+  { text:'Actually have energy to text people back after work bc rn I just ghost', domain:'people', location:'Dublin', horizon:'this year' },
+  { text:'Sleep through the night without waking up stressed', domain:'growth', location:'Chicago', horizon:'this year' },
+  { text:'Make music that sounds like me, not like trends', domain:'creative', location:'Melbourne', horizon:'3 years' },
+  { text:'Read one hard book all the way through instead of living in 40 open tabs', domain:'mind', location:'Berlin', horizon:'this year' },
+  { text:'Have a place that feels good enough to invite friends over', domain:'home', location:'Vancouver', horizon:'3 years' },
+  { text:'Be with someone where quiet is comfortable, not awkward', domain:'people', location:'New York', horizon:'3 years' },
+  { text:'Stop treating my body like a project that is never done', domain:'growth', location:'Lisbon', horizon:'3 years' },
+  { text:'Leave the job that drains me every quarter', domain:'career', location:'Manchester', horizon:'this year' },
+  { text:'Go one month without bills feeling scary', domain:'freedom', location:'Seattle', horizon:'this year' },
+  { text:'Finish a short film and release it even if it is small', domain:'creative', location:'Paris', horizon:'3 years' },
+  { text:'Get conversational in Spanish, not just survive travel', domain:'mind', location:'Madrid', horizon:'3 years' },
+  { text:'Move somewhere I can open windows and not hear chaos', domain:'home', location:'Amsterdam', horizon:'3 years' },
+  { text:'Have friendships where I do not have to perform all the time', domain:'people', location:'Edinburgh', horizon:'this year' },
+  { text:'Eat and rest like future me matters', domain:'growth', location:'Copenhagen', horizon:'this year' },
+  { text:'Do work I can explain without cringing, ngl', domain:'career', location:'Austin', horizon:'3 years' },
+  { text:'Clear the debt that is always in the back of my mind', domain:'freedom', location:'Bristol', horizon:'this year' },
+  { text:'Paint for fun without turning it into content five minutes later', domain:'creative', location:'Oslo', horizon:'this year' },
+  { text:'Feel curious again instead of just busy', domain:'mind', location:'Boston', horizon:'this year' },
+  { text:'Use my table like a normal person and not eat over the sink', domain:'home', location:'Leeds', horizon:'this year' },
+  { text:'Tell someone I love them without overthinking for days', domain:'people', location:'San Diego', horizon:'this year' },
+  { text:'Get out of bed without a 45 minute internal debate', domain:'growth', location:'Glasgow', horizon:'this year' },
+  { text:'Stop being the dependable one in a role with no upside', domain:'career', location:'Philadelphia', horizon:'3 years' },
+  { text:'Build an emergency fund so one bad week does not wreck me', domain:'freedom', location:'Birmingham', horizon:'3 years' },
+  { text:'Write the essay I keep opening docs for and never finishing', domain:'creative', location:'Montreal', horizon:'this year' },
+  { text:'Take a class where I am a beginner and do not fake it', domain:'mind', location:'San Francisco', horizon:'this year' },
+  { text:'Make my room look lived in, not like storage', domain:'home', location:'Sydney', horizon:'this year' },
+  { text:'Stop choosing unavailable people and calling it chemistry because fr that pattern is old', domain:'people', location:'Los Angeles', horizon:'3 years' },
+  { text:'Move my body because it feels good, not as punishment', domain:'growth', location:'Calgary', horizon:'3 years' },
+  { text:'Work four solid days and still be seen as good at my job', domain:'career', location:'Cardiff', horizon:'3 years' },
+  { text:'Have a broken laptop be annoying, not a financial crisis', domain:'freedom', location:'Detroit', horizon:'3 years' },
+  { text:'Fill a sketchbook and stop saying I am not creative', domain:'creative', location:'Brussels', horizon:'this year' },
+  { text:'Go deep on one subject instead of skimming everything', domain:'mind', location:'Munich', horizon:'3 years' },
+  { text:'Live somewhere with decent daylight and less landlord drama', domain:'home', location:'Portland', horizon:'3 years' },
+  { text:'Have a relationship where hard talks happen early', domain:'people', location:'Nashville', horizon:'3 years' },
+  { text:'Feel okay in my skin at the beach', domain:'growth', location:'Miami', horizon:'3 years' },
+  { text:'Start the side project before it is perfect because tbh I am done waiting', domain:'career', location:'Atlanta', horizon:'this year' },
+  { text:'Stop borrowing from future me to survive this month', domain:'freedom', location:'Belfast', horizon:'this year' },
   { text:'Learn piano badly but consistently', domain:'creative', location:'Zurich', horizon:'3 years' },
-  { text:'Travel somewhere alone and trust myself to figure it out', domain:'mind', location:'Hamburg', horizon:'3 years' },
-  { text:'Create a home that smells like dinner, not stress', domain:'home', location:'Dublin', horizon:'this year' },
-  { text:'Find people who ask real questions and wait for the real answer', domain:'people', location:'Toronto', horizon:'this year' },
-  { text:'Get my anxiety from constant static down to background hum', domain:'growth', location:'London', horizon:'3 years' },
-  { text:'Feel useful at work without being online every waking minute', domain:'career', location:'Chicago', horizon:'this year' },
-  { text:'Hit the point where payday is boring, not a rescue mission', domain:'freedom', location:'Berlin', horizon:'3 years' },
-  { text:'Publish something under my own name and not disappear afterwards', domain:'creative', location:'Paris', horizon:'3 years' },
-  { text:'Read fewer hot takes and more actual books', domain:'mind', location:'Vancouver', horizon:'this year' },
-  { text:'Have a hallway I am not embarrassed by when guests come over', domain:'home', location:'New York', horizon:'this year' },
-  { text:'Be brave enough to ask for the kind of love I actually want', domain:'people', location:'Lisbon', horizon:'3 years' },
-  { text:'Build routines that survive a bad week', domain:'growth', location:'Manchester', horizon:'this year' },
-  { text:'Change careers without telling myself I am too late', domain:'career', location:'Seattle', horizon:'3 years' },
-  { text:'Save enough to take three months off and think clearly', domain:'freedom', location:'Austin', horizon:'3 years' },
-  { text:'Make a zine that feels honest and weird in the right way', domain:'creative', location:'Melbourne', horizon:'this year' },
-  { text:'Stop doom-scrolling myself into the night', domain:'mind', location:'Amsterdam', horizon:'this year' },
-  { text:'Find a neighborhood where I can walk to coffee and know a few faces', domain:'home', location:'Edinburgh', horizon:'3 years' },
-  { text:'Repair one family relationship instead of pretending distance is fine', domain:'people', location:'San Diego', horizon:'3 years' },
-  { text:'Feel physically strong enough that stairs are not a negotiation', domain:'growth', location:'Boston', horizon:'this year' },
-  { text:'Do less fake urgency and more meaningful work', domain:'career', location:'Leeds', horizon:'this year' },
-  { text:'Stop being afraid to look at my banking app', domain:'freedom', location:'San Francisco', horizon:'this year' },
-  { text:'Finish a novel draft that does not live only in my notes app', domain:'creative', location:'Montreal', horizon:'3 years' },
-  { text:'Take my own questions seriously enough to study them', domain:'mind', location:'Sydney', horizon:'3 years' },
-  { text:'Live somewhere with a tiny balcony and enough sun for plants', domain:'home', location:'Los Angeles', horizon:'3 years' },
-  { text:'Stop chasing unavailable people because available feels unfamiliar', domain:'people', location:'Calgary', horizon:'3 years' },
-  { text:'Have bloodwork that does not lecture me', domain:'growth', location:'Cardiff', horizon:'3 years' },
-  { text:'Negotiate pay without apologizing for existing', domain:'career', location:'Detroit', horizon:'this year' },
-  { text:'Go a full month without using credit to make rent work', domain:'freedom', location:'Brussels', horizon:'this year' },
-  { text:'Share my photography without deleting half of it first', domain:'creative', location:'Munich', horizon:'this year' },
-  { text:'Remember what focused attention feels like', domain:'mind', location:'Portland', horizon:'this year' },
-  { text:'Make home feel warm even when life is not sorted out', domain:'home', location:'Nashville', horizon:'this year' },
-  { text:'Have a partner who can talk about money, grief, and plans without shutting down', domain:'people', location:'Miami', horizon:'3 years' },
-  { text:'Stop using caffeine and panic as my personality', domain:'growth', location:'Atlanta', horizon:'this year' },
-  { text:'Build a calm career path that does not require me to perform burnout', domain:'career', location:'Belfast', horizon:'3 years' },
-  { text:'Save for a future that is not just me surviving one month at a time', domain:'freedom', location:'Zurich', horizon:'3 years' },
-  { text:'Return to making things with my hands when I am overwhelmed', domain:'creative', location:'Hamburg', horizon:'this year' },
-  { text:'Learn enough history to stop feeling unmoored all the time', domain:'mind', location:'Oslo', horizon:'3 years' },
-  { text:'Have a front door that feels like relief when I turn the key', domain:'home', location:'Copenhagen', horizon:'3 years' },
-  { text:'Find people who like me unpolished', domain:'people', location:'Glasgow', horizon:'this year' },
-  { text:'Get my stress from constant red alert down to manageable noise', domain:'growth', location:'Philadelphia', horizon:'3 years' },
-  { text:'Keep one promise to myself every week, even when no one sees it', domain:'growth', location:'Bristol', horizon:'this year' }
+  { text:'Take a solo trip and trust myself to figure things out', domain:'mind', location:'Hamburg', horizon:'3 years' },
+  { text:'Make home smell like food and calm, not stress', domain:'home', location:'Dublin', horizon:'this year' },
+  { text:'Find people who ask real questions and mean it', domain:'people', location:'Toronto', horizon:'this year' },
+  { text:'Get my anxiety from static to something manageable', domain:'growth', location:'London', horizon:'3 years' },
+  { text:'Feel useful at work without being online 24/7', domain:'career', location:'Chicago', horizon:'this year' },
+  { text:'Make payday feel normal instead of full emergency mode every month', domain:'freedom', location:'Berlin', horizon:'3 years' },
+  { text:'Publish under my own name and not hide after', domain:'creative', location:'Paris', horizon:'3 years' },
+  { text:'Read fewer takes and more actual books', domain:'mind', location:'Vancouver', horizon:'this year' },
+  { text:'Stop being embarrassed of my hallway when people visit', domain:'home', location:'New York', horizon:'this year' },
+  { text:'Ask for the kind of love I actually want', domain:'people', location:'Lisbon', horizon:'3 years' },
+  { text:'Build routines that still work on bad weeks', domain:'growth', location:'Manchester', horizon:'this year' },
+  { text:'Switch careers without telling myself I am too late', domain:'career', location:'Seattle', horizon:'3 years' },
+  { text:'Save enough to step back and think clearly for a while', domain:'freedom', location:'Austin', horizon:'3 years' },
+  { text:'Make a zine that feels real, not over-edited', domain:'creative', location:'Melbourne', horizon:'this year' },
+  { text:'Stop doomscrolling till 2am', domain:'mind', location:'Amsterdam', horizon:'this year' },
+  { text:'Live in a neighborhood where I know a few faces', domain:'home', location:'Edinburgh', horizon:'3 years' },
+  { text:'Repair one family relationship instead of pretending I am fine with distance', domain:'people', location:'San Diego', horizon:'3 years' },
+  { text:'Do less fake urgency and more work that matters', domain:'career', location:'Leeds', horizon:'this year' },
+  { text:'Open my banking app without dread because that is honestly the dream', domain:'freedom', location:'San Francisco', horizon:'this year' },
+  { text:'Finish a novel draft instead of collecting notes forever', domain:'creative', location:'Montreal', horizon:'3 years' },
+  { text:'Take my own questions seriously and actually study them', domain:'mind', location:'Sydney', horizon:'3 years' },
+  { text:'Find a place with a tiny balcony and enough sun for plants', domain:'home', location:'Los Angeles', horizon:'3 years' },
+  { text:'Stop chasing people who cannot meet me halfway', domain:'people', location:'Calgary', horizon:'3 years' },
+  { text:'I cannot tell if I want this career or, idk, just want to stop feeling behind', domain:'career', location:'Toronto', horizon:'3 years' },
+  { text:'Part of me wants to leave everything, part of me knows I would miss it', domain:'freedom', location:'Berlin', horizon:'3 years' },
+  { text:'I am not sure if I am chasing what I want or avoiding what I do not', domain:'mind', location:'Prague', horizon:'3 years' },
+  { text:'Stay in this job and fix my mindset, or leave and start over. I genuinely do not know', domain:'career', location:'Denver', horizon:'3 years' },
+  { text:'I love them and also feel small around them. Not sure what to do with that', domain:'people', location:'Austin', horizon:'this year' },
+  { text:'Keep pushing or admit this was never really my thing', domain:'growth', location:'Copenhagen', horizon:'this year' },
+  { text:'I want more alone time but I am also scared of drifting from everyone', domain:'people', location:'Auckland', horizon:'3 years' },
+  { text:'Not sure if I am lowkey burnt out or just done with this kind of work', domain:'career', location:'Stockholm', horizon:'this year' },
+  { text:'Do I commit to this city or admit I mostly liked the idea of it', domain:'home', location:'Reykjavik', horizon:'3 years' },
+  { text:'Some days I want kids, some days I want a lot more freedom', domain:'growth', location:'Helsinki', horizon:'3 years' },
+  { text:'Is this a phase or actually me now? I keep going back and forth, tbh', domain:'mind', location:'Warsaw', horizon:'this year' },
+  { text:'I miss them, but staying might mean accepting things I cannot unsee', domain:'people', location:'Vienna', horizon:'3 years' },
+  { text:'I want to change everything and keep everything at the same time and it does not make sense', domain:'growth', location:'Rome', horizon:'3 years' },
+  { text:'I cannot tell if I am scared to fail or scared to actually get what I asked for', domain:'creative', location:'Barcelona', horizon:'this year' },
+  { text:'Unsure if I should push through this chapter or let it end', domain:'career', location:'Venice', horizon:'3 years' },
+  { text:'Cannot decide if I need to heal more or just accept where I am rn', domain:'growth', location:'Prague', horizon:'this year' },
+  { text:'Keep one promise to myself every week', domain:'growth', location:'Bristol', horizon:'this year' }
 ];
 
 // ── NEW: Wandering Prompt ──
@@ -9705,15 +9788,153 @@ function buildCommunitySeedWindow(windowSize=20){
   return source.slice(0,Math.max(12,windowSize));
 }
 
+function encodeCommunityDreamText(text=''){
+  return encodeURIComponent(String(text||''));
+}
+
+function decodeCommunityDreamText(value=''){
+  try{return decodeURIComponent(String(value||''));}catch{return String(value||'');}
+}
+
+function appendCommunityDreamToCapture(rawText=''){
+  const text=String(rawText||'').trim();
+  if(!text)return;
+  const input=document.getElementById('dreamInput');
+  if(!input)return;
+  const existing=String(input.value||'').trim();
+  const nextValue=existing?`${existing}\n${text}`:text;
+  input.value=nextValue;
+  input.focus();
+  input.setSelectionRange(nextValue.length,nextValue.length);
+}
+
+function extractCommunityDreamFromDataTransfer(dataTransfer){
+  if(!dataTransfer)return '';
+  let encoded=dataTransfer.getData(COMMUNITY_DREAM_DRAG_MIME)||'';
+  if(!encoded){
+    const plain=String(dataTransfer.getData('text/plain')||'');
+    if(plain.startsWith(COMMUNITY_DREAM_DRAG_PREFIX))encoded=plain.slice(COMMUNITY_DREAM_DRAG_PREFIX.length);
+  }
+  return decodeCommunityDreamText(encoded).trim();
+}
+
+function setCommunityDreamDirection(direction=1){
+  communityDreamDirection=direction<0?-1:1;
+  const track=document.getElementById('communityDreamTrack');
+  if(track)track.style.setProperty('--community-drift-direction',communityDreamDirection<0?'reverse':'normal');
+  const leftBtn=document.getElementById('communityDreamNavLeft');
+  const rightBtn=document.getElementById('communityDreamNavRight');
+  if(leftBtn)leftBtn.classList.toggle('active',communityDreamDirection<0);
+  if(rightBtn)rightBtn.classList.toggle('active',communityDreamDirection>0);
+}
+
+function nudgeCommunityDreamTrack(direction=1){
+  const track=document.getElementById('communityDreamTrack');
+  if(!track)return;
+  const prefersReduced=Boolean(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  const mobileMode=Boolean(window.matchMedia&&window.matchMedia('(max-width:640px)').matches);
+  if(!prefersReduced&&!mobileMode)return;
+  const maxScroll=Math.max(0,track.scrollWidth-track.clientWidth);
+  if(maxScroll<2)return;
+  const step=Math.max(220,Math.round(track.clientWidth*0.72));
+  let next=track.scrollLeft+(direction<0?-step:step);
+  if(next<0)next=maxScroll;
+  if(next>maxScroll)next=0;
+  track.scrollTo({left:next,behavior:'smooth'});
+}
+
+function flipCommunityDreamDirection(direction=1){
+  setCommunityDreamDirection(direction);
+  nudgeCommunityDreamTrack(direction);
+}
+
+function bindCommunityDreamInteractions(track){
+  if(!track||track.dataset.communityBound==='1')return;
+  track.dataset.communityBound='1';
+
+  track.addEventListener('click',event=>{
+    const addBtn=event.target.closest('[data-add-dream]');
+    if(!addBtn)return;
+    const encoded=String(addBtn.getAttribute('data-add-dream')||'');
+    const text=decodeCommunityDreamText(encoded).trim();
+    if(!text)return;
+    appendCommunityDreamToCapture(text);
+    showToast('Added to capture.', 'success');
+  });
+
+  track.addEventListener('dragstart',event=>{
+    const card=event.target.closest('.community-dream-card');
+    if(!card)return;
+    const encoded=String(card.getAttribute('data-dream-text')||'');
+    if(!encoded||!event.dataTransfer)return;
+    event.dataTransfer.effectAllowed='copy';
+    event.dataTransfer.setData(COMMUNITY_DREAM_DRAG_MIME,encoded);
+    event.dataTransfer.setData('text/plain',`${COMMUNITY_DREAM_DRAG_PREFIX}${encoded}`);
+  });
+}
+
+function refreshCommunityDreamWindow(){
+  const railA=document.getElementById('communityDreamRailA');
+  const railB=document.getElementById('communityDreamRailB');
+  const track=document.getElementById('communityDreamTrack');
+  if(!railA||!railB||!track)return;
+  const cards=buildCommunitySeedWindow(20);
+  const cardHtml=cards.map(buildCommunityDreamCardHtml).join('');
+  railA.innerHTML=cardHtml;
+  railB.innerHTML=cardHtml;
+  track.style.setProperty('--community-card-count', String(cards.length));
+  track.style.setProperty('--community-drift-duration', `${cards.length * 8}s`);
+  setCommunityDreamDirection(communityDreamDirection);
+}
+
+function bindCommunityDreamHoverHint(track){
+  if(!track||track.dataset.communityHoverBound==='1')return;
+  track.dataset.communityHoverBound='1';
+  const hideHint=()=>{
+    if(communityDreamHoverHintTimer){
+      clearTimeout(communityDreamHoverHintTimer);
+      communityDreamHoverHintTimer=null;
+    }
+    track.classList.remove('show-new-dreams-hint');
+  };
+  const scheduleHint=()=>{
+    if(communityDreamHoverHintTimer)clearTimeout(communityDreamHoverHintTimer);
+    communityDreamHoverHintTimer=setTimeout(()=>{
+      track.classList.add('show-new-dreams-hint');
+    },20000);
+  };
+  track.addEventListener('mouseenter',scheduleHint);
+  track.addEventListener('mouseleave',hideHint);
+  track.addEventListener('pointerdown',hideHint);
+  track.addEventListener('dragstart',hideHint);
+
+  const hint=document.getElementById('communityDreamNewHint');
+  if(hint&&hint.dataset.communityHintClickBound!=='1'){
+    hint.dataset.communityHintClickBound='1';
+    hint.addEventListener('click',()=>{
+      hideHint();
+      refreshCommunityDreamWindow();
+      showToast('Loaded new dreams.', 'success');
+    });
+  }
+}
+
 function buildCommunityDreamCardHtml(item){
   const domain=DomainRegistry.get(item.domain);
-  return `<article class="community-dream-card">
+  const encodedText=encodeCommunityDreamText(item.text);
+  return `<article class="community-dream-card" draggable="true" data-dream-text="${encodedText}">
     <div class="community-dream-text">${esc(item.text)}</div>
     <div class="community-dream-meta">
       <span class="community-dream-domain">${esc(domain.emoji)}</span>
       <span>someone in ${esc(item.location)}</span>
       <span class="community-dream-dot"></span>
       <span>${esc(item.horizon)}</span>
+    </div>
+    <div class="community-dream-card-actions">
+      <button class="community-dream-add" type="button" data-add-dream="${encodedText}" aria-label="Add this dream to capture">
+        <span class="community-dream-add-icon">⇲</span>
+        <span>Add to capture</span>
+      </button>
     </div>
   </article>`;
 }
@@ -9728,23 +9949,41 @@ function renderCommunityDreamStream(){
 
   const hasDreams=dreams.length>0;
   section.style.display=hasDreams?'block':'none';
-  if(!hasDreams)return;
+  if(!hasDreams){
+    track.classList.remove('show-new-dreams-hint');
+    return;
+  }
 
-  countEl.textContent=String(communityDreamLiveCount);
+  countEl.textContent=communityDreamLiveCount.toLocaleString();
   const cards=buildCommunitySeedWindow(20);
   const cardHtml=cards.map(buildCommunityDreamCardHtml).join('');
   railA.innerHTML=cardHtml;
   railB.innerHTML=cardHtml;
   track.style.setProperty('--community-card-count', String(cards.length));
   track.style.setProperty('--community-drift-duration', `${cards.length * 8}s`);
+  setCommunityDreamDirection(communityDreamDirection);
+  bindCommunityDreamInteractions(track);
+  bindCommunityDreamHoverHint(track);
   syncCommunityStreamToggle();
 }
 
+function nextCommunityDreamLiveCount(current){
+  const min=200;
+  const max=500;
+  const midpoint=380;
+  const trend=current===midpoint?0:(current<midpoint?1:-1);
+  const followTrend=Math.random()<0.76;
+  const direction=trend===0?(Math.random()<0.5?-1:1):(followTrend?trend:-trend);
+  const baseStep=2+Math.floor(Math.random()*7);
+  const bump=Math.random()<0.24?(8+Math.floor(Math.random()*12)):0;
+  const next=current+(direction*(baseStep+bump));
+  return Math.max(min,Math.min(max,next));
+}
+
 function tickCommunityDreamCount(){
-  const drift=Math.random()<0.5?-1:1;
-  communityDreamLiveCount=Math.max(200,Math.min(400,communityDreamLiveCount+drift));
+  communityDreamLiveCount=nextCommunityDreamLiveCount(communityDreamLiveCount);
   const countEl=document.getElementById('communityDreamCount');
-  if(countEl)countEl.textContent=String(communityDreamLiveCount);
+  if(countEl)countEl.textContent=communityDreamLiveCount.toLocaleString();
   const nextMs=8000+Math.floor(Math.random()*4000);
   if(communityDreamCountTimer)clearTimeout(communityDreamCountTimer);
   communityDreamCountTimer=setTimeout(tickCommunityDreamCount,nextMs);
@@ -9789,8 +10028,12 @@ function maybeScheduleWanderingPrompt(){
 let dreams = JSON.parse(safeLocalStorageGet(STORAGE_KEY_DREAMS,'[]')||'[]');
 dreams = dreams.map(normalizeDreamEntry).filter(d=>String(d?.text||'').trim().length>0);
 safeLocalStorageSet(STORAGE_KEY_DREAMS,JSON.stringify(dreams));
-let communityDreamLiveCount = 200 + Math.floor(Math.random()*201);
+const COMMUNITY_DREAM_DRAG_MIME = 'application/x-cove-community-dream';
+const COMMUNITY_DREAM_DRAG_PREFIX = 'cove-community-dream::';
+let communityDreamLiveCount = 360 + Math.floor(Math.random()*41);
 let communityDreamCountTimer = null;
+let communityDreamDirection = 1;
+let communityDreamHoverHintTimer = null;
 let wanderingPromptShowTimer = null;
 let wanderingPromptHideTimer = null;
 let chatHistories = JSON.parse(safeLocalStorageGet(STORAGE_KEY_CHATS,'{}')||'{}');
@@ -15697,8 +15940,9 @@ function setupInputCardDragDrop(){
   card.dataset.dragDropBound='1';
 
   const hasFiles=event=>Array.from(event.dataTransfer?.types||[]).includes('Files');
+  const hasCommunityDream=event=>Array.from(event.dataTransfer?.types||[]).includes(COMMUNITY_DREAM_DRAG_MIME);
   const activate=event=>{
-    if(!hasFiles(event))return false;
+    if(!hasFiles(event)&&!hasCommunityDream(event))return false;
     event.preventDefault();
     if(event.dataTransfer)event.dataTransfer.dropEffect='copy';
     card.classList.add('drag-over');
@@ -15708,14 +15952,20 @@ function setupInputCardDragDrop(){
   card.addEventListener('dragenter',activate);
   card.addEventListener('dragover',activate);
   card.addEventListener('dragleave',event=>{
-    if(!hasFiles(event))return;
+    if(!hasFiles(event)&&!hasCommunityDream(event))return;
     if(card.contains(event.relatedTarget))return;
     card.classList.remove('drag-over');
   });
   card.addEventListener('drop',event=>{
-    if(!hasFiles(event))return;
+    if(!hasFiles(event)&&!hasCommunityDream(event))return;
     event.preventDefault();
     card.classList.remove('drag-over');
+    const draggedDreamText=extractCommunityDreamFromDataTransfer(event.dataTransfer);
+    if(draggedDreamText){
+      appendCommunityDreamToCapture(draggedDreamText);
+      showToast('Added to capture.', 'success');
+      return;
+    }
     const file=event.dataTransfer?.files?.[0];
     if(!file||!String(file.type||'').startsWith('image/'))return;
     handleImageUpload({target:{files:[file],value:''}});
