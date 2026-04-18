@@ -7417,6 +7417,7 @@ function openSubscriptionCenter(){
   const body=getUI('legalBody');
   const title=getUI('legalTitle');
   const kicker=getUI('legalKicker');
+  const stripeReady=Boolean(STRIPE_CHECKOUT_ENDPOINT && STRIPE_PRICE_MONTHLY && STRIPE_PRICE_YEARLY);
   if(!overlay || !body || !title || !kicker)return;
   title.textContent='Subscription Center';
   kicker.textContent='Billing · In app';
@@ -7425,6 +7426,7 @@ function openSubscriptionCenter(){
       <p class="legal-effective"><strong>Subscription Center</strong></p>
       <p class="legal-effective">Manage your plan without leaving this page.</p>
       <p class="legal-scroll-hint">Scroll to review your current status, change plans, or cancel.</p>
+      ${stripeReady ? '' : '<div class="legal-highlight"><strong>Stripe is not fully configured yet.</strong> Add the monthly and yearly price IDs in the page runtime before the buttons can charge anything.</div>'}
       <div class="legal-divider"></div>
       <div class="legal-highlight"><strong>Status:</strong> <span id="subscriptionStatusLabel">Loading…</span></div>
       <div class="legal-highlight"><strong>Plan:</strong> <span id="subscriptionPlanLabel">Loading…</span></div>
@@ -7433,9 +7435,9 @@ function openSubscriptionCenter(){
       <h3>Switch plans</h3>
       <p>You can change plans right here. If your current plan is active, a new checkout session will replace it.</p>
       <div style="display:flex;flex-direction:column;gap:10px;">
-        <button class="paywall-btn primary" type="button" onclick="startStripeCheckout('monthly')">Monthly · $8</button>
-        <button class="paywall-btn primary" type="button" onclick="startStripeCheckout('yearly')">Yearly · $60</button>
-        <button class="paywall-btn primary" type="button" onclick="startStripeUnpluggedCheckout()">Unplugged bundle · $95</button>
+        <button class="paywall-btn primary" type="button" ${stripeReady ? 'onclick="startStripeCheckout(\'monthly\')"' : 'disabled'}>Monthly · $8</button>
+        <button class="paywall-btn primary" type="button" ${stripeReady ? 'onclick="startStripeCheckout(\'yearly\')"' : 'disabled'}>Yearly · $60</button>
+        <button class="paywall-btn primary" type="button" ${STRIPE_PRICE_UNPLUGGED ? 'onclick="startStripeUnpluggedCheckout()"' : 'disabled'}>Unplugged bundle · $95</button>
       </div>
       <h3 id="subscriptionCancelHeading">Cancel subscription</h3>
       <p id="subscriptionCancelCopy">Cancel anytime. The plan stays active until the end of the current billing period unless you choose otherwise.</p>
