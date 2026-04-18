@@ -1,0 +1,17 @@
+name = "trycove-payments"
+main = "index.js"
+compatibility_date = "2026-04-17"
+
+[vars]
+SUPABASE_URL = "https://YOUR_PROJECT.supabase.co"
+SUPABASE_ANON_KEY = "ey..."
+SUPABASE_SYNC_TABLE = "dream_sync_state"
+ALLOWED_ORIGINS = "https://trycove.app,https://www.trycove.app,http://localhost:5173"
+STRIPE_PRICE_MONTHLY = "price_monthly_here"
+STRIPE_PRICE_YEARLY = "price_yearly_here"
+STRIPE_PRICE_UNPLUGGED = "price_unplugged_here"
+
+# Set these as secrets (not vars):
+# wrangler secret put STRIPE_SECRET_KEY
+# wrangler secret put STRIPE_WEBHOOK_SECRET
+# wrangler secret put SUPABASE_SERVICE_ROLE_KEY
