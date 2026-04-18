@@ -1730,6 +1730,68 @@ body.auth-welcome-active .auth-gate-card {
 :root[data-ui-clock-phase="early"] .h-sub { color:color-mix(in srgb, var(--text-dim) 92%, var(--rose) 8%); }
 :root[data-ui-clock-phase="early"] .section-label { color:color-mix(in srgb, var(--text-muted) 80%, var(--rose) 20%); }
 :root[data-ui-clock-phase="early"] .dream-input::placeholder { color:color-mix(in srgb, var(--text-faint) 72%, var(--rose) 28%); }
+
+:root[data-ui-easter-3am="1"] {
+  --bg: #1F1F23;
+  --bg2: #262630;
+  --surface: #2B2B34;
+  --surface2: #323240;
+  --surface3: #383847;
+  --text: #E4DDD7;
+  --text-mid: #D0C5BD;
+  --text-dim: #B8ACA3;
+  --text-muted: #9E938A;
+  --text-faint: #847B72;
+}
+
+:root[data-ui-easter-3am="1"] body {
+  background-color: var(--bg);
+  background: linear-gradient(180deg, var(--bg) 0%, var(--bg2) 100%);
+  color: var(--text);
+}
+
+:root[data-ui-easter-3am="1"] body::before {
+  background-image:
+    radial-gradient(ellipse 80% 60% at 10% 20%,rgba(120,100,95,0.04) 0%,transparent 60%),
+    radial-gradient(ellipse 60% 70% at 90% 80%,rgba(80,70,65,0.03) 0%,transparent 55%),
+    radial-gradient(ellipse 50% 40% at 50% 50%,rgba(100,85,80,0.02) 0%,transparent 70%);
+}
+
+:root[data-ui-easter-3am="1"] .input-card {
+  background: var(--surface);
+  border-color: var(--border);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.28);
+}
+
+:root[data-ui-easter-3am="1"] .dream-input::placeholder {
+  color: color-mix(in srgb, var(--text-faint) 70%, var(--surface) 30%);
+}
+
+:root[data-ui-easter-3am="1"] .section-label,
+:root[data-ui-easter-3am="1"] .section-header {
+  color: color-mix(in srgb, var(--text-muted) 78%, var(--surface) 22%);
+}
+
+:root[data-ui-easter-3am="1"] .h1 {
+  font-weight: 540;
+  color: var(--text-dim);
+}
+
+:root[data-ui-easter-3am="1"] .h-sub {
+  color: color-mix(in srgb, var(--text-dim) 80%, var(--surface) 20%);
+}
+
+:root[data-ui-easter-3am="1"] .theme-mode-chip {
+  background: rgba(255,255,255,0.06);
+  border-color: var(--border);
+  color: color-mix(in srgb, var(--text-dim) 85%, var(--text-faint) 15%);
+}
+
+:root[data-ui-easter-3am="1"] .rec-toggle-btn {
+  background: rgba(255,255,255,0.05);
+  border-color: var(--border);
+  color: var(--text-muted);
+}
 .theme-mode-bar { display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:0;max-width:680px;min-width:0;flex:1 1 auto; }
 .theme-mode-label { font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:var(--text-muted);font-weight:600; }
 .theme-mode-group { display:flex;align-items:center;gap:6px;flex-wrap:wrap; }
@@ -4974,8 +5036,10 @@ body::before { animation: ambientDrift 18s ease-in-out infinite; }
 /* ── 4. Soft card hover lift ── */
 .cat-card {
   transition: border-color .3s, box-shadow 240ms cubic-bezier(.16,1,.3,1), transform 240ms cubic-bezier(.16,1,.3,1);
+  animation: floatPetal 4.5s ease-in-out infinite;
 }
 .cat-card:hover {
+  animation-play-state: paused;
   transform: translateY(-2px);
   box-shadow: 0 6px 20px var(--shadow-md), 0 0 0 1px rgba(200,118,106,0.07), 0 4px 16px color-mix(in srgb, var(--card-color) 12%, transparent);
 }
@@ -5044,7 +5108,7 @@ body::before { animation: ambientDrift 18s ease-in-out infinite; }
   body::before { animation: none; }
   .section-label { animation: none; }
   .return-greeting::after { animation: none; opacity: 0.7; }
-  .cat-card { transition: border-color .3s, box-shadow .3s; }
+  .cat-card { animation: none; transition: border-color .3s, box-shadow .3s; }
   .cat-card:hover { transform: none; }
   .seed-chip:hover { transform: none; }
   .cdr-dot { animation: shimmer 6s ease-in-out infinite; }
@@ -5524,6 +5588,8 @@ body::before { animation: ambientDrift 18s ease-in-out infinite; }
 
 <div class="cov-info-backdrop" id="covInfoBackdrop" onclick="toggleCovInfo(event)"></div>
 <div class="theme-sky" id="themeSky" aria-hidden="true"></div>
+
+<div id="easter3amBanner" style="display:none;" aria-live="polite" aria-atomic="true"></div>
 
 <div class="app-wrapper">
 <div class="side-panel" id="sidePanel">
@@ -6951,9 +7017,23 @@ function getUiClockPhase(date=new Date()){
   return 'default';
 }
 
+function isEaster3am(date=new Date()){
+  const hour=date.getHours();
+  return hour >= 2 && hour < 4;
+}
+
+function applyEaster3am(){
+  const is3am=isEaster3am();
+  document.documentElement.dataset.uiEaster3am=is3am ? '1' : '0';
+  const banner=document.getElementById('easter3amBanner');
+  if(banner)banner.style.display=is3am ? 'block' : 'none';
+  return is3am;
+}
+
 function applyUiClockMood(){
   const phase=getUiClockPhase();
   document.documentElement.dataset.uiClockPhase=phase;
+  applyEaster3am();
   return phase;
 }
 
@@ -7063,6 +7143,46 @@ function clearAiMemory(){
   syncModalMemoryIndicator('');
   syncMemoryDisclosureUi();
   setRecSettingsStatus('AI memory deleted.', 'success');
+}
+
+function initEaster3amBanner(){
+  const banner=document.getElementById('easter3amBanner');
+  if(!banner)return;
+  if(isEaster3am()){
+    banner.innerHTML=`<style>
+      #easter3amBanner {
+        position: sticky;
+        top: 0;
+        z-index: 25;
+        background: linear-gradient(180deg, rgba(43,43,52,0.98), rgba(38,38,48,0.96));
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(148,138,128,0.12);
+        padding: 16px 24px;
+        text-align: center;
+        animation: fadeInDown 0.6s cubic-bezier(.16,1,.3,1);
+      }
+      #easter3amBanner p {
+        font-family: 'Lora', Georgia, serif;
+        font-size: 14px;
+        font-style: italic;
+        line-height: 1.6;
+        color: var(--text-dim);
+        margin: 0;
+        letter-spacing: 0.01em;
+      }
+      @keyframes fadeInDown {
+        from { opacity: 0; transform: translateY(-8px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        #easter3amBanner { animation: none; }
+      }
+    </style>
+    <p>You're up late. Whatever's on your mind, it's safe here.</p>`;
+    banner.style.display='block';
+  }else{
+    banner.style.display='none';
+  }
 }
 
 function renderRecSettings(){
@@ -7546,6 +7666,7 @@ applyUiTimeTheme();
 applyUiClockMood();
 setInterval(()=>applyUiTimeTheme(), 10 * 60 * 1000);
 setInterval(()=>applyUiClockMood(), 60 * 1000);
+setInterval(()=>applyEaster3am(), 60 * 1000);
 
 function focusAuthForm(force=false){
   updateAuthGate('',{ force });
@@ -10541,13 +10662,54 @@ function requestWindowRerender(){
   }, 120);
 }
 
+function initEaster3amBanner(){
+  const banner=document.getElementById('easter3amBanner');
+  if(!banner)return;
+  if(isEaster3am()){
+    banner.innerHTML=`<style>
+      #easter3amBanner {
+        position: sticky;
+        top: 0;
+        z-index: 25;
+        background: linear-gradient(180deg, rgba(43,43,52,0.98), rgba(38,38,48,0.96));
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(148,138,128,0.12);
+        padding: 16px 24px;
+        text-align: center;
+        animation: fadeInDown 0.6s cubic-bezier(.16,1,.3,1);
+      }
+      #easter3amBanner p {
+        font-family: 'Lora', Georgia, serif;
+        font-size: 14px;
+        font-style: italic;
+        line-height: 1.6;
+        color: var(--text-dim);
+        margin: 0;
+        letter-spacing: 0.01em;
+      }
+      @keyframes fadeInDown {
+        from { opacity: 0; transform: translateY(-8px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        #easter3amBanner { animation: none; }
+      }
+    </style>
+    <p>You're up late. Whatever's on your mind, it's safe here.</p>`;
+    banner.style.display='block';
+  }else{
+    banner.style.display='none';
+  }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   applyUiTimeTheme();
   syncUiThemeControls();
   initAuthReelGradientShimmer();
   initWordmarkReelGradientShimmer();
   startAmbientThemeRefresh();
-  syncRecPanelState();
+  initEaster3amBanner();
+  syncRecPanelState;
   setupInputCardDragDrop();
   if (recPanelOpen && firstGlow && window.innerWidth > 1023) {
     const sidePanel = document.getElementById('sidePanel');
