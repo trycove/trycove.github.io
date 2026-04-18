@@ -2310,7 +2310,30 @@ body.auth-welcome-active .auth-gate-card {
   cursor:grab;
 }
 .community-dream-card:active { cursor:grabbing; }
-.community-dream-card-actions { margin-top:6px;display:flex;justify-content:flex-end; }
+.community-dream-card-actions { margin-top:8px;display:flex;justify-content:center;align-items:center;gap:10px; }
+.community-dream-drag-cue {
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  color:var(--text-faint);
+  font-family:'DM Sans',sans-serif;
+  font-size:10px;
+  letter-spacing:0.08em;
+  text-transform:uppercase;
+  user-select:none;
+}
+.community-dream-drag-icon {
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width:18px;
+  height:18px;
+  border-radius:6px;
+  border:1px dashed var(--border-hi);
+  color:var(--text-muted);
+  font-size:11px;
+  line-height:1;
+}
 .community-dream-add {
   border:1px solid var(--border);
   border-radius:999px;
@@ -9831,9 +9854,6 @@ function setCommunityDreamDirection(direction=1){
 function nudgeCommunityDreamTrack(direction=1){
   const track=document.getElementById('communityDreamTrack');
   if(!track)return;
-  const prefersReduced=Boolean(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches);
-  const mobileMode=Boolean(window.matchMedia&&window.matchMedia('(max-width:640px)').matches);
-  if(!prefersReduced&&!mobileMode)return;
   const maxScroll=Math.max(0,track.scrollWidth-track.clientWidth);
   if(maxScroll<2)return;
   const step=Math.max(220,Math.round(track.clientWidth*0.72));
@@ -9931,6 +9951,10 @@ function buildCommunityDreamCardHtml(item){
       <span>${esc(item.horizon)}</span>
     </div>
     <div class="community-dream-card-actions">
+      <span class="community-dream-drag-cue" aria-hidden="true">
+        <span class="community-dream-drag-icon">⋮⋮</span>
+        <span>Drag</span>
+      </span>
       <button class="community-dream-add" type="button" data-add-dream="${encodedText}" aria-label="Add this dream to capture">
         <span class="community-dream-add-icon">⇲</span>
         <span>Add to capture</span>
