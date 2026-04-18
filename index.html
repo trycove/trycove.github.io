@@ -3135,9 +3135,9 @@ body.auth-welcome-active .auth-gate-card {
 .cat-head { display:flex;align-items:stretch;padding:0;gap:0;cursor:pointer;user-select:none;overflow:hidden;border-radius:9px 9px 0 0;transition:background .2s; }
 /* Left swatch: solid color wash, icon centered */
 /* Left swatch: rich jewel-tone panel so emoji-coloured icon strokes pop */
-.cat-head-swatch { width:20%;min-width:60px;max-width:88px;flex-shrink:0;display:flex;align-items:center;justify-content:center;background:color-mix(in srgb, var(--card-color) 65%, #111);transition:background .25s; }
-.cat-head:hover .cat-head-swatch { background:color-mix(in srgb, var(--card-color) 75%, #111); }
-.cat-card.expanded .cat-head-swatch { background:color-mix(in srgb, var(--card-color) 72%, #111); }
+.cat-head-swatch { width:20%;min-width:60px;max-width:88px;flex-shrink:0;display:flex;align-items:center;justify-content:center;background:#2a1f1e;background:color-mix(in srgb, var(--card-color) 65%, #111);transition:background .25s; }
+.cat-head:hover .cat-head-swatch { background:#342725;background:color-mix(in srgb, var(--card-color) 75%, #111); }
+.cat-card.expanded .cat-head-swatch { background:#2f2322;background:color-mix(in srgb, var(--card-color) 72%, #111); }
 /* Right side: label + count + actions */
 .cat-head-right { flex:1;min-width:0;display:flex;align-items:center;gap:14px;padding:16px 14px 14px 18px; }
 .cat-head-body { flex:1;min-width:0; }
@@ -3190,7 +3190,7 @@ body.auth-welcome-active .auth-gate-card {
 .cdr-horizon-wrap { position:relative; z-index:1; }
 .cdr-status-wrap.open,
 .cdr-horizon-wrap.open { z-index:60; }
-.cdr-status { font-size:10px;letter-spacing:0.08em;text-transform:uppercase;padding:5px 11px 5px 12px;border-radius:999px;cursor:pointer;transition:all .2s;border:1px solid;line-height:1;white-space:nowrap;display:flex;align-items:center;gap:5px;user-select:none;font-weight:500;background:color-mix(in srgb, var(--surface2) 86%, var(--petal) 14%); }
+.cdr-status { font-size:10px;letter-spacing:0.08em;text-transform:uppercase;padding:5px 11px 5px 12px;border-radius:999px;cursor:pointer;transition:all .2s;border:1px solid;line-height:1;white-space:nowrap;display:flex;align-items:center;gap:5px;user-select:none;font-weight:500;background:var(--surface2);background:color-mix(in srgb, var(--surface2) 86%, var(--petal) 14%); }
 .cdr-status-chevron { font-size:8px;opacity:0.6;transition:transform .2s; }
 .cdr-status-wrap.open .cdr-status-chevron { transform:rotate(180deg); }
 .cdr-status.dreaming { color:var(--text-dim);border-color:var(--border); }
@@ -3201,36 +3201,36 @@ body.auth-welcome-active .auth-gate-card {
 .cdr-status.done { color:var(--rose);border-color:rgba(200,118,106,0.3);background:rgba(200,118,106,0.07); }
 .cdr-status.done.status-flash { box-shadow:0 0 0 2px rgba(200,118,106,0.18),var(--glow-rose-sm); }
 
-.cdr-status-pop { position:fixed;top:0;left:0;z-index:10020;background:color-mix(in srgb, var(--glass-panel-strong) 92%, var(--surface) 8%);border:1px solid color-mix(in srgb, var(--rose) 18%, var(--border) 82%);border-radius:12px;padding:6px;min-width:200px;max-width:min(240px,calc(100vw - 20px));max-height:min(320px,calc(100vh - 24px));overflow-y:auto;overscroll-behavior:contain;display:none;animation:fadeDown 0.15s cubic-bezier(.16,1,.3,1);box-shadow:0 14px 36px rgba(0,0,0,0.16),var(--glow-rose-sm); }
+.cdr-status-pop { position:fixed;top:0;left:0;z-index:10020;background:var(--glass-panel-strong);background:color-mix(in srgb, var(--glass-panel-strong) 92%, var(--surface) 8%);border:1px solid var(--border);border:1px solid color-mix(in srgb, var(--rose) 18%, var(--border) 82%);border-radius:12px;padding:6px;min-width:200px;max-width:min(240px,calc(100vw - 20px));max-height:min(320px,calc(100vh - 24px));overflow-y:auto;overscroll-behavior:contain;display:none;animation:fadeDown 0.15s cubic-bezier(.16,1,.3,1);box-shadow:0 14px 36px rgba(0,0,0,0.16),var(--glow-rose-sm); }
 .cdr-status-pop::before { content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--chrome);background-size:300% 100%;animation:shimmer 6s ease-in-out infinite;border-radius:12px 12px 0 0; }
 .cdr-status-pop.pop-open { display:block; }
 
 .cdr-pop-opt { display:flex;align-items:center;gap:11px;padding:10px 12px;border-radius:8px;cursor:pointer;transition:background .15s,color .15s; }
-.cdr-pop-opt:hover { background:color-mix(in srgb, var(--rose) 6%, var(--surface2)); }
-.cdr-pop-opt.selected { background:color-mix(in srgb, var(--rose) 8%, var(--surface2)); }
+.cdr-pop-opt:hover { background:var(--surface2);background:color-mix(in srgb, var(--rose) 6%, var(--surface2)); }
+.cdr-pop-opt.selected { background:var(--surface2);background:color-mix(in srgb, var(--rose) 8%, var(--surface2)); }
 .cdr-pop-dot { width:8px;height:8px;border-radius:50%;flex-shrink:0;border:1.5px solid; }
 .dot-dreaming { background:transparent;border-color:var(--border-hi); }
 .dot-active { background:rgba(78,150,102,0.25);border-color:var(--green);box-shadow:0 0 4px rgba(78,150,102,0.4); }
 .cdr-pop-label { font-size:12px;letter-spacing:0.04em;text-transform:uppercase;color:var(--text);font-weight:600; }
 .cdr-pop-desc { font-family:'Lora',Georgia,serif;font-size:12px;font-style:italic;color:var(--text-dim);margin-top:2px; }
 
-.cdr-horizon { font-size:10px;letter-spacing:0.08em;text-transform:uppercase;padding:5px 11px 5px 12px;border-radius:999px;cursor:pointer;transition:all .2s;border:1px solid var(--border);color:var(--text-dim);background:color-mix(in srgb, var(--surface2) 86%, var(--petal) 14%);line-height:1;white-space:nowrap;display:flex;align-items:center;gap:5px;user-select:none;font-weight:500; }
+.cdr-horizon { font-size:10px;letter-spacing:0.08em;text-transform:uppercase;padding:5px 11px 5px 12px;border-radius:999px;cursor:pointer;transition:all .2s;border:1px solid var(--border);color:var(--text-dim);background:var(--surface2);background:color-mix(in srgb, var(--surface2) 86%, var(--petal) 14%);line-height:1;white-space:nowrap;display:flex;align-items:center;gap:5px;user-select:none;font-weight:500; }
 .cdr-horizon:hover { border-color:var(--blush-light);color:var(--text); }
 .cdr-horizon-chevron { font-size:8px;opacity:0.5;transition:transform .2s; }
 .cdr-horizon-wrap.open .cdr-horizon-chevron { transform:rotate(180deg); }
-.cdr-horizon-pop { position:fixed;top:0;left:0;z-index:10020;background:color-mix(in srgb, var(--glass-panel-strong) 92%, var(--surface) 8%);border:1px solid color-mix(in srgb, var(--rose) 18%, var(--border) 82%);border-radius:12px;padding:6px;min-width:210px;max-width:min(250px,calc(100vw - 20px));max-height:min(320px,calc(100vh - 24px));overflow-y:auto;overscroll-behavior:contain;display:none;animation:fadeDown 0.15s cubic-bezier(.16,1,.3,1);box-shadow:0 14px 36px rgba(0,0,0,0.16),var(--glow-rose-sm); }
+.cdr-horizon-pop { position:fixed;top:0;left:0;z-index:10020;background:var(--glass-panel-strong);background:color-mix(in srgb, var(--glass-panel-strong) 92%, var(--surface) 8%);border:1px solid var(--border);border:1px solid color-mix(in srgb, var(--rose) 18%, var(--border) 82%);border-radius:12px;padding:6px;min-width:210px;max-width:min(250px,calc(100vw - 20px));max-height:min(320px,calc(100vh - 24px));overflow-y:auto;overscroll-behavior:contain;display:none;animation:fadeDown 0.15s cubic-bezier(.16,1,.3,1);box-shadow:0 14px 36px rgba(0,0,0,0.16),var(--glow-rose-sm); }
 .cdr-horizon-pop::before { content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--chrome);background-size:300% 100%;animation:shimmer 6s ease-in-out infinite;border-radius:12px 12px 0 0; }
 .cdr-horizon-pop.pop-open { display:block; }
 .cdr-hz-opt { display:flex;align-items:flex-start;gap:10px;padding:10px 12px;border-radius:8px;cursor:pointer;transition:background .15s,color .15s; }
-.cdr-hz-opt:hover { background:color-mix(in srgb, var(--rose) 6%, var(--surface2)); }
-.cdr-hz-opt.selected { background:color-mix(in srgb, var(--rose) 8%, var(--surface2)); }
+.cdr-hz-opt:hover { background:var(--surface2);background:color-mix(in srgb, var(--rose) 6%, var(--surface2)); }
+.cdr-hz-opt.selected { background:var(--surface2);background:color-mix(in srgb, var(--rose) 8%, var(--surface2)); }
 .cdr-hz-icon { font-size:14px;flex-shrink:0;margin-top:1px;color:var(--rose-deep); }
 .cdr-hz-text { display:flex;flex-direction:column;gap:2px; }
 .cdr-hz-label { font-size:12px;letter-spacing:0.04em;text-transform:uppercase;color:var(--text);font-weight:600; }
 .cdr-hz-desc { font-family:'Lora',Georgia,serif;font-size:12px;font-style:italic;color:var(--text-dim); }
 .cdr-hz-divider { height:1px;background:var(--border);margin:4px 8px; }
 .cdr-hz-custom { display:flex;align-items:center;gap:8px;padding:9px 12px;border-radius:8px;cursor:pointer;transition:background .15s,color .15s; }
-.cdr-hz-custom:hover { background:color-mix(in srgb, var(--rose) 6%, var(--surface2)); }
+.cdr-hz-custom:hover { background:var(--surface2);background:color-mix(in srgb, var(--rose) 6%, var(--surface2)); }
 .cdr-hz-custom-icon { font-size:12px;color:var(--rose-deep); }
 .cdr-hz-custom-label { font-size:12px;letter-spacing:0.04em;text-transform:uppercase;color:var(--text-dim);font-weight:600; }
 
@@ -3691,6 +3691,7 @@ body.auth-welcome-active .auth-gate-card {
   position:fixed;
   inset:0;
   z-index:245;
+  background:rgba(24,16,16,0.88);
   background:color-mix(in srgb, rgba(24,16,16,0.88) 72%, var(--petal) 28%);
   display:flex;
   align-items:center;
@@ -3704,6 +3705,8 @@ body.auth-welcome-active .auth-gate-card {
 .discovery-card {
   width:100%;
   max-width:620px;
+  background:linear-gradient(180deg,var(--petal),var(--surface));
+  background:linear-gradient(180deg,var(--petal),var(--surface));
   background:linear-gradient(180deg,color-mix(in srgb, var(--petal) 62%, var(--surface) 38%),var(--surface));
   border:1px solid var(--blush-light);
 }
@@ -3764,7 +3767,11 @@ body.auth-welcome-active .auth-gate-card {
 }
 .discovery-result-card:hover { transform:translateY(-1px); }
 .discovery-result-card.checked {
+  border-color:var(--border);
+  border-color:var(--border);
   border-color:color-mix(in srgb, var(--card-color,var(--green)) 65%, var(--border));
+  background:var(--surface);
+  background:var(--surface);
   background:color-mix(in srgb, var(--card-color,var(--green)) 7%, var(--surface));
 }
 .discovery-result-check { margin-top:2px; accent-color:var(--rose); }
@@ -3784,6 +3791,8 @@ body.auth-welcome-active .auth-gate-card {
   pointer-events:none;
   transition:opacity .24s ease;
   padding:24px;
+  background:linear-gradient(180deg,rgba(24,16,16,0.84),rgba(24,16,16,0.90));
+  background:linear-gradient(180deg,rgba(24,16,16,0.84),rgba(24,16,16,0.90));
   background:linear-gradient(180deg,color-mix(in srgb, rgba(24,16,16,0.84) 68%, var(--petal) 32%),color-mix(in srgb, rgba(24,16,16,0.90) 72%, var(--surface) 28%));
 }
 .capsule-overlay.open,
@@ -3792,6 +3801,8 @@ body.auth-welcome-active .auth-gate-card {
 .capsule-reveal-card {
   width:100%;
   max-width:640px;
+  background:linear-gradient(180deg,var(--petal),var(--surface));
+  background:linear-gradient(180deg,var(--petal),var(--surface));
   background:linear-gradient(180deg,color-mix(in srgb, var(--petal) 58%, var(--surface) 42%),var(--surface));
   border:1px solid var(--blush-light);
   position:relative;
@@ -3840,7 +3851,11 @@ body.auth-welcome-active .auth-gate-card {
   width:170px;
   height:112px;
   border-radius:12px;
+  background:linear-gradient(180deg,var(--blush-light),var(--surface));
+  background:linear-gradient(180deg,var(--blush-light),var(--surface));
   background:linear-gradient(180deg,color-mix(in srgb, var(--blush-light) 60%, white 40%),color-mix(in srgb, var(--rose) 18%, var(--surface) 82%));
+  border:1px solid var(--border);
+  border:1px solid var(--border);
   border:1px solid color-mix(in srgb, var(--rose) 28%, var(--border));
   box-shadow:0 14px 32px rgba(60,37,32,0.10);
   overflow:hidden;
@@ -3853,6 +3868,8 @@ body.auth-welcome-active .auth-gate-card {
   width:0;height:0;
   border-left:85px solid transparent;
   border-right:85px solid transparent;
+  border-top:60px solid var(--rose);
+  border-top:60px solid var(--rose);
   border-top:60px solid color-mix(in srgb, var(--rose) 26%, var(--surface) 74%);
 }
 .capsule-envelope::after {
@@ -3889,6 +3906,8 @@ body.auth-welcome-active .auth-gate-card {
 .capsule-empty-card {
   width:100%;
   max-width:480px;
+  background:linear-gradient(180deg,var(--petal),var(--surface));
+  background:linear-gradient(180deg,var(--petal),var(--surface));
   background:linear-gradient(180deg,color-mix(in srgb, var(--petal) 58%, var(--surface) 42%),var(--surface));
   border:1px solid var(--blush-light);
   position:relative;
@@ -3962,11 +3981,15 @@ body.auth-welcome-active .auth-gate-card {
 }
 
 .capsule-empty-btn.new {
+  background:var(--surface);
+  background:var(--surface);
   background:color-mix(in srgb, var(--rose) 12%, var(--surface) 88%);
   color:var(--rose);
   border-color:var(--rose);
 }
 .capsule-empty-btn.new:hover {
+  background:var(--surface);
+  background:var(--surface);
   background:color-mix(in srgb, var(--rose) 18%, var(--surface) 82%);
 }
 
@@ -4031,6 +4054,8 @@ body.auth-welcome-active .auth-gate-card {
   height: 0;
   border-left: 60px solid transparent;
   border-right: 60px solid transparent;
+  border-top: 40px solid var(--rose);
+  border-top: 40px solid var(--rose);
   border-top: 40px solid color-mix(in srgb, var(--rose) 30%, var(--petal) 70%);
 }
 
@@ -4279,7 +4304,11 @@ body.auth-welcome-active .auth-gate-card {
   margin-bottom: 10px;
   padding: 5px 9px;
   border-radius: 999px;
+  background: var(--surface);
+  background: var(--surface);
   background: color-mix(in srgb, var(--rose) 10%, var(--surface));
+  border: 1px solid var(--border);
+  border: 1px solid var(--border);
   border: 1px solid color-mix(in srgb, var(--rose) 18%, var(--border) 82%);
   color: var(--rose-deep);
   font-size: 9px;
@@ -4795,13 +4824,19 @@ body::before { animation: ambientDrift 18s ease-in-out infinite; }
 
 /* ── 5. Chapter header frosted color wash (right side) ── */
 .cat-head {
+  background: var(--surface);
+  background: var(--surface);
   background: color-mix(in srgb, var(--card-color) 7%, var(--surface));
   transition: background .25s;
 }
 .cat-head:hover {
+  background: var(--surface2);
+  background: var(--surface2);
   background: color-mix(in srgb, var(--card-color) 11%, var(--surface2));
 }
 .cat-card.expanded .cat-head {
+  background: var(--surface);
+  background: var(--surface);
   background: color-mix(in srgb, var(--card-color) 9%, var(--surface));
 }
 
@@ -4907,18 +4942,26 @@ body::before { animation: ambientDrift 18s ease-in-out infinite; }
 }
 .toast.toast-exit { animation: toastSlideDown 280ms cubic-bezier(.16,1,.3,1) both; }
 .toast.toast-success {
+  background: var(--glass-panel-strong);
+  background: var(--glass-panel-strong);
   background: color-mix(in srgb, var(--green) 12%, var(--glass-panel-strong));
   border-left-color: var(--green);
 }
 .toast.toast-warning {
+  background: var(--glass-panel-strong);
+  background: var(--glass-panel-strong);
   background: color-mix(in srgb, var(--amber) 10%, var(--glass-panel-strong));
   border-left-color: var(--amber);
 }
 .toast.toast-error {
+  background: var(--glass-panel-strong);
+  background: var(--glass-panel-strong);
   background: color-mix(in srgb, var(--rose) 10%, var(--glass-panel-strong));
   border-left-color: var(--rose);
 }
 .toast.toast-info {
+  background: var(--glass-panel-strong);
+  background: var(--glass-panel-strong);
   background: color-mix(in srgb, var(--rose) 6%, var(--glass-panel-strong));
   border-left-color: var(--blush-light);
 }
@@ -5521,7 +5564,7 @@ body::before { animation: ambientDrift 18s ease-in-out infinite; }
           </div>
         </div>
       </div>
-      <textarea class="dream-input" id="dreamInput" rows="4"></textarea>
+      <textarea class="dream-input" id="dreamInput" rows="4" maxlength="1800"></textarea>
       <div class="input-footer">
         <div class="input-footer-row">
           <span class="input-hint">Press <strong>Enter</strong> to add, or drag a photo here.</span>
@@ -9084,6 +9127,9 @@ let firstGlow = true;
 let justAdded = false;
 let currentImageScan = null;
 let currentImageUploadToken = 0;
+let _lastRenderGapKey = '';
+let _lastRenderTensionKey = '';
+let sessionMemoryWriteInProgress = false;
 let lastUploadedFile = null;
 let hasAttemptedUpload = false;
 let firstDreamNoteShown = false;
@@ -9177,7 +9223,7 @@ function isPaid(){
     return adminPreviewMode==='paid';
   }
   if(new URLSearchParams(window.location.search).get('preview')==='free')return false;
-  return cloudPlan==='paid';
+  return cloudPlan==='paid' && Boolean(supabaseUser);
 }
 
 function isOwnerUser(){
@@ -9479,69 +9525,75 @@ function collectSessionStatusChanges(meta){
 }
 
 async function writeSessionMemory(meta){
-  if(!meta?.domain)return;
-  const dk=meta.domain;
-  const history=Array.isArray(chatHistories[dk])?chatHistories[dk]:[];
-  if(history.length<=(meta.chatLengthAtOpen||0))return;
+  if(sessionMemoryWriteInProgress)return;
+  sessionMemoryWriteInProgress=true;
+  try{
+    if(!meta?.domain)return;
+    const dk=meta.domain;
+    const history=Array.isArray(chatHistories[dk])?chatHistories[dk]:[];
+    if(history.length<=(meta.chatLengthAtOpen||0))return;
 
-  const existing=normalizeMemoryEntry(aiMemory[dk]||{});
-  const focusDream=dreams.find(d=>d.id===(meta.focusedDreamId||dreamDashboardId)&&d.domain===dk)
-    || dreams.find(d=>d.domain===dk)
-    || null;
-  const newStatusChanges=collectSessionStatusChanges(meta);
-  const aiMessages=history.filter(message=>message.role==='ai').slice(-3).map(message=>String(message.content||'').trim()).filter(Boolean);
-  const lastAiFallback=trimText(aiMessages[aiMessages.length-1]||existing.lastAIObservation||'',120);
-  let lastAIObservation=lastAiFallback;
-  if(aiMessages.length){
-    try{
-      const raw=await callClaude(
-        'You are writing a one-sentence memory note for an AI coach to use next session. Summarize the most important thing that emerged in this conversation in plain language. Max 120 characters. No quotes. No labels. Just the observation.',
-        aiMessages.join('\n')
-      );
-      lastAIObservation=trimText(String(raw||'').replace(/["“”]/g,''),120)||lastAiFallback;
-    }catch(err){
-      reportDebug('warn','AI memory observation fallback used',{domain:dk,error:err?.message});
-      lastAIObservation=lastAiFallback;
+    const existing=normalizeMemoryEntry(aiMemory[dk]||{});
+    const focusDream=dreams.find(d=>d.id===(meta.focusedDreamId||dreamDashboardId)&&d.domain===dk)
+      || dreams.find(d=>d.domain===dk)
+      || null;
+    const newStatusChanges=collectSessionStatusChanges(meta);
+    const aiMessages=history.filter(message=>message.role==='ai').slice(-3).map(message=>String(message.content||'').trim()).filter(Boolean);
+    const lastAiFallback=trimText(aiMessages[aiMessages.length-1]||existing.lastAIObservation||'',120);
+    let lastAIObservation=lastAiFallback;
+    if(aiMessages.length){
+      try{
+        const raw=await callClaude(
+          'You are writing a one-sentence memory note for an AI coach to use next session. Summarize the most important thing that emerged in this conversation in plain language. Max 120 characters. No quotes. No labels. Just the observation.',
+          aiMessages.join('\n')
+        );
+        lastAIObservation=trimText(String(raw||'').replace(/["“”]/g,''),120)||lastAiFallback;
+      }catch(err){
+        reportDebug('warn','AI memory observation fallback used',{domain:dk,error:err?.message});
+        lastAIObservation=lastAiFallback;
+      }
     }
+
+    const noteSource=dreams
+      .filter(d=>d.domain===dk)
+      .flatMap(d=>Array.isArray(d.savedNotes)?d.savedNotes:[])
+      .sort((a,b)=>new Date(b.savedAt||0)-new Date(a.savedAt||0))
+      .slice(0,4)
+      .map(note=>`${note.title?`${note.title}: `:''}${String(note.body||'').trim()}`)
+      .filter(Boolean)
+      .join('\n');
+    let notesSummary=existing.notesSummary||'';
+    if(noteSource){
+      try{
+        const raw=await callClaude(
+          'You are writing a short memory summary of personal dream notes for an AI coach. Plain language only. Max 200 characters. No quotes or labels.',
+          noteSource.slice(0,1200)
+        );
+        notesSummary=trimText(String(raw||''),200)||trimText(noteSource,200);
+      }catch(err){
+        reportDebug('info','AI memory notes summary fallback used',{domain:dk,error:err?.message});
+        notesSummary=trimText(noteSource,200);
+      }
+    }
+
+    aiMemory=normalizeMemoryStore({
+      ...aiMemory,
+      [dk]:{
+        ...existing,
+        lastVisited:new Date().toISOString(),
+        lastDreamFocused:focusDream?{id:focusDream.id,text:focusDream.text}:existing.lastDreamFocused,
+        lastAIObservation:lastAIObservation||existing.lastAIObservation,
+        statusChanges:[...(existing.statusChanges||[]),...newStatusChanges].slice(-5),
+        notesSummary:notesSummary||existing.notesSummary,
+        sessionCount:(existing.sessionCount||0)+1
+      }
+    });
+    save();
+    syncModalMemoryIndicator(dk);
+    syncMemoryDisclosureUi();
+  } finally {
+    sessionMemoryWriteInProgress=false;
   }
-
-  const noteSource=dreams
-    .filter(d=>d.domain===dk)
-    .flatMap(d=>Array.isArray(d.savedNotes)?d.savedNotes:[])
-    .sort((a,b)=>new Date(b.savedAt||0)-new Date(a.savedAt||0))
-    .slice(0,4)
-    .map(note=>`${note.title?`${note.title}: `:''}${String(note.body||'').trim()}`)
-    .filter(Boolean)
-    .join('\n');
-  let notesSummary=existing.notesSummary||'';
-  if(noteSource){
-    try{
-      const raw=await callClaude(
-        'You are writing a short memory summary of personal dream notes for an AI coach. Plain language only. Max 200 characters. No quotes or labels.',
-        noteSource.slice(0,1200)
-      );
-      notesSummary=trimText(String(raw||''),200)||trimText(noteSource,200);
-    }catch(err){
-      reportDebug('info','AI memory notes summary fallback used',{domain:dk,error:err?.message});
-      notesSummary=trimText(noteSource,200);
-    }
-  }
-
-  aiMemory=normalizeMemoryStore({
-    ...aiMemory,
-    [dk]:{
-      ...existing,
-      lastVisited:new Date().toISOString(),
-      lastDreamFocused:focusDream?{id:focusDream.id,text:focusDream.text}:existing.lastDreamFocused,
-      lastAIObservation:lastAIObservation||existing.lastAIObservation,
-      statusChanges:[...(existing.statusChanges||[]),...newStatusChanges].slice(-5),
-      notesSummary:notesSummary||existing.notesSummary,
-      sessionCount:(existing.sessionCount||0)+1
-    }
-  });
-  save();
-  syncModalMemoryIndicator(dk);
-  syncMemoryDisclosureUi();
 }
 
 function syncAppWrapperLayout(){
@@ -9804,7 +9856,6 @@ function save(){
   lifeCapsule=normalizeLifeCapsule(lifeCapsule||{});
   capsuleCreated=Boolean(capsuleCreated || lifeCapsule?.createdAt);
   safeLocalStorageSet(STORAGE_KEY_DREAMS,JSON.stringify(dreams));
-  safeLocalStorageSet(STORAGE_KEY_CHATS,JSON.stringify(chatHistories));
   safeLocalStorageSet(STORAGE_KEY_CHECKIN,JSON.stringify(checkinHistory));
   safeLocalStorageSet(STORAGE_KEY_MEMORY,JSON.stringify(aiMemory));
   safeLocalStorageSet(STORAGE_KEY_CAPSULE,JSON.stringify(lifeCapsule));
@@ -9827,6 +9878,10 @@ function addDreamEntry(dreamObj){
   dreams.unshift(normalized);
   activationSessionState.dreamAdds+=1;
   maybeMarkAhaMoment();
+  if(dreams.length<3 && capsuleCreationTimer){
+    clearTimeout(capsuleCreationTimer);
+    capsuleCreationTimer=0;
+  }
   markDataUpdated();
   save();
   render(true);
@@ -9866,7 +9921,27 @@ function groupedDreams(){
   for(const d of dreams){if(!g[d.domain])g[d.domain]=[];g[d.domain].push(d);}
   return g;
 }
-function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function esc(s){
+  return String(s)
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;')
+    .replace(/'/g,'&#39;');
+}
+function sanitizeAiHtml(raw) {
+  const tmp = document.createElement('div');
+  tmp.innerHTML = String(raw || '');
+  tmp.querySelectorAll('script, style, iframe, object, embed, form').forEach(el => el.remove());
+  tmp.querySelectorAll('*').forEach(el => {
+    [...el.attributes].forEach(attr => {
+      if (attr.name.startsWith('on') || attr.value.startsWith('javascript:')) {
+        el.removeAttribute(attr.name);
+      }
+    });
+  });
+  return tmp.innerHTML;
+}
 function pruneChats(){const MAX=30;for(const k of Object.keys(chatHistories)){if(chatHistories[k].length>MAX)chatHistories[k]=chatHistories[k].slice(-MAX);}safeLocalStorageSet(STORAGE_KEY_CHATS,JSON.stringify(chatHistories));}
 
 // ═══════════════════════════════════════════════════
@@ -9874,10 +9949,15 @@ function pruneChats(){const MAX=30;for(const k of Object.keys(chatHistories)){if
 // ═══════════════════════════════════════════════════
 const CRISIS_PATTERNS = [
   /\b(suicide|suicidal|kill myself|end my life|want to die)\b/i,
-  /\b(don't want to live|dont want to live|no reason to live)\b/i,
-  /\b(better off dead|self.harm|hurt myself|cutting myself)\b/i,
-  /\b(hopeless|worthless|can't go on|cant go on)\b/i,
-  /\b(ending it|end it all|disappear forever)\b/i
+  /\b(don'?t want to live|no reason to live)\b/i,
+  /\b(better off dead|self.?harm|hurt myself|cutting myself)\b/i,
+  /\b(ending it|end it all|disappear forever)\b/i,
+  /\b(can'?t go on|can'?t take (it|this|anymore))\b/i,
+  /\b(feel(ing)? like a burden)\b/i,
+  /\b(no point (in living|anymore|to anything))\b/i,
+  /\b(thinking about (ending|disappearing|not being here))\b/i,
+  /\b(don'?t see (the point|a reason|a way out))\b/i,
+  /\b(give up on (life|everything|living))\b/i,
 ];
 
 const CRISIS_RESOURCES = {
@@ -10526,7 +10606,8 @@ function getNextCapsuleUnlockInfo(capsule=lifeCapsule){
   return buildCapsuleUnlockSchedule(capsule).find(item=>!capsule?.[item.openedKey]&&now<item.unlockAtMs)||null;
 }
 function scheduleLifeCapsuleCreation(prevCount,nextCount=dreams.length){
-  if(capsuleCreated||prevCount!==0||nextCount!==1)return;
+  if(capsuleCreated||dreams.length<3)return;
+  if(!activationSessionState.chapterOpened)return;
   if(capsuleCreationTimer)clearTimeout(capsuleCreationTimer);
   capsuleCreationTimer=setTimeout(()=>{
     capsuleCreationTimer=0;
@@ -12626,6 +12707,7 @@ function renderTimeline(){
 }
 
 function render(rebuildTabs=true){
+  uiCache.clear();
   const emptyEl=document.getElementById('emptyState');
   const catsSection=document.getElementById('categoriesSection');
   const coverageSection=document.getElementById('coverageSection');
@@ -12691,14 +12773,14 @@ function render(rebuildTabs=true){
     // Only re-queue if dream count or statuses changed since last AI analysis
     const _gapKey = dreams.map(d=>d.domain).sort().join(',');
     const _tensionKey = dreams.map(d=>d.id+d.status).join(',');
-    if(render._lastGapKey!==_gapKey){
-      render._lastGapKey=_gapKey;
+    if(_lastRenderGapKey!==_gapKey){
+      _lastRenderGapKey=_gapKey;
       queueAiCall(()=>computeGapInsight()).catch(err=>{
         reportDebug('info','Deferred gap insight queue failed',{error:err?.message});
       });
     }
-    if(render._lastTensionKey!==_tensionKey&&dreams.length>=8){
-      render._lastTensionKey=_tensionKey;
+    if(_lastRenderTensionKey!==_tensionKey&&dreams.length>=8){
+      _lastRenderTensionKey=_tensionKey;
       queueAiCall(()=>maybeSurfaceTension()).catch(err=>{
         reportDebug('info','Deferred tension queue failed',{error:err?.message});
       });
@@ -12814,7 +12896,7 @@ function render(rebuildTabs=true){
             <span class="cat-add-label">Add a dream to ${dom.label}</span>
           </div>
           <div class="cat-quick-add" id="quick-${dk}">
-            <input class="cat-quick-input" id="quick-input-${dk}" placeholder="Another dream for this chapter…" onkeydown="quickAddKey(event,'${dk}')">
+            <input class="cat-quick-input" id="quick-input-${dk}" maxlength="1800" placeholder="Another dream for this chapter…" onkeydown="quickAddKey(event,'${dk}')">
             <button class="cat-quick-submit" onclick="submitQuickAdd('${dk}')">Add →</button>
             <button class="cat-quick-cancel" onclick="closeQuickAdd('${dk}')">✕</button>
           </div>
@@ -13361,7 +13443,7 @@ function renderDreamDashboard(){
     <div class="dd-section" id="dreamNoteSection">
       <div class="dd-label">Notes</div>
       <input class="dd-note-title" id="dreamNoteTitle-${dream.id}" placeholder="Title this note" value="${esc(editorTitle)}">
-      <textarea class="dd-note-area" id="dreamNoteBody-${dream.id}" placeholder="Why this matters, what it sounds like, reminders, references…">${esc(editorBody)}</textarea>
+      <textarea class="dd-note-area" id="dreamNoteBody-${dream.id}" maxlength="5000" placeholder="Why this matters, what it sounds like, reminders, references…">${esc(editorBody)}</textarea>
       <div class="dd-note-actions">
         <div class="dd-note-actions-main">
           <button class="dd-note-save" id="dreamNoteSave-${dream.id}" onclick="saveDreamDashboardNote('${dream.id}')">Save note</button>
@@ -13792,7 +13874,9 @@ async function submitDeepDiveStep(){
     renderDeepDiveOverlay();
     if(!crisisBlocked&&deepDiveState.stepIndex<totalSteps-1){
       clearDeepDiveAutoAdvance();
-      deepDiveState.autoAdvanceTimer=setTimeout(()=>isPreMortem?advancePreMortemStep():advanceDeepDiveStep(),1200);
+      const responseLength=deepDiveState.steps[deepDiveState.stepIndex]?.aiResponse?.length||0;
+      const readTimeMs=Math.max(2400,Math.min(5000,responseLength*28));
+      deepDiveState.autoAdvanceTimer=setTimeout(()=>isPreMortem?advancePreMortemStep():advanceDeepDiveStep(),readTimeMs);
     }
   }
 }
@@ -13917,7 +14001,7 @@ function renderDeepDiveOverlay(){
       <div class="deepdive-progress">Step ${deepDiveState.stepIndex+1} of ${PRE_MORTEM_STEPS.length}</div>
       <div class="deepdive-question">${esc(currentStep.question)}</div>
       <div class="premortem-step-subtext">${esc(currentStep.subtext)}</div>
-      <textarea class="deepdive-textarea" id="deepDiveInput" rows="4" placeholder="Write a sentence or two…"${savedStep.aiResponse?' disabled':''}>${esc(savedStep.userResponse||'')}</textarea>
+      <textarea class="deepdive-textarea" id="deepDiveInput" rows="4" maxlength="2000" placeholder="Write a sentence or two…"${savedStep.aiResponse?' disabled':''}>${esc(savedStep.userResponse||'')}</textarea>
       ${aiBlock}
       <div class="modal-disclaimer">This is a reflection tool, not professional advice.</div>
       ${actionRow}`;
@@ -13943,7 +14027,7 @@ function renderDeepDiveOverlay(){
     <div class="deepdive-dream">${dreamText}</div>
     <div class="deepdive-progress">Step ${deepDiveState.stepIndex+1} of 8</div>
     <div class="deepdive-question">${esc(currentStep.question)}</div>
-    <textarea class="deepdive-textarea" id="deepDiveInput" rows="4" placeholder="Write a sentence or two…"${savedStep.aiResponse?' disabled':''}>${esc(savedStep.userResponse||'')}</textarea>
+    <textarea class="deepdive-textarea" id="deepDiveInput" rows="4" maxlength="2000" placeholder="Write a sentence or two…"${savedStep.aiResponse?' disabled':''}>${esc(savedStep.userResponse||'')}</textarea>
     ${aiBlock}
     <div class="modal-disclaimer">AI can make mistakes. This is a reflection tool, not professional advice.</div>
     ${actionRow}`;
@@ -14523,11 +14607,15 @@ async function expandDream(){
   const t=inp.value.trim();if(!t)return;
   if(checkAndHandleCrisisText(t,{ sourceEl:inp, source:'expand-dream' }))return;
   const btn=document.getElementById('expandBtn');btn.textContent='…';btn.disabled=true;
+  inp.disabled=true;
   try{
     const r=await callClaude('This tool is for reflection and general assistance only. Expand this half-formed life dream into a richer, more vivid version in 1-2 sentences. Stay true to their voice and intent. Present as a possible expansion, not definitive. Frame insights as possibilities, not certainties. Return ONLY the expanded text.',t);
     if(r.trim())inp.value=r.trim();
   }catch{}
-  btn.textContent='✦ Expand';btn.disabled=false;
+  finally{
+    inp.disabled=false;
+    btn.textContent='✦ Expand';btn.disabled=false;
+  }
 }
 
 // ═══════════════════════════════════════════════════
@@ -14565,6 +14653,7 @@ function setupInputCardDragDrop(){
 }
 
 async function handleImageUpload(event){
+  const uploadToken=++currentImageUploadToken;
   const file=event?.target?.files?.[0];
   const allowedTypes=['image/png','image/jpeg','image/webp','image/gif'];
   const maxBytes=5*1024*1024;
@@ -14582,7 +14671,6 @@ async function handleImageUpload(event){
   hasAttemptedUpload = true;
   if(event.target)event.target.value=''; // reset input
   clearImageResult();
-  const uploadToken=++currentImageUploadToken;
   const container=document.getElementById('imgResultContainer');
   const previewUrl=URL.createObjectURL(file);
   currentImageScan={previewUrl};
@@ -14915,7 +15003,6 @@ async function deleteImageScan(id){
 }
 
 function clearImageResult(){
-  currentImageUploadToken++;
   const container=document.getElementById('imgResultContainer');
   if(currentImageScan?.previewUrl){
     URL.revokeObjectURL(currentImageScan.previewUrl);
@@ -15313,7 +15400,7 @@ async function synthesize(){
       `My dreams:\n${list}`
     );
     synContent=raw||'';
-    txt.innerHTML=raw||'<p>Unable to generate reflection.</p>';
+    txt.innerHTML=sanitizeAiHtml(raw)||'<p>Unable to generate reflection.</p>';
     if(raw){
       renderSynDisclaimer();
       markSynthesisSeenInSession();
@@ -15326,7 +15413,14 @@ async function synthesize(){
     document.getElementById('synActions').style.display='flex';
   }catch(err){
     if(err?.code==='CRISIS_BLOCKED')return;
-    txt.innerHTML=`<p class="api-error" role="alert" aria-live="assertive">${esc(getFriendlyError(err))}</p>`;
+    txt.innerHTML=`
+      <p class="api-error" role="alert" aria-live="assertive">${esc(getFriendlyError(err))}</p>
+      <div style="margin-top:14px;">
+        <button class="btn-syn" onclick="synthesize()" style="width:auto;padding:12px 20px;">
+          <span class="btn-syn-icon">↺</span>
+          <span class="btn-syn-text">Try again</span>
+        </button>
+      </div>`;
     showToast(getFriendlyError(err), 'error');
   }finally{
     if(btn){
@@ -15380,7 +15474,7 @@ async function generateLetter(forceRegen=false){
       `This tool is for reflection and general assistance only. Write a personal letter from this person's future self, as though they are writing from 10 years in the future, having achieved or grown through everything they dreamed of. Write in first person as the future self writing to the present self. Make it feel lived-in, specific to their actual dreams, warm but honest. 3-4 paragraphs. Use plain text, no headers. Present as a possible future scenario, not a guaranteed outcome. Frame insights as possibilities, not certainties. Do not use definitive language about the user's identity, psychology, or future.`,
       `Their current dreams:\n${dreamList}`
     );
-    txt.innerHTML=raw.split('\n\n').map(p=>`<p>${esc(p)}</p>`).join('');
+    txt.innerHTML=sanitizeAiHtml(String(raw||'').split('\n\n').map(p=>`<p>${esc(p)}</p>`).join(''));
   }catch(err){
     if(err?.code==='CRISIS_BLOCKED')return;
     txt.innerHTML=`<p class="api-error" role="alert" aria-live="assertive">${esc(getFriendlyError(err))}</p>`;
@@ -15454,12 +15548,14 @@ function confirmDate(){
   const d=dreams.find(x=>x.id===dpId);if(!d)return;
   const yearItems=document.getElementById('dpYearDrum').querySelectorAll('.dps-item');
   const y=parseInt(yearItems[dpState.year+2]?.textContent)||new Date().getFullYear()+1;
-  const dt=new Date(y,dpState.month,dpState.day+1);
+  const daysInMonth=new Date(y,dpState.month+1,0).getDate();
+  const safeDay=Math.min(dpState.day+1,daysInMonth);
+  const dt=new Date(y,dpState.month,safeDay);
   const diff=(dt-new Date())/(1000*60*60*24*30);
   updateDreamEntry(dpId,{targetDate:dt.toISOString().slice(0,10),horizon:diff<=14?'this year':diff<=42?'3 years':'someday'});
   closeDatepick();
 }
-function closeDatepick(){document.getElementById('datepickOverlay').classList.remove('open');document.body.style.overflow='';dpId=null;}
+function closeDatepick(){document.getElementById('datepickOverlay').classList.remove('open');const anyOverlayOpen=document.getElementById('modalOverlay')?.classList.contains('open')||document.getElementById('dreamDashboardOverlay')?.classList.contains('open')||document.getElementById('deepDiveOverlay')?.classList.contains('open')||document.getElementById('capsuleOverlay')?.classList.contains('open')||document.getElementById('capsuleRevealOverlay')?.classList.contains('open')||document.getElementById('llOverlay')?.classList.contains('open')||document.getElementById('discoverOverlay')?.classList.contains('open')||document.getElementById('discoveryOverlay')?.classList.contains('open');if(!anyOverlayOpen)document.body.style.overflow='';dpId=null;}
 function closeDatepickOnBg(e){if(e.target===document.getElementById('datepickOverlay'))closeDatepick();}
 
 // ═══════════════════════════════════════════════════
@@ -15503,6 +15599,10 @@ function handleFabAction(){
 function scrollToInput(){document.getElementById('inputSection').scrollIntoView({behavior:'smooth',block:'center'});setTimeout(()=>document.getElementById('dreamInput').focus(),400);}
 updateFabMode();
 
+function generateRequestId(){
+  return `${Date.now()}-${Math.random().toString(36).slice(2,10)}`;
+}
+
 // ═══════════════════════════════════════════════════
 // CLAUDE API CALLS
 // ═══════════════════════════════════════════════════
@@ -15541,7 +15641,7 @@ async function callClaude(system,msg){
   blockReflectionForCrisis(msg, 'callClaude');
   const safeSystem=withReflectionSafety(system);
   const r=await fetchWithRetry('https://curly-rice-3072.vineet-s.workers.dev/claude',{
-    method:'POST',headers:{'Content-Type':'application/json'},
+    method:'POST',headers:{'Content-Type':'application/json','X-Request-Id':generateRequestId()},
     body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,system:safeSystem,messages:[{role:'user',content:msg}]})
   });
   const d=await r.json();if(d.error)throw new Error(d.error.message);
@@ -15551,7 +15651,7 @@ async function callClaudeConvo(system,messages){
   blockReflectionForCrisis(messages, 'callClaudeConvo');
   const safeSystem=withReflectionSafety(system);
   const r=await fetchWithRetry('https://curly-rice-3072.vineet-s.workers.dev/claude',{
-    method:'POST',headers:{'Content-Type':'application/json'},
+    method:'POST',headers:{'Content-Type':'application/json','X-Request-Id':generateRequestId()},
     body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,system:safeSystem,messages})
   });
   const d=await r.json();if(d.error)throw new Error(d.error.message);
@@ -15561,7 +15661,7 @@ async function callClaudeVision(system,contentArray){
   blockReflectionForCrisis(contentArray, 'callClaudeVision');
   const safeSystem=withReflectionSafety(system);
   const r=await fetchWithRetry('https://curly-rice-3072.vineet-s.workers.dev/claude',{
-    method:'POST',headers:{'Content-Type':'application/json'},
+    method:'POST',headers:{'Content-Type':'application/json','X-Request-Id':generateRequestId()},
     body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,system:safeSystem,messages:[{role:'user',content:contentArray}]})
   });
   const d=await r.json();if(d.error)throw new Error(d.error.message);
@@ -15604,6 +15704,23 @@ document.addEventListener('keydown',e=>{
   maybeShowCheckin();
   maybePromptCapsuleReveal();
 })();
+
+window.addEventListener('storage', (event) => {
+  if (event.key === STORAGE_KEY_DREAMS && event.newValue) {
+    try {
+      const updated = JSON.parse(event.newValue);
+      if (Array.isArray(updated)) {
+        dreams = updated.map(normalizeDreamEntry).filter(d => String(d?.text || '').trim().length > 0);
+        render(true);
+        if (document.querySelector('.view-tab.active')?.dataset.view === 'timeline') renderTimeline();
+        updateSummaryBar();
+        rendercoverage();
+      }
+    } catch (err) {
+      reportDebug('warn', 'Cross-tab dream sync failed', { error: err?.message });
+    }
+  }
+});
 </script>
 <script id="bgCanvasAmbientScript">
 (() => {
