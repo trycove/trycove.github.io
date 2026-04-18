@@ -6896,13 +6896,13 @@ function renderRecSettings(){
   if(billingStatusEl){
     billingStatusEl.textContent=signedIn
       ? (isPaid()
-          ? 'Your paid plan is active. Manage billing or cancellation in Stripe.'
-          : 'You are on the free plan. Upgrade to unlock paid features.')
+          ? 'Your paid plan is active. Open the subscription center to manage billing or cancellation here.'
+          : 'You are on the free plan. Open the subscription center to upgrade when you are ready.')
       : 'Log in to manage your subscription and billing.';
   }
   if(billingManageBtn){
     billingManageBtn.disabled=!signedIn || stripePortalBusy;
-    billingManageBtn.textContent=stripePortalBusy ? 'Opening billing…' : 'Manage subscription';
+    billingManageBtn.textContent=stripePortalBusy ? 'Opening subscription center…' : 'Manage subscription';
   }
   if(deleteBtn){
     deleteBtn.style.display=signedIn ? '' : 'none';
@@ -7410,6 +7410,160 @@ function closeLegalDoc(){
 
 function closeLegalOnBg(event){
   if(event?.target===getUI('legalOverlay'))closeLegalDoc();
+}
+
+function openSubscriptionCenter(){
+  const overlay=getUI('legalOverlay');
+  const body=getUI('legalBody');
+  const title=getUI('legalTitle');
+  const kicker=getUI('legalKicker');
+  if(!overlay || !body || !title || !kicker)return;
+  title.textContent='Subscription Center';
+  kicker.textContent='Billing · In app';
+  body.innerHTML=`
+    <div class="legal-doc">
+      <p class="legal-effective"><strong>Subscription Center</strong></p>
+      <p class="legal-effective">Manage your plan without leaving this page.</p>
+      <p class="legal-scroll-hint">Scroll to review your current status, change plans, or cancel.</p>
+      <div class="legal-divider"></div>
+      <div class="legal-highlight"><strong>Status:</strong> <span id="subscriptionStatusLabel">Loading…</span></div>
+      <div class="legal-highlight"><strong>Plan:</strong> <span id="subscriptionPlanLabel">Loading…</span></div>
+      <h3>Current subscription</h3>
+      <p id="subscriptionSummaryText">Loading your billing details…</p>
+      <h3>Switch plans</h3>
+      <p>You can change plans right here. If your current plan is active, a new checkout session will replace it.</p>
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <button class="paywall-btn primary" type="button" onclick="startStripeCheckout('monthly')">Monthly · $8</button>
+        <button class="paywall-btn primary" type="button" onclick="startStripeCheckout('yearly')">Yearly · $60</button>
+        <button class="paywall-btn primary" type="button" onclick="startStripeUnpluggedCheckout()">Unplugged bundle · $95</button>
+      </div>
+      <h3 id="subscriptionCancelHeading">Cancel subscription</h3>
+      <p id="subscriptionCancelCopy">Cancel anytime. The plan stays active until the end of the current billing period unless you choose otherwise.</p>
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <button class="paywall-btn" id="subscriptionCancelBtn" type="button" onclick="updateSubscriptionAction('cancel')">Cancel at period end</button>
+        <button class="paywall-btn" id="subscriptionResumeBtn" type="button" onclick="updateSubscriptionAction('resume')" style="display:none;">Resume subscription</button>
+        <button class="paywall-btn" type="button" onclick="closeLegalDoc()">Close</button>
+      </div>
+    </div>`;
+  overlay.classList.add('open');
+  overlay.setAttribute('aria-hidden','false');
+  document.body.style.overflow='hidden';
+  void refreshSubscriptionCenter();
+}
+
+function formatSubscriptionDate(value){
+  if(!value)return 'Not available';
+  const date=new Date(value);
+  if(Number.isNaN(date.getTime()))return 'Not available';
+  return date.toLocaleDateString(undefined,{ year:'numeric', month:'short', day:'numeric' });
+}
+
+function renderSubscriptionCenter(summary={}){
+  const statusLabel=getUI('subscriptionStatusLabel');
+  const planLabel=getUI('subscriptionPlanLabel');
+  const summaryText=getUI('subscriptionSummaryText');
+  const cancelBtn=getUI('subscriptionCancelBtn');
+  const resumeBtn=getUI('subscriptionResumeBtn');
+  const cancelHeading=getUI('subscriptionCancelHeading');
+  const cancelCopy=getUI('subscriptionCancelCopy');
+  const status=String(summary.status || (isPaid() ? 'active' : 'free')).toLowerCase();
+  const planText=String(summary.planLabel || (isPaid() ? 'Paid' : 'Free')).trim();
+  const currentPeriodEnd=formatSubscriptionDate(summary.currentPeriodEnd);
+  const cancelAtPeriodEnd=Boolean(summary.cancelAtPeriodEnd);
+  const isActiveLike=['active','trialing','past_due','incomplete'].includes(status);
+
+  if(statusLabel)statusLabel.textContent=isActiveLike ? (cancelAtPeriodEnd ? 'Active, set to cancel' : 'Active') : 'Not subscribed';
+  if(planLabel)planLabel.textContent=planText;
+  if(summaryText){
+    summaryText.textContent=isActiveLike
+      ? `Your subscription status is ${status}. ${cancelAtPeriodEnd ? `It will end on ${currentPeriodEnd}.` : `Your next renewal date is ${currentPeriodEnd}.`}`
+      : 'You are on the free plan. Choose an upgrade option below to subscribe.';
+  }
+  if(cancelBtn){
+    cancelBtn.style.display=isActiveLike && !cancelAtPeriodEnd ? '' : 'none';
+    cancelBtn.disabled=!isActiveLike;
+  }
+  if(resumeBtn){
+    resumeBtn.style.display=isActiveLike && cancelAtPeriodEnd ? '' : 'none';
+    resumeBtn.disabled=!isActiveLike;
+  }
+  if(cancelHeading)cancelHeading.textContent=cancelAtPeriodEnd ? 'Subscription scheduled to end' : 'Cancel subscription';
+  if(cancelCopy)cancelCopy.textContent=cancelAtPeriodEnd
+    ? `Your subscription is already scheduled to end on ${currentPeriodEnd}. You can keep it active until then or resume it if you change your mind.`
+    : 'Cancel anytime. The subscription remains active until the current billing period ends.';
+}
+
+async function refreshSubscriptionCenter(){
+  if(!supabaseUser || !supabaseClient)return;
+  const summaryText=getUI('subscriptionSummaryText');
+  const statusLabel=getUI('subscriptionStatusLabel');
+  const planLabel=getUI('subscriptionPlanLabel');
+  try{
+    const { data:{ session } } = await supabaseClient.auth.getSession();
+    const accessToken=String(session?.access_token||'').trim();
+    if(!accessToken)throw new Error('Could not verify your session. Please log in again.');
+
+    const r=await fetchWithRetry(STRIPE_SUBSCRIPTION_SUMMARY_ENDPOINT,{
+      method:'POST',
+      headers:{
+        'Content-Type':'application/json',
+        'Authorization':`Bearer ${accessToken}`,
+        'X-Request-Id':generateRequestId()
+      },
+      body:JSON.stringify({}),
+      timeoutMs:20000
+    },1);
+
+    if(!r.ok){
+      const raw=await r.text().catch(()=>'');
+      throw new Error(raw || `Subscription lookup failed (${r.status}).`);
+    }
+
+    const summary=await r.json().catch(()=>({}));
+    renderSubscriptionCenter(summary);
+  }catch(err){
+    reportDebug('warn','Subscription summary failed',{error:err?.message});
+    if(summaryText)summaryText.textContent='We could not load your billing details right now. Try again in a moment.';
+    if(statusLabel)statusLabel.textContent='Unavailable';
+    if(planLabel)planLabel.textContent=isPaid() ? 'Paid' : 'Free';
+  }
+}
+
+async function updateSubscriptionAction(action='cancel'){
+  if(!supabaseUser || !supabaseClient){
+    showToast('Log in first to manage your subscription.', 'warning');
+    focusAuthForm(true);
+    return;
+  }
+  const normalizedAction=String(action||'cancel').toLowerCase()==='resume'?'resume':'cancel';
+  try{
+    const { data:{ session } } = await supabaseClient.auth.getSession();
+    const accessToken=String(session?.access_token||'').trim();
+    if(!accessToken)throw new Error('Could not verify your session. Please log in again.');
+
+    const r=await fetchWithRetry(STRIPE_SUBSCRIPTION_ACTION_ENDPOINT,{
+      method:'POST',
+      headers:{
+        'Content-Type':'application/json',
+        'Authorization':`Bearer ${accessToken}`,
+        'X-Request-Id':generateRequestId()
+      },
+      body:JSON.stringify({ action:normalizedAction }),
+      timeoutMs:20000
+    },1);
+
+    if(!r.ok){
+      const raw=await r.text().catch(()=>'');
+      throw new Error(raw || `Subscription update failed (${r.status}).`);
+    }
+
+    showToast(normalizedAction==='resume' ? 'Subscription resumed.' : 'Subscription set to cancel at the end of the billing period.', 'success');
+    await refreshSubscriptionCenter();
+    renderRecSettings();
+  }catch(err){
+    reportDebug('warn','Subscription action failed',{error:err?.message,action:normalizedAction});
+    showToast(getFriendlyError(err), 'error');
+  }
 }
 
 function scrollLegalSection(sectionId){
@@ -9165,6 +9319,8 @@ const WORKER_BASE_URL = 'https://curly-rice-3072.vineet-s.workers.dev';
 const STRIPE_PUBLISHABLE_KEY = String(window.STRIPE_PUBLISHABLE_KEY || '').trim();
 const STRIPE_CHECKOUT_ENDPOINT = String(window.STRIPE_CHECKOUT_ENDPOINT || `${WORKER_BASE_URL}/create-checkout-session`).trim();
 const STRIPE_PORTAL_ENDPOINT = String(window.STRIPE_PORTAL_ENDPOINT || `${WORKER_BASE_URL}/create-portal-session`).trim();
+const STRIPE_SUBSCRIPTION_SUMMARY_ENDPOINT = String(window.STRIPE_SUBSCRIPTION_SUMMARY_ENDPOINT || `${WORKER_BASE_URL}/subscription-summary`).trim();
+const STRIPE_SUBSCRIPTION_ACTION_ENDPOINT = String(window.STRIPE_SUBSCRIPTION_ACTION_ENDPOINT || `${WORKER_BASE_URL}/subscription-action`).trim();
 const STRIPE_PRICE_MONTHLY = String(window.STRIPE_PRICE_MONTHLY || '').trim();
 const STRIPE_PRICE_YEARLY = String(window.STRIPE_PRICE_YEARLY || '').trim();
 const STRIPE_PRICE_UNPLUGGED = String(window.STRIPE_PRICE_UNPLUGGED || '').trim();
@@ -9531,46 +9687,11 @@ async function openSubscriptionSettingsTab(){
     focusAuthForm(true);
     return;
   }
-  if(!STRIPE_PORTAL_ENDPOINT){
-    showToast('Billing portal is not configured yet.', 'warning');
-    return;
-  }
-
-  const tab=window.open('about:blank','_blank','noopener');
-  if(!tab){
-    showToast('Popup was blocked. Allow popups for this site and try again.', 'warning');
-    return;
-  }
-
   setBillingPortalBusy(true);
   try{
-    const { data:{ session } } = await supabaseClient.auth.getSession();
-    const accessToken=String(session?.access_token||'').trim();
-    if(!accessToken)throw new Error('Could not verify your session. Please log in again.');
-
-    const r=await fetchWithRetry(STRIPE_PORTAL_ENDPOINT,{
-      method:'POST',
-      headers:{
-        'Content-Type':'application/json',
-        'Authorization':`Bearer ${accessToken}`,
-        'X-Request-Id':generateRequestId()
-      },
-      body:JSON.stringify({ returnUrl:`${window.location.origin}${window.location.pathname}` }),
-      timeoutMs:20000
-    },1);
-
-    if(!r.ok){
-      const raw=await r.text().catch(()=>'');
-      throw new Error(raw || `Billing portal failed (${r.status}).`);
-    }
-
-    const payload=await r.json().catch(()=>({}));
-    const portalUrl=String(payload?.url||'').trim();
-    if(!portalUrl)throw new Error('Billing portal URL was not returned.');
-    tab.location.assign(portalUrl);
+    openSubscriptionCenter();
   }catch(err){
-    try{tab.close();}catch{}
-    reportDebug('warn','Billing portal open failed',{error:err?.message});
+    reportDebug('warn','Subscription center open failed',{error:err?.message});
     showToast(getFriendlyError(err), 'error');
   }finally{
     setBillingPortalBusy(false);
