@@ -8,6 +8,7 @@
      cannot be set via meta tags, configure them in your hosting provider's settings
      (e.g. GitHub Pages custom headers, Cloudflare, or Netlify _headers file). -->
 <meta name="referrer" content="strict-origin-when-cross-origin">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net 'unsafe-inline'; style-src 'self' https://fonts.googleapis.com 'unsafe-inline'; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob: https:; media-src 'self' data: blob: https:; connect-src 'self' https://*.supabase.co https://curly-rice-3072.vineet-s.workers.dev https://api.open-meteo.com https://ipapi.co; frame-src 'self' data: blob: https:; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; upgrade-insecure-requests">
 <title>COVE</title>
 
 <!-- SEO & Social Metadata -->
@@ -7985,15 +7986,13 @@ function buildMetadataSyncPayload(){
   const snapshot=buildCloudSyncSnapshot();
   return {
     uiThemeMode:normalizeUiThemeMode(snapshot.uiThemeMode),
-    dreams:Array.isArray(snapshot.dreams)?snapshot.dreams:[],
-    checkinHistory:Array.isArray(snapshot.checkinHistory)?snapshot.checkinHistory:[],
-    deepDiveSessions:Array.isArray(snapshot.deepDiveSessions)?snapshot.deepDiveSessions:[],
-    imageScans:Array.isArray(snapshot.imageScans)?snapshot.imageScans:[],
-    aiMemory:snapshot.aiMemory && typeof snapshot.aiMemory==='object' ? snapshot.aiMemory : {},
-    capsule:snapshot.capsule && typeof snapshot.capsule==='object' ? snapshot.capsule : {},
+    // Keep metadata fallback minimal and non-content-bearing.
+    cloudPlan:String(cloudPlan||'free').toLowerCase()==='paid'?'paid':'free',
+    dreamCount:Array.isArray(snapshot.dreams)?snapshot.dreams.length:0,
+    deepDiveCount:Array.isArray(snapshot.deepDiveSessions)?snapshot.deepDiveSessions.length:0,
+    imageScanCount:Array.isArray(snapshot.imageScans)?snapshot.imageScans.length:0,
+    pulseCount:Array.isArray(snapshot.pulseLog)?snapshot.pulseLog.length:0,
     capsuleCreated:Boolean(snapshot.capsuleCreated),
-    pulseLog:Array.isArray(snapshot.pulseLog)?snapshot.pulseLog:[],
-    pulseReflection:snapshot.pulseReflection && typeof snapshot.pulseReflection==='object' ? snapshot.pulseReflection : null,
     lastDreamboxOpenedAt:Number(snapshot.lastDreamboxOpenedAt)||0,
     ahaAt:String(snapshot.ahaAt||''),
     firstSessionAt:String(snapshot.firstSessionAt||''),
@@ -8028,18 +8027,12 @@ function buildSupabaseStoragePath(fileName,scope='uploads',relatedId=''){
 async function resolveSupabaseStorageUrl(path=''){
   if(!supabaseClient || !path)return '';
   try{
-    const { data, error } = await supabaseClient.storage.from(SUPABASE_STORAGE_BUCKET).createSignedUrl(path, 60 * 60 * 24 * 365);
+    const { data, error } = await supabaseClient.storage.from(SUPABASE_STORAGE_BUCKET).createSignedUrl(path, 60 * 60 * 6);
     if(!error && data?.signedUrl)return String(data.signedUrl);
   }catch(err){
-    reportDebug('info','Signed storage URL unavailable, falling back to public URL',{error:err?.message,path});
+    reportDebug('info','Signed storage URL unavailable',{error:err?.message,path});
   }
-  try{
-    const { data } = supabaseClient.storage.from(SUPABASE_STORAGE_BUCKET).getPublicUrl(path);
-    return String(data?.publicUrl || '');
-  }catch(err){
-    reportDebug('warn','Storage public URL lookup failed',{error:err?.message,path});
-    return '';
-  }
+  return '';
 }
 
 async function uploadFileToSupabaseStorage(file,{scope='uploads',relatedId=''}={}){
@@ -9121,7 +9114,7 @@ let supabaseUser = null;
 let authGateMode = 'login';
 let authWelcomeTimer = null;
 let authWelcomeSceneLoaded = false;
-let cloudPlan = String(safeLocalStorageGet(STORAGE_KEY_CLOUD_PLAN,'free')||'free').toLowerCase()==='paid'?'paid':'free';
+let cloudPlan = 'free';
 let ahaAt = String(safeLocalStorageGet(STORAGE_KEY_AHA_AT,'')||'').trim();
 let paywallTriggerCount = Math.max(0, parseInt(safeLocalStorageGet(STORAGE_KEY_PAYWALL_SHOWN,'0')||'0',10)||0);
 let synthesisCount = Math.max(0, parseInt(safeLocalStorageGet(STORAGE_KEY_SYNTHESIS_COUNT,'0')||'0',10)||0);
@@ -9960,14 +9953,35 @@ function esc(s){
     .replace(/"/g,'&quot;')
     .replace(/'/g,'&#39;');
 }
+
+function sanitizeUrl(rawUrl,{allowData=false,allowBlob=true}={}){
+  const candidate=String(rawUrl||'').trim();
+  if(!candidate)return '';
+  const lower=candidate.toLowerCase();
+  if(lower.startsWith('javascript:')||lower.startsWith('vbscript:')||lower.startsWith('file:'))return '';
+  if(lower.startsWith('data:'))return allowData?candidate:'';
+  if(lower.startsWith('blob:'))return allowBlob?candidate:'';
+  if(lower.startsWith('http://')||lower.startsWith('https://'))return candidate;
+  if(lower.startsWith('/')||lower.startsWith('./')||lower.startsWith('../'))return candidate;
+  return '';
+}
+
 function sanitizeAiHtml(raw) {
   const tmp = document.createElement('div');
   tmp.innerHTML = String(raw || '');
   tmp.querySelectorAll('script, style, iframe, object, embed, form').forEach(el => el.remove());
   tmp.querySelectorAll('*').forEach(el => {
     [...el.attributes].forEach(attr => {
-      if (attr.name.startsWith('on') || attr.value.startsWith('javascript:')) {
+      const name=String(attr.name||'').toLowerCase();
+      const value=String(attr.value||'').trim();
+      const lowerValue=value.toLowerCase();
+      if (name.startsWith('on') || lowerValue.startsWith('javascript:') || lowerValue.startsWith('vbscript:')) {
         el.removeAttribute(attr.name);
+        return;
+      }
+      if(['href','src','xlink:href','formaction'].includes(name)){
+        const safe=sanitizeUrl(value,{allowData:false,allowBlob:false});
+        if(!safe)el.removeAttribute(attr.name);
       }
     });
   });
@@ -13199,8 +13213,9 @@ function ensureDreamAttachmentPreviewOverlay(){
 }
 
 function buildDreamAttachmentPreviewMarkup(url,kind,name){
-  const safeUrl=String(url||'');
+  const safeUrl=sanitizeUrl(url,{allowData:true,allowBlob:true});
   const safeName=esc(name||'Attachment');
+  if(!safeUrl)return '<div class="attachment-preview-file"><div class="attachment-preview-file-icon">⚠️</div><div class="attachment-preview-file-name">Attachment preview unavailable</div></div>';
   if(kind==='image')return `<img src="${safeUrl}" alt="${safeName}">`;
   if(kind==='video')return `<video src="${safeUrl}" controls autoplay playsinline></video>`;
   if(kind==='audio')return `<audio controls autoplay src="${safeUrl}"></audio>`;
@@ -13236,7 +13251,7 @@ function renderDreamAttachmentPreviewAt(index){
 
 function downloadDreamAttachment(event,cardEl){
   if(event)event.stopPropagation();
-  const url=String(cardEl?.dataset?.url||'').trim();
+  const url=sanitizeUrl(cardEl?.dataset?.url,{allowData:true,allowBlob:true});
   const name=String(cardEl?.dataset?.name||'attachment').trim()||'attachment';
   if(!url)return;
   const link=document.createElement('a');
@@ -13251,9 +13266,10 @@ function downloadDreamAttachment(event,cardEl){
 function downloadCurrentDreamAttachment(event){
   if(event)event.stopPropagation();
   const current=dreamboxPreviewAttachmentList[dreamboxPreviewAttachmentIndex]||{};
-  if(!current?.url)return;
+  const safeUrl=sanitizeUrl(current?.url,{allowData:true,allowBlob:true});
+  if(!safeUrl)return;
   const link=document.createElement('a');
-  link.href=String(current.url);
+  link.href=safeUrl;
   link.download=String(current.name||'attachment');
   link.rel='noreferrer';
   document.body.appendChild(link);
@@ -13274,11 +13290,11 @@ function openDreamAttachment(event,cardEl,fromPointerRelease=false,fromActionBut
   if(event)event.stopPropagation();
   if(!cardEl||(!fromPointerRelease&&cardEl.classList.contains('just-dragged')))return;
   if(!fromActionButton&&event?.target?.closest('button,a,video,audio'))return;
-  const url=String(cardEl.dataset.url||'').trim();
+  const url=sanitizeUrl(cardEl.dataset.url,{allowData:true,allowBlob:true});
   if(!url)return;
   const cards=[...document.querySelectorAll('#dreamAttachmentGrid .dd-attachment-card')];
   dreamboxPreviewAttachmentList=cards.map(card=>({
-    url:String(card.dataset.url||''),
+    url:sanitizeUrl(card.dataset.url,{allowData:true,allowBlob:true}),
     kind:String(card.dataset.kind||'file'),
     name:String(card.dataset.name||'Attachment'),
     createdAt:String(card.dataset.createdAt||'')
@@ -13378,18 +13394,19 @@ function renderDreamDashboard(){
     : 'Tap + Add files, or drag files here. Use the × on any card to remove it.';
   const attachmentsHtml=attachments.length?attachments.map((att,idx)=>{
     const kind=classifyAttachmentKind(att.type,att.kind||'file');
+    const safeAttachmentUrl=sanitizeUrl(att.url,{allowData:true,allowBlob:true});
     const preview=kind==='image'
-      ? (att.url?`<img src="${att.url}" alt="${esc(att.name)}">`:`<div class="dd-att-file-icon">${attachmentKindIcon(kind)}</div>`)
+      ? (safeAttachmentUrl?`<img src="${safeAttachmentUrl}" alt="${esc(att.name)}">`:`<div class="dd-att-file-icon">${attachmentKindIcon(kind)}</div>`)
       : kind==='video'
-        ? (att.url?`<video src="${att.url}" controls preload="metadata"></video>`:`<div class="dd-att-file-icon">${attachmentKindIcon(kind)}</div>`)
+        ? (safeAttachmentUrl?`<video src="${safeAttachmentUrl}" controls preload="metadata"></video>`:`<div class="dd-att-file-icon">${attachmentKindIcon(kind)}</div>`)
         : kind==='audio'
-          ? (att.url?`<audio controls src="${att.url}"></audio>`:`<div class="dd-att-file-icon">${attachmentKindIcon(kind)}</div>`)
+          ? (safeAttachmentUrl?`<audio controls src="${safeAttachmentUrl}"></audio>`:`<div class="dd-att-file-icon">${attachmentKindIcon(kind)}</div>`)
           : `<div class="dd-att-file-icon">${attachmentKindIcon(kind)}</div>`;
     const previewStop=(kind==='video'||kind==='audio')?' onclick="event.stopPropagation()"':'';
-    const previewAction=att.url
+    const previewAction=safeAttachmentUrl
       ? `<button class="dd-att-link" type="button" onclick="openDreamAttachment(event,this.closest('.dd-attachment-card'),true,true)">Preview</button>`
       : `<span class="dd-att-link muted">Preview unavailable</span>`;
-    const downloadAction=att.url
+    const downloadAction=safeAttachmentUrl
       ? `<button class="dd-att-download" type="button" aria-label="Download ${esc(att.name||'attachment')}" title="Download" onclick="downloadDreamAttachment(event,this.closest('.dd-attachment-card'))">↓</button>`
       : '';
     const floatX=[-16,18,6,22,-12,12][idx%6];
@@ -13398,7 +13415,7 @@ function renderDreamDashboard(){
     const floatDelay=(idx*0.42).toFixed(2);
     const floatSpeed=(6.3+(idx%4)*0.7).toFixed(1);
     return `
-      <div class="dd-attachment-card" role="button" tabindex="0" data-url="${esc(att.url||'')}" data-kind="${kind}" data-name="${esc(att.name||'Attachment')}" data-created-at="${esc(att.createdAt||'')}" style="--float-x:${floatX}px;--float-y:${floatY}px;--float-r:${floatR}deg;--float-delay:${floatDelay}s;--float-speed:${floatSpeed}s;--drag-x:0px;--drag-y:0px;" onclick="openDreamAttachment(event,this,true)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openDreamAttachment(event,this,true)}" onpointerdown="startDreamAttachmentDrag(event,this)" onpointermove="moveDreamAttachmentDrag(event)" onpointerup="endDreamAttachmentDrag(event)" onpointercancel="endDreamAttachmentDrag(event)">
+      <div class="dd-attachment-card" role="button" tabindex="0" data-url="${esc(safeAttachmentUrl)}" data-kind="${kind}" data-name="${esc(att.name||'Attachment')}" data-created-at="${esc(att.createdAt||'')}" style="--float-x:${floatX}px;--float-y:${floatY}px;--float-r:${floatR}deg;--float-delay:${floatDelay}s;--float-speed:${floatSpeed}s;--drag-x:0px;--drag-y:0px;" onclick="openDreamAttachment(event,this,true)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openDreamAttachment(event,this,true)}" onpointerdown="startDreamAttachmentDrag(event,this)" onpointermove="moveDreamAttachmentDrag(event)" onpointerup="endDreamAttachmentDrag(event)" onpointercancel="endDreamAttachmentDrag(event)">
         <button class="dd-attachment-remove" type="button" aria-label="Remove attachment" onclick="event.stopPropagation();removeDreamAttachment('${dream.id}','${att.id}')">✕</button>
         <div class="dd-att-preview"${previewStop}>${preview}</div>
         <div class="dd-att-name">${esc(att.name)}</div>
@@ -15194,14 +15211,38 @@ async function openDiscover(dk){
     body.innerHTML='';
     for(const text of items){
       const item=document.createElement('div');item.className='discover-item';
-      item.innerHTML=`<div class="di-text">${esc(text)}</div><button class="di-btn" onclick="addFromDiscover('${dk}',this,'${text.replace(/'/g,"\\'")}')">Add →</button>`;
+      const safeText=String(text||'').trim();
+      const textEl=document.createElement('div');
+      textEl.className='di-text';
+      textEl.textContent=safeText;
+      const btn=document.createElement('button');
+      btn.className='di-btn';
+      btn.type='button';
+      btn.textContent='Add →';
+      btn.dataset.domain=dk;
+      btn.dataset.dream=safeText;
+      btn.addEventListener('click',()=>addFromDiscover(dk,btn,safeText));
+      item.appendChild(textEl);
+      item.appendChild(btn);
       body.appendChild(item);
     }
   }catch{
     body.innerHTML='<div class="discover-fallback-note">Showing saved ideas for now. Live suggestions are unavailable right now.</div>';
     for(const text of(DomainRegistry.get(dk).seeds||DomainRegistry.get('creative').seeds)){
       const item=document.createElement('div');item.className='discover-item';
-      item.innerHTML=`<div class="di-text">${esc(text)}</div><button class="di-btn" onclick="addFromDiscover('${dk}',this,'${text.replace(/'/g,"\\'")}')">Add →</button>`;
+      const safeText=String(text||'').trim();
+      const textEl=document.createElement('div');
+      textEl.className='di-text';
+      textEl.textContent=safeText;
+      const btn=document.createElement('button');
+      btn.className='di-btn';
+      btn.type='button';
+      btn.textContent='Add →';
+      btn.dataset.domain=dk;
+      btn.dataset.dream=safeText;
+      btn.addEventListener('click',()=>addFromDiscover(dk,btn,safeText));
+      item.appendChild(textEl);
+      item.appendChild(btn);
       body.appendChild(item);
     }
   }
@@ -15581,8 +15622,20 @@ function openDatepick(id){
   document.body.style.overflow='hidden';
 }
 
+function cleanupDatepickDrums(){
+  ['dpMonthDrum','dpDayDrum','dpYearDrum'].forEach(id=>{
+    const drum=document.getElementById(id);
+    if(drum&&typeof drum._cleanup==='function'){
+      drum._cleanup();
+    }
+  });
+}
+
 function buildDrum(id,items,selIdx){
-  const drum=document.getElementById(id);drum.innerHTML='';
+  const drum=document.getElementById(id);
+  if(!drum)return;
+  if(typeof drum._cleanup==='function')drum._cleanup();
+  drum.innerHTML='';
   const inner=document.createElement('div');inner.className='dps-inner';
   for(let i=0;i<2;i++){const s=document.createElement('div');s.className='dps-item';s.textContent='';inner.appendChild(s);}
   items.forEach((val,i)=>{const s=document.createElement('div');s.className='dps-item'+(i===selIdx?' selected':'');s.textContent=val;inner.appendChild(s);});
@@ -15603,13 +15656,33 @@ function buildDrum(id,items,selIdx){
   const onStart=y=>{startY=y;dragging=true;drum._active=true;inner.style.transition='none';};
   const onMove=y=>{if(!dragging||!drum._active)return;const dy=y-startY;inner.style.transform=`translateY(${startTranslate+dy}px)`;};
   const onEnd=y=>{if(!dragging||!drum._active)return;dragging=false;drum._active=false;const dy=y-startY;snap(Math.round(-(startTranslate+dy)/ITEM_H));};
-  drum.addEventListener('mousedown',e=>{onStart(e.clientY);e.preventDefault();});
-  drum.addEventListener('touchstart',e=>{onStart(e.touches[0].clientY);},{passive:true});
-  window.addEventListener('mousemove',e=>{if(drum._active)onMove(e.clientY);});
-  window.addEventListener('touchmove',e=>{if(drum._active)onMove(e.touches[0].clientY);},{passive:true});
-  window.addEventListener('mouseup',e=>{if(drum._active)onEnd(e.clientY);});
-  window.addEventListener('touchend',e=>{if(drum._active)onEnd(e.changedTouches[0].clientY);},{passive:true});
-  drum.addEventListener('wheel',e=>{e.preventDefault();snap(currentIdx+(e.deltaY>0?1:-1));},{passive:false});
+  const onMouseDown=e=>{onStart(e.clientY);e.preventDefault();};
+  const onTouchStart=e=>{onStart(e.touches[0].clientY);};
+  const onMouseMove=e=>{if(drum._active)onMove(e.clientY);};
+  const onTouchMove=e=>{if(drum._active)onMove(e.touches[0].clientY);};
+  const onMouseUp=e=>{if(drum._active)onEnd(e.clientY);};
+  const onTouchEnd=e=>{if(drum._active)onEnd(e.changedTouches[0].clientY);};
+  const onWheel=e=>{e.preventDefault();snap(currentIdx+(e.deltaY>0?1:-1));};
+
+  drum.addEventListener('mousedown',onMouseDown);
+  drum.addEventListener('touchstart',onTouchStart,{passive:true});
+  window.addEventListener('mousemove',onMouseMove);
+  window.addEventListener('touchmove',onTouchMove,{passive:true});
+  window.addEventListener('mouseup',onMouseUp);
+  window.addEventListener('touchend',onTouchEnd,{passive:true});
+  drum.addEventListener('wheel',onWheel,{passive:false});
+
+  drum._cleanup=()=>{
+    drum._active=false;
+    drum.removeEventListener('mousedown',onMouseDown);
+    drum.removeEventListener('touchstart',onTouchStart);
+    window.removeEventListener('mousemove',onMouseMove);
+    window.removeEventListener('touchmove',onTouchMove);
+    window.removeEventListener('mouseup',onMouseUp);
+    window.removeEventListener('touchend',onTouchEnd);
+    drum.removeEventListener('wheel',onWheel);
+    drum._cleanup=null;
+  };
 }
 
 function confirmDate(){
@@ -15624,7 +15697,7 @@ function confirmDate(){
   updateDreamEntry(dpId,{targetDate:dt.toISOString().slice(0,10),horizon:diff<=14?'this year':diff<=42?'3 years':'someday'});
   closeDatepick();
 }
-function closeDatepick(){document.getElementById('datepickOverlay').classList.remove('open');const anyOverlayOpen=document.getElementById('modalOverlay')?.classList.contains('open')||document.getElementById('dreamDashboardOverlay')?.classList.contains('open')||document.getElementById('deepDiveOverlay')?.classList.contains('open')||document.getElementById('capsuleOverlay')?.classList.contains('open')||document.getElementById('capsuleRevealOverlay')?.classList.contains('open')||document.getElementById('llOverlay')?.classList.contains('open')||document.getElementById('discoverOverlay')?.classList.contains('open')||document.getElementById('discoveryOverlay')?.classList.contains('open');if(!anyOverlayOpen)document.body.style.overflow='';dpId=null;}
+function closeDatepick(){cleanupDatepickDrums();document.getElementById('datepickOverlay').classList.remove('open');const anyOverlayOpen=document.getElementById('modalOverlay')?.classList.contains('open')||document.getElementById('dreamDashboardOverlay')?.classList.contains('open')||document.getElementById('deepDiveOverlay')?.classList.contains('open')||document.getElementById('capsuleOverlay')?.classList.contains('open')||document.getElementById('capsuleRevealOverlay')?.classList.contains('open')||document.getElementById('llOverlay')?.classList.contains('open')||document.getElementById('discoverOverlay')?.classList.contains('open')||document.getElementById('discoveryOverlay')?.classList.contains('open');if(!anyOverlayOpen)document.body.style.overflow='';dpId=null;}
 function closeDatepickOnBg(e){if(e.target===document.getElementById('datepickOverlay'))closeDatepick();}
 
 // ═══════════════════════════════════════════════════
@@ -15676,10 +15749,24 @@ function generateRequestId(){
 // CLAUDE API CALLS
 // ═══════════════════════════════════════════════════
 async function fetchWithRetry(url, options, maxRetries=2){
+  const timeoutMs=Math.max(1000,Number(options?.timeoutMs)||15000);
+  const baseOptions={...(options||{})};
+  delete baseOptions.timeoutMs;
   let lastError=null;
   for(let attempt=0;attempt<=maxRetries;attempt+=1){
+    const timeoutController=new AbortController();
+    const externalSignal=baseOptions.signal;
+    let abortRelay=null;
+    const timeoutId=setTimeout(()=>timeoutController.abort(new Error('Request timed out')),timeoutMs);
     try{
-      const response=await fetch(url,options);
+      if(externalSignal){
+        if(externalSignal.aborted)throw new DOMException('Aborted','AbortError');
+        abortRelay=()=>timeoutController.abort(new DOMException('Aborted','AbortError'));
+        externalSignal.addEventListener('abort',abortRelay,{once:true});
+      }
+      const response=await fetch(url,{...baseOptions,signal:timeoutController.signal});
+      clearTimeout(timeoutId);
+      if(externalSignal&&abortRelay)externalSignal.removeEventListener('abort',abortRelay);
       if(response.ok)return response;
       if((response.status===529||response.status===503) && attempt<maxRetries){
         await new Promise(resolve=>setTimeout(resolve,(attempt+1)*1000));
@@ -15687,6 +15774,8 @@ async function fetchWithRetry(url, options, maxRetries=2){
       }
       return response;
     }catch(err){
+      clearTimeout(timeoutId);
+      if(externalSignal&&abortRelay)externalSignal.removeEventListener('abort',abortRelay);
       lastError=err;
       if(attempt<maxRetries){
         await new Promise(resolve=>setTimeout(resolve,(attempt+1)*800));
