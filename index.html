@@ -2233,6 +2233,9 @@ body.auth-welcome-active .auth-gate-card {
 
 .community-dream-track {
   position:relative;
+}
+.community-dream-scroll {
+  position:relative;
   overflow:hidden;
   border:1px solid var(--border);
   border-radius:14px;
@@ -2296,7 +2299,7 @@ body.auth-welcome-active .auth-gate-card {
   animation-direction:var(--community-drift-direction);
 }
 .community-dream-rail#communityDreamRailA { padding-left:14px; }
-.community-dream-track:hover .community-dream-rail,
+.community-dream-scroll:hover .community-dream-rail,
 .community-dream-card:hover { animation-play-state:paused; }
 .community-dream-card {
   width:min(320px, 72vw);
@@ -4569,7 +4572,7 @@ body.auth-welcome-active .auth-gate-card {
   .deepdive-question { font-size:18px; }
   .capsule-reveal-title { font-size:24px; }
   .community-dream-head { flex-direction:column; align-items:flex-start; }
-  .community-dream-track { overflow-x:auto; -webkit-overflow-scrolling:touch; scroll-snap-type:x proximity; }
+  .community-dream-scroll { overflow-x:auto; -webkit-overflow-scrolling:touch; scroll-snap-type:x proximity; }
   .community-dream-rail { animation:none; padding-right:14px; }
   .community-dream-rail#communityDreamRailB { display:none; }
   .community-dream-card { width:min(300px,78vw); scroll-snap-align:start; }
@@ -5922,11 +5925,13 @@ body::before { animation: ambientDrift 18s ease-in-out infinite; }
     <div class="community-dream-track" id="communityDreamTrack">
       <button class="community-dream-nav left" id="communityDreamNavLeft" type="button" aria-label="Show previous dreams" onclick="flipCommunityDreamDirection(-1)">←</button>
       <button class="community-dream-nav right" id="communityDreamNavRight" type="button" aria-label="Show next dreams" onclick="flipCommunityDreamDirection(1)">→</button>
-      <div class="community-dream-fade left" aria-hidden="true"></div>
-      <div class="community-dream-fade right" aria-hidden="true"></div>
-      <div class="community-dream-rail" id="communityDreamRailA"></div>
-      <div class="community-dream-rail" id="communityDreamRailB" aria-hidden="true"></div>
-      <div class="community-dream-new-hint" id="communityDreamNewHint" aria-live="polite">new dreams →</div>
+      <div class="community-dream-scroll" id="communityDreamScroll">
+        <div class="community-dream-fade left" aria-hidden="true"></div>
+        <div class="community-dream-fade right" aria-hidden="true"></div>
+        <div class="community-dream-rail" id="communityDreamRailA"></div>
+        <div class="community-dream-rail" id="communityDreamRailB" aria-hidden="true"></div>
+        <div class="community-dream-new-hint" id="communityDreamNewHint" aria-live="polite">new dreams →</div>
+      </div>
     </div>
   </section>
 
@@ -9852,15 +9857,15 @@ function setCommunityDreamDirection(direction=1){
 }
 
 function nudgeCommunityDreamTrack(direction=1){
-  const track=document.getElementById('communityDreamTrack');
-  if(!track)return;
-  const maxScroll=Math.max(0,track.scrollWidth-track.clientWidth);
+  const scroll=document.getElementById('communityDreamScroll');
+  if(!scroll)return;
+  const maxScroll=Math.max(0,scroll.scrollWidth-scroll.clientWidth);
   if(maxScroll<2)return;
-  const step=Math.max(220,Math.round(track.clientWidth*0.72));
-  let next=track.scrollLeft+(direction<0?-step:step);
+  const step=Math.max(220,Math.round(scroll.clientWidth*0.72));
+  let next=scroll.scrollLeft+(direction<0?-step:step);
   if(next<0)next=maxScroll;
   if(next>maxScroll)next=0;
-  track.scrollTo({left:next,behavior:'smooth'});
+  scroll.scrollTo({left:next,behavior:'smooth'});
 }
 
 function flipCommunityDreamDirection(direction=1){
