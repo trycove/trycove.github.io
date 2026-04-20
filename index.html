@@ -3229,7 +3229,161 @@ body.auth-welcome-active .auth-gate-card {
 .cf-tab { font-size:10px;letter-spacing:0.1em;text-transform:uppercase;padding:6px 13px;border-radius:4px;background:transparent;border:1px solid var(--border);color:var(--text-muted);cursor:pointer;white-space:nowrap;transition:all .2s;display:flex;align-items:center;gap:5px;font-weight:500; }
 .cf-tab:hover { border-color:var(--border-hi);color:var(--text-dim); }
 .cf-tab.active { border-color:var(--rose);color:var(--rose);background:rgba(200,118,106,0.05);box-shadow:none; }
-.cats-grid { display:flex;flex-direction:column;gap:18px; }
+.masonry { columns:2;column-gap:12px;width:100%; }
+.dream-card {
+  break-inside:avoid;
+  margin:0 0 12px;
+  display:inline-block;
+  width:100%;
+  padding:14px 14px 12px;
+  border-radius:18px;
+  border:1px solid var(--border);
+  background:linear-gradient(180deg, color-mix(in srgb, var(--surface) 92%, var(--card-color) 8%), var(--surface));
+  box-shadow:0 1px 0 rgba(255,255,255,0.4) inset, 0 10px 30px rgba(0,0,0,0.06);
+  position:relative;
+  overflow:hidden;
+  animation:riseIn 0.5s cubic-bezier(.16,1,.3,1) forwards;
+  transition:transform .22s ease, box-shadow .22s ease, border-color .22s ease;
+}
+.dream-card:hover {
+  transform:translateY(-2px);
+  border-color:var(--blush-light);
+  box-shadow:0 6px 20px var(--shadow-md), 0 0 0 1px rgba(200,118,106,0.07), 0 4px 16px color-mix(in srgb, var(--card-color) 12%, transparent);
+}
+.dream-card-top {
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:10px;
+  margin-bottom:12px;
+}
+.dream-card-swatch {
+  width:6px;
+  height:6px;
+  border-radius:999px;
+  flex-shrink:0;
+  margin-top:7px;
+  background:var(--card-color);
+  box-shadow:0 0 0 2px color-mix(in srgb, var(--card-color) 16%, transparent);
+}
+.dream-card-delete {
+  border:none;
+  background:transparent;
+  color:var(--text-faint);
+  cursor:pointer;
+  font-size:14px;
+  line-height:1;
+  padding:2px 4px;
+  transition:color .2s, transform .2s;
+}
+.dream-card-delete:hover { color:var(--rose); transform:scale(1.05); }
+.dream-card-media {
+  width:100%;
+  border-radius:14px;
+  overflow:hidden;
+  margin-bottom:12px;
+  background:var(--surface2);
+  border:1px solid rgba(0,0,0,0.04);
+}
+.dream-card-media img {
+  display:block;
+  width:100%;
+  max-height:240px;
+  object-fit:cover;
+}
+.dream-card-domain {
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  margin-bottom:8px;
+  font-size:10px;
+  letter-spacing:0.16em;
+  text-transform:uppercase;
+  color:var(--text-muted);
+  font-weight:600;
+}
+.dream-card-domain::before {
+  content:'';
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  background:var(--card-color);
+  box-shadow:0 0 0 2px color-mix(in srgb, var(--card-color) 16%, transparent);
+}
+.dream-card-text {
+  font-family:'Lora',Georgia,serif;
+  font-size:15px;
+  font-style:italic;
+  line-height:1.72;
+  color:var(--text-mid);
+  margin:0;
+}
+.dream-card-footer {
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:10px;
+  margin-top:12px;
+  flex-wrap:wrap;
+}
+.dream-card-footer-left,
+.dream-card-footer-right {
+  display:flex;
+  align-items:center;
+  gap:8px;
+  flex-wrap:wrap;
+  min-width:0;
+}
+.dream-card-pill-wrap { position:relative; z-index:1; }
+.dream-card-pill {
+  font-size:10px;
+  letter-spacing:0.08em;
+  text-transform:uppercase;
+  padding:5px 11px 5px 12px;
+  border-radius:999px;
+  cursor:pointer;
+  transition:all .2s;
+  border:1px solid var(--border);
+  color:var(--text-dim);
+  background:color-mix(in srgb, var(--surface2) 86%, var(--petal) 14%);
+  line-height:1;
+  white-space:nowrap;
+  display:flex;
+  align-items:center;
+  gap:5px;
+  user-select:none;
+  font-weight:500;
+}
+.dream-card-pill:hover { border-color:var(--blush-light); color:var(--text); }
+.dream-card-pill .caret { font-size:8px; opacity:0.55; transition:transform .2s; }
+.dream-card-pill-wrap.open .caret { transform:rotate(180deg); }
+.dream-card-dreambox {
+  font-size:10px;
+  letter-spacing:0.08em;
+  text-transform:uppercase;
+  padding:6px 12px;
+  border-radius:999px;
+  border:1px solid var(--rose);
+  color:var(--rose);
+  background:transparent;
+  cursor:pointer;
+  transition:all .2s;
+  white-space:nowrap;
+  font-weight:500;
+}
+.dream-card-dreambox:hover { background:rgba(200,118,106,0.07); box-shadow:var(--glow-rose-sm); }
+.dream-card .cdr-status-pop,
+.dream-card .cdr-horizon-pop {
+  position:absolute;
+  top:calc(100% + 8px);
+  left:0;
+}
+.dream-card .cdr-horizon-pop { left:auto; right:0; }
+.dream-card .cdr-status-wrap,
+.dream-card .cdr-horizon-wrap { position:relative; }
+@media (max-width:640px) {
+  .masonry { columns:1; }
+}
 .timeline-view { padding:20px 0; }
 .timeline-groups { display:flex;flex-direction:column;gap:24px; }
 .timeline-group-title { font-size:14px;font-weight:600;color:var(--text);margin-bottom:12px;text-transform:uppercase;letter-spacing:0.1em; }
@@ -6151,7 +6305,7 @@ body::before { animation: ambientDrift 18s ease-in-out infinite; }
         <button class="cf-tab" data-filter="stale" onclick="filterCats(this,'stale')">Stale</button>
       </div>
     </div>
-    <div class="cats-grid" id="catsGrid"></div>
+    <div class="masonry" id="catsGrid"></div>
     <div class="timeline-view" id="timelineView" style="display:none;">
       <!-- Timeline content will be populated here -->
     </div>
@@ -11240,7 +11394,7 @@ function revealNewDreamInChapters(domainKey=''){
   }
   if(hadFilters)render(false);
   if(domainKey){
-    requestAnimationFrame(()=>document.querySelector(`.cat-card[data-domkey="${domainKey}"]`)?.classList.add('expanded'));
+    requestAnimationFrame(()=>document.querySelector(`.dream-card[data-domain="${domainKey}"]`)?.scrollIntoView({behavior:'smooth',block:'center'}));
   }
 }
 
@@ -12666,7 +12820,7 @@ function addSelectedDiscoveryDreams(){
   closeDiscoveryFlow();
   setView('chapters');
   requestAnimationFrame(()=>{
-    [...addedDomains].forEach(domainKey=>document.querySelector(`.cat-card[data-domkey="${domainKey}"]`)?.classList.add('expanded'));
+    [...addedDomains].forEach(domainKey=>document.querySelector(`.dream-card[data-domain="${domainKey}"]`)?.scrollIntoView({behavior:'smooth',block:'center'}));
   });
 }
 function renderDiscoveryFlow(){
@@ -13337,8 +13491,8 @@ function openNextActionFromRecommendation(dreamId){
 
   const revealTarget=()=>{
     if(typeof render==='function')render(true);
-    const card=document.querySelector(`.cat-card[data-domkey="${dream.domain}"]`);
-    if(card&&!card.classList.contains('expanded'))card.classList.add('expanded');
+    const card=document.querySelector(`.dream-card[data-dream-id="${dream.id}"]`)||document.querySelector(`.dream-card[data-domain="${dream.domain}"]`);
+    if(card)card.scrollIntoView({behavior:'smooth',block:'center'});
     markChapterOpenedInSession();
     const row=document.getElementById(`na-${dream.id}`)||document.getElementById(`row-${dream.id}`);
     if(row)row.scrollIntoView({behavior:'smooth',block:'center'});
@@ -13678,6 +13832,77 @@ function buildDreamRowHTML(d,dom,now){
         </div>`;
 }
 
+function buildDreamCardHTML(d,dom,now,delay=0){
+  const st=d.status||'dreaming';
+  const stLabel={dreaming:'Dreaming',active:'In progress',done:'Achieved'}[st]||'Dreaming';
+  const horizonLabel=d.targetDate?formatHorizonDate(d):getHorizonLabel(d.horizon);
+  const age=(now-new Date(d.createdAt).getTime())/(1000*60*60*24);
+  const isStale=age>30&&st==='dreaming';
+  const imageMarkup=d.imageUrl
+    ? `<div class="dream-card-media"><img src="${esc(d.imageUrl)}" alt="Dream image for ${esc(dom.label)}"></div>`
+    : '';
+  return `
+    <article class="dream-card${isStale?' stale':''}" data-dream-id="${esc(d.id)}" data-domain="${esc(d.domain)}" style="--card-color:${dom.color};animation-delay:${delay*45}ms">
+      <div class="dream-card-top">
+        <span class="dream-card-swatch" aria-hidden="true"></span>
+        <button class="dream-card-delete" type="button" onclick="event.stopPropagation();removeDream('${esc(d.id)}','${esc(d.domain)}')" title="Remove">✕</button>
+      </div>
+      ${imageMarkup}
+      <div class="dream-card-domain">${dom.label}</div>
+      <p class="dream-card-text">${esc(d.text)}</p>
+      <div class="dream-card-footer">
+        <div class="dream-card-footer-left">
+          <div class="cdr-status-wrap dream-card-pill-wrap" id="sw-${d.id}" onclick="event.stopPropagation()">
+            <button class="cdr-status dream-card-pill ${st}" id="status-${d.id}" onclick="event.stopPropagation();toggleStatusPop('${d.id}',event)">
+              ${stLabel} <span class="caret">▾</span>
+            </button>
+            <div class="cdr-status-pop" id="sp-${d.id}">
+              <div class="cdr-pop-opt ${st==='dreaming'?'selected':''}" onclick="setStatus('${d.id}','dreaming')">
+                <span class="cdr-pop-dot dot-dreaming"></span>
+                <div><div class="cdr-pop-label">Dreaming</div><div class="cdr-pop-desc">Still an aspiration</div></div>
+              </div>
+              <div class="cdr-pop-opt ${st==='active'?'selected':''}" onclick="setStatus('${d.id}','active')">
+                <span class="cdr-pop-dot dot-active"></span>
+                <div><div class="cdr-pop-label">In progress</div><div class="cdr-pop-desc">Actively working on this</div></div>
+              </div>
+              <div class="cdr-pop-opt ${st==='done'?'selected':''}" onclick="setStatus('${d.id}','done')">
+                <span class="cdr-pop-dot dot-done"></span>
+                <div><div class="cdr-pop-label">Achieved</div><div class="cdr-pop-desc">This one is real now</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="dream-card-footer-right">
+          <div class="cdr-horizon-wrap dream-card-pill-wrap" id="hw-${d.id}" onclick="event.stopPropagation()">
+            <button class="cdr-horizon dream-card-pill" id="horizon-${d.id}" onclick="event.stopPropagation();toggleHorizonPop('${d.id}',event)">
+              ${horizonLabel} <span class="caret">▾</span>
+            </button>
+            <div class="cdr-horizon-pop" id="hp-${d.id}">
+              <div class="cdr-hz-opt ${(d.horizon||'someday')==='this year'?'selected':''}" onclick="setHorizon('${d.id}','this year')">
+                <span class="cdr-hz-icon">◈</span>
+                <div class="cdr-hz-text"><div class="cdr-hz-label">This year</div><div class="cdr-hz-desc">Within the next 12 months</div></div>
+              </div>
+              <div class="cdr-hz-opt ${(d.horizon||'someday')==='3 years'?'selected':''}" onclick="setHorizon('${d.id}','3 years')">
+                <span class="cdr-hz-icon">◇</span>
+                <div class="cdr-hz-text"><div class="cdr-hz-label">3 years</div><div class="cdr-hz-desc">Medium-term horizon</div></div>
+              </div>
+              <div class="cdr-hz-opt ${(d.horizon||'someday')==='someday'?'selected':''}" onclick="setHorizon('${d.id}','someday')">
+                <span class="cdr-hz-icon">○</span>
+                <div class="cdr-hz-text"><div class="cdr-hz-label">Someday</div><div class="cdr-hz-desc">No timeline yet</div></div>
+              </div>
+              <div class="cdr-hz-divider"></div>
+              <div class="cdr-hz-custom" onclick="closeAllPops();openDatepick('${d.id}')">
+                <span class="cdr-hz-custom-icon">◷</span>
+                <span class="cdr-hz-custom-label">Set a specific date →</span>
+              </div>
+            </div>
+          </div>
+          <button class="dream-card-dreambox" type="button" onclick="event.stopPropagation();openDreamDashboard('${d.id}')">Dreambox →</button>
+        </div>
+      </div>
+    </article>`;
+}
+
 function renderTimeline(){
   const timeline=document.getElementById('timelineView');
   timeline.innerHTML=`
@@ -13879,7 +14104,6 @@ function render(rebuildTabs=true){
     }
   }else filterBar.style.display='none';
 
-  const expandedKeys=new Set([...document.querySelectorAll('.cat-card.expanded')].map(c=>c.dataset.domkey));
   grid.innerHTML='';
   let delay=0;
 
@@ -13892,70 +14116,25 @@ function render(rebuildTabs=true){
   for(const[dk,dd]of sortedGroups){
     if(domainFilter !== 'all' && domainFilter !== dk) continue;
     const dom=DomainRegistry.get(dk);
-    const isExp=expandedKeys.has(dk);
     let filteredDd = dd;
     if(statusFilter !== 'all'){
       filteredDd = dd.filter(d => {
         if(statusFilter === 'stale'){
           const age = (now - new Date(d.createdAt).getTime()) / (1000*60*60*24);
           return age > 30 && d.status === 'dreaming';
-        }else{
-          return d.status === statusFilter;
         }
+        return d.status === statusFilter;
       });
     }
     if(searchFilter){
       filteredDd = filteredDd.filter(d => d.text.toLowerCase().includes(searchFilter));
     }
-    if(filteredDd.length === 0) continue; // hide card if no dreams match filters
-    const card=document.createElement('div');
-    card.className=`cat-card${isExp?' expanded':''}`;
-    card.dataset.domkey=dk;
-    card.style.animationDelay=`${delay*55}ms`;
-    card.style.setProperty('--card-color', dom.color);
-
-    const doneCount=filteredDd.filter(d=>d.status==='done').length;
-    const activeCount=filteredDd.filter(d=>d.status==='active').length;
-    const progressPct=filteredDd.length>0?Math.round(((doneCount+activeCount*.5)/filteredDd.length)*100):0;
-    const headerCountLabel=doneCount>0
-      ? `${doneCount} done`
-      : activeCount>0
-        ? `${activeCount} in progress`
-        : `${filteredDd.length} dream${filteredDd.length!==1?'s':''}`;
-    const headerCountClass=doneCount>0?'cat-count is-done':'cat-count';
-
-    const dreamRows=filteredDd.map(d=>buildDreamRowHTML(d,dom,now)).join('');
-
-    card.innerHTML=`
-      <div class="cat-card-inner">
-        <div class="cat-head" onclick="toggleCatCard(this.closest('.cat-card'))">
-          <div class="cat-head-swatch" aria-hidden="true"></div>
-          <div class="cat-head-right">
-            <div class="cat-head-body">
-              <div class="cat-name">${dom.label}</div>
-              <div class="${headerCountClass}" id="count-${dk}">${headerCountLabel}</div>
-            </div>
-            <div class="cat-head-actions">
-              <span class="cat-chevron">▾</span>
-            </div>
-          </div>
-        </div>
-        <div class="cat-progress"><div class="cat-progress-fill" style="width:${progressPct}%"></div></div>
-        <div class="cat-dreams-list">
-          ${dreamRows}
-          <div class="cat-add-row" onclick="openQuickAdd(event,'${dk}')">
-            <span class="cat-add-icon">+</span>
-            <span class="cat-add-label">Add a dream to ${dom.label}</span>
-          </div>
-          <div class="cat-quick-add" id="quick-${dk}">
-            <input class="cat-quick-input" id="quick-input-${dk}" maxlength="1800" placeholder="Another dream for this chapter…" onkeydown="quickAddKey(event,'${dk}')">
-            <button class="cat-quick-submit" onclick="submitQuickAdd('${dk}')">Add →</button>
-            <button class="cat-quick-cancel" onclick="closeQuickAdd('${dk}')">✕</button>
-          </div>
-        </div>
-      </div>`;
-    grid.appendChild(card);
-    delay++;
+    if(filteredDd.length === 0) continue;
+    filteredDd.forEach(d=>{
+      const card=document.createElement('div');
+      card.innerHTML=buildDreamCardHTML(d,dom,now,delay++).trim();
+      grid.appendChild(card.firstElementChild);
+    });
   }
 
   if(!grid.children.length&&(domainFilter!=='all'||statusFilter!=='all'||searchFilter)){
@@ -15517,24 +15696,7 @@ function submitQuickAdd(dk){
   if(inp)inp.value='';
   revealNewDreamInChapters(dk);
   maybeShowFirstDreamNote(prevCount);
-  const card=document.querySelector(`.cat-card[data-domkey="${dk}"]`);
-  if(card){
-    card.classList.add('expanded');
-    const quickRow=card.querySelector(`#quick-${dk}`);
-    if(quickRow)quickRow.classList.add('open');
-    const liveQuickSubmit=quickRow?.querySelector('.cat-quick-submit');
-    if(liveQuickSubmit){
-      const originalLabel=liveQuickSubmit.textContent;
-      liveQuickSubmit.classList.add('success');
-      liveQuickSubmit.textContent='✓ Added';
-      liveQuickSubmit.disabled=true;
-      setTimeout(()=>{
-        liveQuickSubmit.classList.remove('success');
-        liveQuickSubmit.textContent=originalLabel;
-        liveQuickSubmit.disabled=false;
-      },900);
-    }
-  }
+  requestAnimationFrame(()=>document.querySelector(`.dream-card[data-domain="${dk}"]`)?.scrollIntoView({behavior:'smooth',block:'center'}));
 }
 
 function showAddDreamSuccess(){
@@ -15572,7 +15734,7 @@ async function addDream(){
   seedPlaceholderLockedByConfessional=false;
   rotateSeed();
   if(added?.id)scheduleDreamArticulationMoment(added.id,'main-input');
-  const card=document.querySelector(`.cat-card[data-domkey="${dk}"]`);if(card)card.classList.add('expanded');
+  requestAnimationFrame(()=>document.querySelector(`.dream-card[data-domain="${dk}"]`)?.scrollIntoView({behavior:'smooth',block:'center'}));
 }
 
 async function expandDream(){
@@ -16067,7 +16229,7 @@ function addFromImage(){
   });
   maybeShowFirstDreamNote(prevCount);
   clearImageResult();
-  const card=document.querySelector(`.cat-card[data-domkey="${dk}"]`);if(card)card.classList.add('expanded');
+  requestAnimationFrame(()=>document.querySelector(`.dream-card[data-domain="${dk}"]`)?.scrollIntoView({behavior:'smooth',block:'center'}));
 }
 
 // ═══════════════════════════════════════════════════
@@ -16150,7 +16312,7 @@ function addDreamFromRec(dk,text){
   const prevCount=dreams.length;
   addDreamEntry({id:Date.now().toString(),text,domain:dk,status:'dreaming',horizon:'someday',nextAction:'',nextActionSaved:false,createdAt:new Date().toISOString()});
   maybeShowFirstDreamNote(prevCount);
-  const card=document.querySelector(`.cat-card[data-domkey="${dk}"]`);if(card)card.classList.add('expanded');
+  requestAnimationFrame(()=>document.querySelector(`.dream-card[data-domain="${dk}"]`)?.scrollIntoView({behavior:'smooth',block:'center'}));
 }
 function closeDiscover(){document.getElementById('discoverOverlay').classList.remove('open');}
 function closeDiscoverOnBg(e){if(e.target===document.getElementById('discoverOverlay'))closeDiscover();}
