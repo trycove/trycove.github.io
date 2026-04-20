@@ -3384,78 +3384,9 @@ body.auth-welcome-active .auth-gate-card {
 .dream-card .cdr-status-wrap,
 .dream-card .cdr-horizon-wrap { position:relative; }
 
-/* // ── SONDER LAYER ── */
-.sonder-community {
-  margin:0 0 12px;
-  border:1px solid color-mix(in srgb, var(--border) 88%, transparent);
-  border-radius:12px;
-  overflow:hidden;
-  background:transparent;
-}
-.sonder-community-scroll {
-  position:relative;
-  overflow:hidden;
-  width:100%;
-}
-.sonder-community-scroll::before,
-.sonder-community-scroll::after {
-  content:'';
-  position:absolute;
-  top:0;
-  bottom:0;
-  width:22px;
-  pointer-events:none;
-  z-index:2;
-}
-.sonder-community-scroll::before { left:0;background:linear-gradient(90deg,var(--surface),transparent); }
-.sonder-community-scroll::after { right:0;background:linear-gradient(270deg,var(--surface),transparent); }
-.sonder-community-track {
-  display:flex;
-  align-items:center;
-  width:max-content;
-  min-width:100%;
-  padding:7px 8px;
-}
-.sonder-community-rail {
-  display:flex;
-  align-items:center;
-  gap:8px;
-  flex-shrink:0;
-  width:max-content;
-  animation:sonderTickerDrift var(--sonder-ticker-duration,40s) linear infinite;
-}
-.sonder-community:hover .sonder-community-rail { animation-play-state:paused; }
-.sonder-community-pill {
-  border:1px solid color-mix(in srgb, var(--border) 80%, transparent);
-  border-radius:999px;
-  background:transparent;
-  color:var(--text-muted);
-  font-family:'DM Sans',sans-serif;
-  font-size:12px;
-  line-height:1.25;
-  letter-spacing:0.005em;
-  padding:5px 10px;
-  display:inline-flex;
-  align-items:center;
-  gap:7px;
-  white-space:nowrap;
-  cursor:pointer;
-  transition:border-color .18s,color .18s;
-}
-.sonder-community-pill:hover { border-color:var(--border-hi);color:var(--text-dim); }
-.sonder-community-loc { opacity:.82; }
-.sonder-community-dot { opacity:.48; }
-.sonder-community-text { max-width:min(52vw,420px);overflow:hidden;text-overflow:ellipsis; }
-
-@keyframes sonderTickerDrift {
-  from { transform:translateX(0); }
-  to { transform:translateX(-50%); }
-}
-
 @media (max-width:640px) {
   .masonry { grid-template-columns:1fr; }
   .masonry-column.sonder-depth { transform:none !important; }
-  .sonder-community { display:none !important; }
   .sonder-sound-toggle { display:none !important; }
 }
 .timeline-view { padding:20px 0; }
@@ -6420,14 +6351,6 @@ body::before { animation: ambientDrift 18s ease-in-out infinite; }
         <button class="cf-tab" data-filter="stale" onclick="filterCats(this,'stale')">Stale</button>
       </div>
     </div>
-    <div class="sonder-community" id="sonderCommunity" style="display:none;">
-      <div class="sonder-community-scroll" id="sonderCommunityScroll">
-        <div class="sonder-community-track">
-          <div class="sonder-community-rail" id="sonderCommunityRailA"></div>
-          <div class="sonder-community-rail" id="sonderCommunityRailB" aria-hidden="true"></div>
-        </div>
-      </div>
-    </div>
     <div class="masonry" id="catsGrid"></div>
     <div class="timeline-view" id="timelineView" style="display:none;">
       <!-- Timeline content will be populated here -->
@@ -9381,7 +9304,6 @@ const STORAGE_KEY_SEED_SESSION_COUNT = 'qSeedSessionCount9';
 const STORAGE_KEY_CONFESSIONAL_SEEDS_USED = 'qConfessionalSeedsUsed9';
 const STORAGE_KEY_NIGHT_GREETING_SEEN = 'qNightGreetingSeen9';
 const SUPABASE_SYNC_TABLE = 'dream_sync_state';
-const SUPABASE_STREAM_TABLE = 'dream_stream_entries';
 const SONDER_AMBIENT_AUDIO_URL = 'https://cdn.pixabay.com/audio/2022/03/10/audio_1e5e3db5b4.mp3';
 const SUPABASE_STORAGE_BUCKET = 'dream-media';
 const SUPABASE_METADATA_SYNC_KEY = 'dream_sync_fallback_v1';
@@ -10295,148 +10217,6 @@ function isSonderDesktop(){
   return window.innerWidth > 640;
 }
 
-function nextSonderLocationFallback(){
-  const loc=SONDER_LOCATION_FALLBACKS[sonderLocationCursor % SONDER_LOCATION_FALLBACKS.length];
-  sonderLocationCursor+=1;
-  return loc;
-}
-
-function truncateSonderText(text='',maxLen=48){
-  const clean=String(text||'').replace(/\s+/g,' ').trim();
-  if(clean.length<=maxLen)return clean;
-  return `${clean.slice(0,maxLen).trim()}…`;
-}
-
-function normalizeSonderEntry(entry={}){
-  const dreamText=String(entry?.dream_text||entry?.text||'').replace(/\s+/g,' ').trim();
-  if(!dreamText)return null;
-  const rawLoc=String(entry?.city||entry?.location||'').trim();
-  const location=rawLoc
-    ? (/^someone\s/i.test(rawLoc)?rawLoc:`someone in ${rawLoc}`)
-    : nextSonderLocationFallback();
-  return {
-    dream_text:dreamText,
-    domain:String(entry?.domain||'growth').trim()||'growth',
-    location,
-    created_at:String(entry?.created_at||'')
-  };
-}
-
-function buildSonderFallbackEntries(){
-  return SEEDED_COMMUNITY_DREAMS
-    .slice(0,40)
-    .map(item=>normalizeSonderEntry({
-      dream_text:item?.text,
-      domain:item?.domain,
-      location:item?.location,
-      created_at:new Date().toISOString()
-    }))
-    .filter(Boolean);
-}
-
-async function fetchSonderCommunityEntries(){
-  if(!supabaseClient)return buildSonderFallbackEntries();
-  try{
-    const { data, error } = await supabaseClient
-      .from(SUPABASE_STREAM_TABLE)
-      .select('dream_text,domain,created_at')
-      .eq('is_anonymized', true)
-      .order('created_at', { ascending:false })
-      .limit(40);
-    if(error||!Array.isArray(data)||!data.length)return buildSonderFallbackEntries();
-    const rows=data.map(normalizeSonderEntry).filter(Boolean);
-    return rows.length?rows:buildSonderFallbackEntries();
-  }catch{
-    return buildSonderFallbackEntries();
-  }
-}
-
-function buildSonderCommunityPillHtml(entry={}){
-  const normalized=normalizeSonderEntry(entry);
-  if(!normalized)return '';
-  const encoded=encodeCommunityDreamText(normalized.dream_text);
-  const clipped=truncateSonderText(normalized.dream_text,48);
-  return `<button class="sonder-community-pill" type="button" data-sonder-dream="${encoded}"><span class="sonder-community-loc">${esc(normalized.location)}</span><span class="sonder-community-dot">·</span><span class="sonder-community-text">${esc(clipped)}</span></button>`;
-}
-
-function bindSonderCommunityInteractions(){
-  if(sonderTickerBound)return;
-  const host=document.getElementById('sonderCommunity');
-  if(!host)return;
-  host.addEventListener('click',event=>{
-    const pill=event.target.closest('[data-sonder-dream]');
-    if(!pill)return;
-    const dreamInput=document.getElementById('dreamInput');
-    if(!dreamInput)return;
-    const text=decodeCommunityDreamText(String(pill.getAttribute('data-sonder-dream')||'')).trim();
-    if(!text)return;
-    dreamInput.value=text;
-    dreamInput.focus();
-    dreamInput.setSelectionRange(text.length,text.length);
-  });
-  sonderTickerBound=true;
-}
-
-function renderSonderCommunityTicker(entries=[]){
-  const host=document.getElementById('sonderCommunity');
-  const railA=document.getElementById('sonderCommunityRailA');
-  const railB=document.getElementById('sonderCommunityRailB');
-  if(!host||!railA||!railB)return;
-  const canShow=document.querySelector('.view-tab.active')?.dataset.view==='chapters';
-  const normalized=Array.isArray(entries)?entries.map(normalizeSonderEntry).filter(Boolean):[];
-  host.style.display=(canShow&&normalized.length)?'block':'none';
-  if(!normalized.length){
-    railA.innerHTML='';
-    railB.innerHTML='';
-    return;
-  }
-  const html=normalized.map(buildSonderCommunityPillHtml).filter(Boolean).join('');
-  railA.innerHTML=html;
-  railB.innerHTML=html;
-  host.style.setProperty('--sonder-ticker-duration','40s');
-  bindSonderCommunityInteractions();
-}
-
-function requestSonderCommunityTicker(force=false){
-  const maxAgeMs=1000*60*3;
-  const cachedOk=Date.now()-sonderTickerFetchedAt<maxAgeMs;
-  if(!force&&cachedOk&&sonderTickerEntries.length){
-    renderSonderCommunityTicker(sonderTickerEntries);
-    return;
-  }
-  if(sonderTickerPromise)return;
-  sonderTickerPromise=fetchSonderCommunityEntries()
-    .then(rows=>{
-      sonderTickerEntries=rows;
-      sonderTickerFetchedAt=Date.now();
-      renderSonderCommunityTicker(sonderTickerEntries);
-    })
-    .catch(()=>{
-      sonderTickerEntries=buildSonderFallbackEntries();
-      sonderTickerFetchedAt=Date.now();
-      renderSonderCommunityTicker(sonderTickerEntries);
-    })
-    .finally(()=>{sonderTickerPromise=null;});
-}
-
-async function maybePublishDreamToCommunityStream(dream){
-  if(!dream||!supabaseClient||!supabaseUser||!getCommunityStreamOptIn())return;
-  const dreamText=String(dream?.text||'').trim();
-  if(!dreamText)return;
-  try{
-    await supabaseClient
-      .from(SUPABASE_STREAM_TABLE)
-      .insert([{
-        user_id:supabaseUser.id,
-        dream_text:dreamText,
-        domain:String(dream?.domain||'growth')||'growth',
-        source:'opt_in',
-        is_anonymized:true
-      }]);
-    requestSonderCommunityTicker(true);
-  }catch{}
-}
-
 function runSonderParallaxFrame(){
   sonderParallaxRaf=0;
 }
@@ -10593,12 +10373,6 @@ let communityDreamLiveCount = 360 + Math.floor(Math.random()*41);
 let communityDreamCountTimer = null;
 let communityDreamDirection = 1;
 let communityDreamHoverHintTimer = null;
-const SONDER_LOCATION_FALLBACKS = ['someone at 2am','someone on a layover','someone nearby','someone you\'ll never meet'];
-let sonderLocationCursor = 0;
-let sonderTickerEntries = [];
-let sonderTickerPromise = null;
-let sonderTickerFetchedAt = 0;
-let sonderTickerBound = false;
 let sonderParallaxBound = false;
 let sonderParallaxRaf = 0;
 let sonderParallaxCurrent = 0;
@@ -11857,7 +11631,6 @@ function addDreamEntry(dreamObj){
   render(true);
   if(document.querySelector('.view-tab.active')?.dataset.view==='timeline')renderTimeline();
   if(dreamDashboardId===normalized.id)renderDreamDashboard();
-  void maybePublishDreamToCommunityStream(normalized);
   return normalized;
 }
 /** Removes a dream entry by id and returns the removed dream, if found. */
@@ -14431,7 +14204,6 @@ function render(rebuildTabs=true){
   const grid=document.getElementById('catsGrid');
   const filterBar=document.getElementById('catFilterBar');
   const controls=document.getElementById('catsControls');
-  const sonderCommunity=document.getElementById('sonderCommunity');
   const seedChips=document.getElementById('seedChips');
   const addBtn=document.getElementById('addBtn');
   const daysSinceFirst=getDaysSinceFirstSession();
@@ -14512,14 +14284,6 @@ function render(rebuildTabs=true){
       });
     }
   }else filterBar.style.display='none';
-
-  if(sonderCommunity){
-    const isChapterView=document.querySelector('.view-tab.active')?.dataset.view==='chapters';
-    sonderCommunity.style.display=isChapterView?'block':'none';
-  }
-  if(!sonderTickerEntries.length)sonderTickerEntries=buildSonderFallbackEntries();
-  renderSonderCommunityTicker(sonderTickerEntries);
-  requestSonderCommunityTicker();
 
   grid.innerHTML='';
   let delay=0;
