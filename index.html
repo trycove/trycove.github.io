@@ -3299,15 +3299,6 @@ body.auth-welcome-active .auth-gate-card {
   gap:10px;
   margin-bottom:12px;
 }
-.dream-card-swatch {
-  width:6px;
-  height:6px;
-  border-radius:999px;
-  flex-shrink:0;
-  margin-top:7px;
-  background:var(--card-color);
-  box-shadow:0 0 0 2px color-mix(in srgb, var(--card-color) 16%, transparent);
-}
 .dream-card-delete {
   border:none;
   background:transparent;
@@ -10065,7 +10056,7 @@ function renderDreamTypingEcho(rawText=''){
     echo.innerHTML='';
     return;
   }
-  const words=clean.split(' ').filter(Boolean).slice(-8);
+  const words=clean.split(' ').filter(Boolean).slice(-3);
   const freshStart=Math.max(0,words.length-2);
   echo.innerHTML=words.map((word,index)=>`<span class="dream-echo-word${index>=freshStart?' fresh':''}">${esc(word)}</span>`).join('');
   Array.from(echo.querySelectorAll('.dream-echo-word.fresh')).forEach(span=>{
@@ -11638,9 +11629,6 @@ function revealNewDreamInChapters(domainKey=''){
     allTab.classList.add('active');
   }
   if(hadFilters)render(false);
-  if(domainKey){
-    requestAnimationFrame(()=>document.querySelector(`.dream-card[data-domain="${domainKey}"]`)?.scrollIntoView({behavior:'smooth',block:'center'}));
-  }
 }
 
 let imageScans = loadScans();
@@ -13064,9 +13052,6 @@ function addSelectedDiscoveryDreams(){
   maybeShowFirstDreamNote(prevCount);
   closeDiscoveryFlow();
   setView('chapters');
-  requestAnimationFrame(()=>{
-    [...addedDomains].forEach(domainKey=>document.querySelector(`.dream-card[data-domain="${domainKey}"]`)?.scrollIntoView({behavior:'smooth',block:'center'}));
-  });
 }
 function renderDiscoveryFlow(){
   const content=document.getElementById('discoveryContent');
@@ -14090,7 +14075,6 @@ function buildDreamCardHTML(d,dom,now,delay=0){
   return `
     <article class="dream-card${isStale?' stale':''}" data-dream-id="${esc(d.id)}" data-domain="${esc(d.domain)}" style="--card-color:${dom.color};animation-delay:${delay*45}ms">
       <div class="dream-card-top">
-        <span class="dream-card-swatch" aria-hidden="true"></span>
         <button class="dream-card-delete" type="button" onclick="event.stopPropagation();removeDream('${esc(d.id)}','${esc(d.domain)}')" title="Remove">✕</button>
       </div>
       ${imageMarkup}
@@ -15961,7 +15945,6 @@ function submitQuickAdd(dk){
   if(inp)inp.value='';
   revealNewDreamInChapters(dk);
   maybeShowFirstDreamNote(prevCount);
-  requestAnimationFrame(()=>document.querySelector(`.dream-card[data-domain="${dk}"]`)?.scrollIntoView({behavior:'smooth',block:'center'}));
 }
 
 function showAddDreamSuccess(){
@@ -16002,7 +15985,6 @@ async function addDream(){
   seedPlaceholderLockedByConfessional=false;
   rotateSeed();
   if(added?.id)scheduleDreamArticulationMoment(added.id,'main-input');
-  requestAnimationFrame(()=>document.querySelector(`.dream-card[data-domain="${dk}"]`)?.scrollIntoView({behavior:'smooth',block:'center'}));
 }
 
 async function expandDream(){
@@ -16497,7 +16479,6 @@ function addFromImage(){
   });
   maybeShowFirstDreamNote(prevCount);
   clearImageResult();
-  requestAnimationFrame(()=>document.querySelector(`.dream-card[data-domain="${dk}"]`)?.scrollIntoView({behavior:'smooth',block:'center'}));
 }
 
 // ═══════════════════════════════════════════════════
@@ -16580,7 +16561,6 @@ function addDreamFromRec(dk,text){
   const prevCount=dreams.length;
   addDreamEntry({id:Date.now().toString(),text,domain:dk,status:'dreaming',horizon:'someday',nextAction:'',nextActionSaved:false,createdAt:new Date().toISOString()});
   maybeShowFirstDreamNote(prevCount);
-  requestAnimationFrame(()=>document.querySelector(`.dream-card[data-domain="${dk}"]`)?.scrollIntoView({behavior:'smooth',block:'center'}));
 }
 function closeDiscover(){document.getElementById('discoverOverlay').classList.remove('open');}
 function closeDiscoverOnBg(e){if(e.target===document.getElementById('discoverOverlay'))closeDiscover();}
