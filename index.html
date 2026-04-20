@@ -3389,36 +3389,52 @@ body.auth-welcome-active .auth-gate-card {
   margin:0 0 12px;
   border:1px solid color-mix(in srgb, var(--border) 88%, transparent);
   border-radius:12px;
-  background:transparent;
   overflow:hidden;
+  background:transparent;
 }
 .sonder-community-scroll {
+  position:relative;
+  overflow:hidden;
+  width:100%;
+}
+.sonder-community-scroll::before,
+.sonder-community-scroll::after {
+  content:'';
+  position:absolute;
+  top:0;
+  bottom:0;
+  width:22px;
+  pointer-events:none;
+  z-index:2;
+}
+.sonder-community-scroll::before { left:0;background:linear-gradient(90deg,var(--surface),transparent); }
+.sonder-community-scroll::after { right:0;background:linear-gradient(270deg,var(--surface),transparent); }
+.sonder-community-track {
   display:flex;
   align-items:center;
-  gap:10px;
   width:max-content;
   min-width:100%;
-  padding:8px 10px;
+  padding:7px 8px;
 }
 .sonder-community-rail {
   display:flex;
   align-items:center;
-  gap:10px;
-  width:max-content;
+  gap:8px;
   flex-shrink:0;
+  width:max-content;
   animation:sonderTickerDrift var(--sonder-ticker-duration,40s) linear infinite;
 }
 .sonder-community:hover .sonder-community-rail { animation-play-state:paused; }
 .sonder-community-pill {
-  border:1px solid color-mix(in srgb, var(--border) 82%, transparent);
+  border:1px solid color-mix(in srgb, var(--border) 80%, transparent);
+  border-radius:999px;
   background:transparent;
   color:var(--text-muted);
-  border-radius:999px;
   font-family:'DM Sans',sans-serif;
   font-size:12px;
-  line-height:1.3;
-  letter-spacing:0.01em;
-  padding:6px 10px;
+  line-height:1.25;
+  letter-spacing:0.005em;
+  padding:5px 10px;
   display:inline-flex;
   align-items:center;
   gap:7px;
@@ -3426,17 +3442,14 @@ body.auth-welcome-active .auth-gate-card {
   cursor:pointer;
   transition:border-color .18s,color .18s;
 }
-.sonder-community-pill:hover {
-  border-color:var(--border-hi);
-  color:var(--text-dim);
-}
-.sonder-community-loc { opacity:0.86; }
-.sonder-community-dot { opacity:0.5; }
-.sonder-community-text { max-width:380px;overflow:hidden;text-overflow:ellipsis; }
+.sonder-community-pill:hover { border-color:var(--border-hi);color:var(--text-dim); }
+.sonder-community-loc { opacity:.82; }
+.sonder-community-dot { opacity:.48; }
+.sonder-community-text { max-width:min(52vw,420px);overflow:hidden;text-overflow:ellipsis; }
 
 @keyframes sonderTickerDrift {
   from { transform:translateX(0); }
-  to { transform:translateX(calc(-50% - 5px)); }
+  to { transform:translateX(-50%); }
 }
 
 @media (max-width:640px) {
@@ -6409,8 +6422,10 @@ body::before { animation: ambientDrift 18s ease-in-out infinite; }
     </div>
     <div class="sonder-community" id="sonderCommunity" style="display:none;">
       <div class="sonder-community-scroll" id="sonderCommunityScroll">
-        <div class="sonder-community-rail" id="sonderCommunityRailA"></div>
-        <div class="sonder-community-rail" id="sonderCommunityRailB" aria-hidden="true"></div>
+        <div class="sonder-community-track">
+          <div class="sonder-community-rail" id="sonderCommunityRailA"></div>
+          <div class="sonder-community-rail" id="sonderCommunityRailB" aria-hidden="true"></div>
+        </div>
       </div>
     </div>
     <div class="masonry" id="catsGrid"></div>
@@ -10281,31 +10296,42 @@ function isSonderDesktop(){
 }
 
 function nextSonderLocationFallback(){
-  const item=SONDER_LOCATION_FALLBACKS[sonderLocationCursor % SONDER_LOCATION_FALLBACKS.length];
+  const loc=SONDER_LOCATION_FALLBACKS[sonderLocationCursor % SONDER_LOCATION_FALLBACKS.length];
   sonderLocationCursor+=1;
-  return item;
+  return loc;
 }
 
-function normalizeSonderLocation(raw=''){
-  const city=String(raw||'').trim();
-  if(!city)return nextSonderLocationFallback();
-  if(/^someone\s/i.test(city))return city;
-  return `someone in ${city}`;
-}
-
-function truncateSonderText(text='',max=48){
+function truncateSonderText(text='',maxLen=48){
   const clean=String(text||'').replace(/\s+/g,' ').trim();
-  if(clean.length<=max)return clean;
-  return `${clean.slice(0,max).trim()}…`;
+  if(clean.length<=maxLen)return clean;
+  return `${clean.slice(0,maxLen).trim()}…`;
+}
+
+function normalizeSonderEntry(entry={}){
+  const dreamText=String(entry?.dream_text||entry?.text||'').replace(/\s+/g,' ').trim();
+  if(!dreamText)return null;
+  const rawLoc=String(entry?.city||entry?.location||'').trim();
+  const location=rawLoc
+    ? (/^someone\s/i.test(rawLoc)?rawLoc:`someone in ${rawLoc}`)
+    : nextSonderLocationFallback();
+  return {
+    dream_text:dreamText,
+    domain:String(entry?.domain||'growth').trim()||'growth',
+    location,
+    created_at:String(entry?.created_at||'')
+  };
 }
 
 function buildSonderFallbackEntries(){
-  return SEEDED_COMMUNITY_DREAMS.slice(0,40).map(item=>({
-    dream_text:String(item?.text||'').trim(),
-    domain:String(item?.domain||'growth'),
-    created_at:new Date().toISOString(),
-    location:normalizeSonderLocation(item?.location||'')
-  })).filter(item=>item.dream_text);
+  return SEEDED_COMMUNITY_DREAMS
+    .slice(0,40)
+    .map(item=>normalizeSonderEntry({
+      dream_text:item?.text,
+      domain:item?.domain,
+      location:item?.location,
+      created_at:new Date().toISOString()
+    }))
+    .filter(Boolean);
 }
 
 async function fetchSonderCommunityEntries(){
@@ -10318,27 +10344,19 @@ async function fetchSonderCommunityEntries(){
       .order('created_at', { ascending:false })
       .limit(40);
     if(error||!Array.isArray(data)||!data.length)return buildSonderFallbackEntries();
-    return data
-      .map((item,idx)=>({
-        dream_text:String(item?.dream_text||'').trim(),
-        domain:String(item?.domain||'growth'),
-        created_at:String(item?.created_at||''),
-        location:normalizeSonderLocation(item?.city||'')
-      }))
-      .filter(item=>item.dream_text)
-      .slice(0,40);
+    const rows=data.map(normalizeSonderEntry).filter(Boolean);
+    return rows.length?rows:buildSonderFallbackEntries();
   }catch{
     return buildSonderFallbackEntries();
   }
 }
 
 function buildSonderCommunityPillHtml(entry={}){
-  const rawText=String(entry?.dream_text||'').trim();
-  if(!rawText)return '';
-  const encoded=encodeCommunityDreamText(rawText);
-  const loc=normalizeSonderLocation(entry?.location||'');
-  const clipped=truncateSonderText(rawText,48);
-  return `<button class="sonder-community-pill" type="button" data-sonder-dream="${encoded}"><span class="sonder-community-loc">${esc(loc)}</span><span class="sonder-community-dot">·</span><span class="sonder-community-text">${esc(clipped)}</span></button>`;
+  const normalized=normalizeSonderEntry(entry);
+  if(!normalized)return '';
+  const encoded=encodeCommunityDreamText(normalized.dream_text);
+  const clipped=truncateSonderText(normalized.dream_text,48);
+  return `<button class="sonder-community-pill" type="button" data-sonder-dream="${encoded}"><span class="sonder-community-loc">${esc(normalized.location)}</span><span class="sonder-community-dot">·</span><span class="sonder-community-text">${esc(clipped)}</span></button>`;
 }
 
 function bindSonderCommunityInteractions(){
@@ -10348,13 +10366,13 @@ function bindSonderCommunityInteractions(){
   host.addEventListener('click',event=>{
     const pill=event.target.closest('[data-sonder-dream]');
     if(!pill)return;
-    const input=document.getElementById('dreamInput');
-    if(!input)return;
+    const dreamInput=document.getElementById('dreamInput');
+    if(!dreamInput)return;
     const text=decodeCommunityDreamText(String(pill.getAttribute('data-sonder-dream')||'')).trim();
     if(!text)return;
-    input.value=text;
-    input.focus();
-    input.setSelectionRange(text.length,text.length);
+    dreamInput.value=text;
+    dreamInput.focus();
+    dreamInput.setSelectionRange(text.length,text.length);
   });
   sonderTickerBound=true;
 }
@@ -10364,11 +10382,15 @@ function renderSonderCommunityTicker(entries=[]){
   const railA=document.getElementById('sonderCommunityRailA');
   const railB=document.getElementById('sonderCommunityRailB');
   if(!host||!railA||!railB)return;
-  const hasEntries=Array.isArray(entries)&&entries.length>0;
-  const isChapterView=document.querySelector('.view-tab.active')?.dataset.view==='chapters';
-  host.style.display=(hasEntries&&isChapterView)?'block':'none';
-  if(!hasEntries)return;
-  const html=entries.map(buildSonderCommunityPillHtml).filter(Boolean).join('');
+  const canShow=document.querySelector('.view-tab.active')?.dataset.view==='chapters';
+  const normalized=Array.isArray(entries)?entries.map(normalizeSonderEntry).filter(Boolean):[];
+  host.style.display=(canShow&&normalized.length)?'block':'none';
+  if(!normalized.length){
+    railA.innerHTML='';
+    railB.innerHTML='';
+    return;
+  }
+  const html=normalized.map(buildSonderCommunityPillHtml).filter(Boolean).join('');
   railA.innerHTML=html;
   railB.innerHTML=html;
   host.style.setProperty('--sonder-ticker-duration','40s');
@@ -10376,16 +10398,16 @@ function renderSonderCommunityTicker(entries=[]){
 }
 
 function requestSonderCommunityTicker(force=false){
-  const maxAge=1000*60*3;
-  const fresh=Date.now()-sonderTickerFetchedAt<maxAge;
-  if(!force&&fresh&&sonderTickerEntries.length){
+  const maxAgeMs=1000*60*3;
+  const cachedOk=Date.now()-sonderTickerFetchedAt<maxAgeMs;
+  if(!force&&cachedOk&&sonderTickerEntries.length){
     renderSonderCommunityTicker(sonderTickerEntries);
     return;
   }
   if(sonderTickerPromise)return;
   sonderTickerPromise=fetchSonderCommunityEntries()
-    .then(entries=>{
-      sonderTickerEntries=entries.length?entries:buildSonderFallbackEntries();
+    .then(rows=>{
+      sonderTickerEntries=rows;
       sonderTickerFetchedAt=Date.now();
       renderSonderCommunityTicker(sonderTickerEntries);
     })
@@ -10407,26 +10429,25 @@ async function maybePublishDreamToCommunityStream(dream){
       .insert([{
         user_id:supabaseUser.id,
         dream_text:dreamText,
-        domain:String(dream?.domain||'growth'),
+        domain:String(dream?.domain||'growth')||'growth',
         source:'opt_in',
-        is_anonymized:true,
-        consented_at:new Date().toISOString()
+        is_anonymized:true
       }]);
     requestSonderCommunityTicker(true);
   }catch{}
 }
 
-function tickSonderParallax(){
+function runSonderParallaxFrame(){
   sonderParallaxRaf=0;
-  sonderParallaxCurrent += (sonderParallaxTarget - sonderParallaxCurrent) * 0.12;
+  sonderParallaxCurrent += (sonderParallaxTarget - sonderParallaxCurrent) * 0.11;
   const rightCol=document.querySelector('#catsGrid .masonry-column.sonder-depth');
   if(rightCol)rightCol.style.setProperty('--sonder-depth-offset', `${sonderParallaxCurrent.toFixed(2)}px`);
-  if(Math.abs(sonderParallaxTarget - sonderParallaxCurrent) > 0.12){
-    sonderParallaxRaf=requestAnimationFrame(tickSonderParallax);
+  if(Math.abs(sonderParallaxTarget - sonderParallaxCurrent) > 0.1){
+    sonderParallaxRaf=requestAnimationFrame(runSonderParallaxFrame);
   }
 }
 
-function queueSonderParallaxUpdate(){
+function updateSonderParallaxTarget(){
   if(!isSonderDesktop()){
     sonderParallaxTarget=0;
     sonderParallaxCurrent=0;
@@ -10435,18 +10456,16 @@ function queueSonderParallaxUpdate(){
     return;
   }
   sonderParallaxTarget = -window.scrollY * 0.08;
-  if(!sonderParallaxRaf)sonderParallaxRaf=requestAnimationFrame(tickSonderParallax);
+  if(!sonderParallaxRaf)sonderParallaxRaf=requestAnimationFrame(runSonderParallaxFrame);
 }
 
 function setupSonderMasonryParallax(){
-  const rightCol=document.querySelector('#catsGrid .masonry-column.sonder-depth');
-  if(!rightCol)return;
   if(!sonderParallaxBound){
-    window.addEventListener('scroll',queueSonderParallaxUpdate,{passive:true});
-    window.addEventListener('resize',queueSonderParallaxUpdate,{passive:true});
+    window.addEventListener('scroll',updateSonderParallaxTarget,{passive:true});
+    window.addEventListener('resize',updateSonderParallaxTarget,{passive:true});
     sonderParallaxBound=true;
   }
-  queueSonderParallaxUpdate();
+  updateSonderParallaxTarget();
 }
 
 function getSonderGlyphMarkup(active=false){
@@ -10466,19 +10485,20 @@ function setSonderAmbientPreferred(active){
 
 function syncSonderSoundToggle(active){
   const btn=document.getElementById('sonderSoundToggle');
-  const label=document.getElementById('sonderSoundLabel');
   const glyph=document.getElementById('sonderSoundGlyph');
-  if(!btn||!label||!glyph)return;
-  btn.classList.toggle('active',Boolean(active));
-  label.textContent=active?'Sounds on':'Sounds';
-  glyph.innerHTML=getSonderGlyphMarkup(Boolean(active));
+  const label=document.getElementById('sonderSoundLabel');
+  if(!btn||!glyph||!label)return;
+  const on=Boolean(active);
+  btn.classList.toggle('active',on);
+  glyph.innerHTML=getSonderGlyphMarkup(on);
+  label.textContent=on?'Sounds on':'Sounds';
 }
 
 function ensureSonderAmbientController(){
   if(sonderAmbientController)return sonderAmbientController;
-  const AudioCtx=window.AudioContext||window.webkitAudioContext;
-  if(!AudioCtx)return null;
-  const ctx=new AudioCtx();
+  const AudioContextCtor=window.AudioContext||window.webkitAudioContext;
+  if(!AudioContextCtor)return null;
+  const ctx=new AudioContextCtor();
   const gainNode=ctx.createGain();
   gainNode.gain.value=0;
   const audioEl=new Audio(SONDER_AMBIENT_AUDIO_URL);
@@ -10487,53 +10507,52 @@ function ensureSonderAmbientController(){
   const sourceNode=ctx.createMediaElementSource(audioEl);
   sourceNode.connect(gainNode);
   gainNode.connect(ctx.destination);
-  sonderAmbientController={ ctx, gainNode, audioEl, playing:false, stopTimer:0 };
+  sonderAmbientController={ctx,gainNode,audioEl,playing:false,stopTimer:0};
   return sonderAmbientController;
 }
 
 async function playSonderAmbientSound(){
-  const controller=ensureSonderAmbientController();
-  if(!controller)return;
-  if(controller.stopTimer){
-    clearTimeout(controller.stopTimer);
-    controller.stopTimer=0;
+  const ctl=ensureSonderAmbientController();
+  if(!ctl)return;
+  if(ctl.stopTimer){
+    clearTimeout(ctl.stopTimer);
+    ctl.stopTimer=0;
   }
-  await controller.ctx.resume();
-  await controller.audioEl.play();
-  const now=controller.ctx.currentTime;
-  controller.gainNode.gain.cancelScheduledValues(now);
-  controller.gainNode.gain.setValueAtTime(controller.gainNode.gain.value, now);
-  controller.gainNode.gain.linearRampToValueAtTime(1, now + 2);
-  controller.playing=true;
+  await ctl.ctx.resume();
+  await ctl.audioEl.play();
+  const now=ctl.ctx.currentTime;
+  ctl.gainNode.gain.cancelScheduledValues(now);
+  ctl.gainNode.gain.setValueAtTime(ctl.gainNode.gain.value,now);
+  ctl.gainNode.gain.linearRampToValueAtTime(1,now+2);
+  ctl.playing=true;
   setSonderAmbientPreferred(true);
   syncSonderSoundToggle(true);
 }
 
 function stopSonderAmbientSound(){
-  const controller=sonderAmbientController;
-  if(!controller){
+  const ctl=sonderAmbientController;
+  if(!ctl){
     setSonderAmbientPreferred(false);
     syncSonderSoundToggle(false);
     return;
   }
-  const now=controller.ctx.currentTime;
-  controller.gainNode.gain.cancelScheduledValues(now);
-  controller.gainNode.gain.setValueAtTime(controller.gainNode.gain.value, now);
-  controller.gainNode.gain.linearRampToValueAtTime(0, now + 2);
-  if(controller.stopTimer)clearTimeout(controller.stopTimer);
-  controller.stopTimer=setTimeout(()=>{
-    controller.audioEl.pause();
-    controller.stopTimer=0;
+  const now=ctl.ctx.currentTime;
+  ctl.gainNode.gain.cancelScheduledValues(now);
+  ctl.gainNode.gain.setValueAtTime(ctl.gainNode.gain.value,now);
+  ctl.gainNode.gain.linearRampToValueAtTime(0,now+2);
+  if(ctl.stopTimer)clearTimeout(ctl.stopTimer);
+  ctl.stopTimer=setTimeout(()=>{
+    ctl.audioEl.pause();
+    ctl.stopTimer=0;
   },2100);
-  controller.playing=false;
+  ctl.playing=false;
   setSonderAmbientPreferred(false);
   syncSonderSoundToggle(false);
 }
 
 async function toggleSonderAmbientSound(){
   if(!isSonderDesktop())return;
-  const active=Boolean(sonderAmbientController?.playing);
-  if(active){
+  if(Boolean(sonderAmbientController?.playing)){
     stopSonderAmbientSound();
     return;
   }
@@ -10544,7 +10563,7 @@ async function toggleSonderAmbientSound(){
   }
 }
 
-window.toggleSonderAmbientSound = toggleSonderAmbientSound;
+window.toggleSonderAmbientSound=toggleSonderAmbientSound;
 
 // ── NEW: Wandering Prompt ──
 function getWanderingPromptGate(){
@@ -14549,7 +14568,7 @@ function render(rebuildTabs=true){
       card.innerHTML=buildDreamCardHTML(d,dom,now,delay++).trim();
       const dreamEl=card.firstElementChild;
       if(!dreamEl)return;
-      const estimate=130+Math.min(String(d.text||'').length*0.35,90)+(d.imageUrl?90:0);
+      const estimate=120 + Math.min(String(d.text||'').length * 0.34, 96) + (d.imageUrl ? 92 : 0);
       if(leftLoad<=rightLoad){
         leftColumn.appendChild(dreamEl);
         leftLoad+=estimate;
@@ -14560,8 +14579,8 @@ function render(rebuildTabs=true){
     });
   }
 
-  if(leftColumn.children.length)grid.appendChild(leftColumn);
-  if(rightColumn.children.length)grid.appendChild(rightColumn);
+  grid.appendChild(leftColumn);
+  grid.appendChild(rightColumn);
 
   if(!leftColumn.children.length&&!rightColumn.children.length&&(domainFilter!=='all'||statusFilter!=='all'||searchFilter)){
     grid.innerHTML=`<div class="filter-empty-state"><span class="filter-empty-emoji">◦</span><span class="filter-empty-main">Nothing here for this filter.</span><span class="filter-empty-sub">Try a different filter or add a new dream.</span></div>`;
