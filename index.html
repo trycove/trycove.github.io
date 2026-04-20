@@ -3229,10 +3229,12 @@ body.auth-welcome-active .auth-gate-card {
 .cf-tab { font-size:10px;letter-spacing:0.1em;text-transform:uppercase;padding:6px 13px;border-radius:4px;background:transparent;border:1px solid var(--border);color:var(--text-muted);cursor:pointer;white-space:nowrap;transition:all .2s;display:flex;align-items:center;gap:5px;font-weight:500; }
 .cf-tab:hover { border-color:var(--border-hi);color:var(--text-dim); }
 .cf-tab.active { border-color:var(--rose);color:var(--rose);background:rgba(200,118,106,0.05);box-shadow:none; }
-.masonry { columns:2;column-gap:12px;width:100%; }
+.masonry { display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;width:100%;align-items:start; }
+.masonry-column { display:flex;flex-direction:column;gap:12px;min-width:0; }
+.masonry-column.sonder-depth { transform:translateY(var(--sonder-depth-offset,0px));will-change:transform; }
 .dream-card {
   break-inside:avoid;
-  margin:0 0 12px;
+  margin:0;
   display:inline-block;
   width:100%;
   padding:14px 14px 12px;
@@ -3381,8 +3383,67 @@ body.auth-welcome-active .auth-gate-card {
 .dream-card .cdr-horizon-pop { left:auto; right:0; }
 .dream-card .cdr-status-wrap,
 .dream-card .cdr-horizon-wrap { position:relative; }
+
+/* // ── SONDER LAYER ── */
+.sonder-community {
+  margin:0 0 12px;
+  border:1px solid color-mix(in srgb, var(--border) 88%, transparent);
+  border-radius:12px;
+  background:transparent;
+  overflow:hidden;
+}
+.sonder-community-scroll {
+  display:flex;
+  align-items:center;
+  gap:10px;
+  width:max-content;
+  min-width:100%;
+  padding:8px 10px;
+}
+.sonder-community-rail {
+  display:flex;
+  align-items:center;
+  gap:10px;
+  width:max-content;
+  flex-shrink:0;
+  animation:sonderTickerDrift var(--sonder-ticker-duration,40s) linear infinite;
+}
+.sonder-community:hover .sonder-community-rail { animation-play-state:paused; }
+.sonder-community-pill {
+  border:1px solid color-mix(in srgb, var(--border) 82%, transparent);
+  background:transparent;
+  color:var(--text-muted);
+  border-radius:999px;
+  font-family:'DM Sans',sans-serif;
+  font-size:12px;
+  line-height:1.3;
+  letter-spacing:0.01em;
+  padding:6px 10px;
+  display:inline-flex;
+  align-items:center;
+  gap:7px;
+  white-space:nowrap;
+  cursor:pointer;
+  transition:border-color .18s,color .18s;
+}
+.sonder-community-pill:hover {
+  border-color:var(--border-hi);
+  color:var(--text-dim);
+}
+.sonder-community-loc { opacity:0.86; }
+.sonder-community-dot { opacity:0.5; }
+.sonder-community-text { max-width:380px;overflow:hidden;text-overflow:ellipsis; }
+
+@keyframes sonderTickerDrift {
+  from { transform:translateX(0); }
+  to { transform:translateX(calc(-50% - 5px)); }
+}
+
 @media (max-width:640px) {
-  .masonry { columns:1; }
+  .masonry { grid-template-columns:1fr; }
+  .masonry-column.sonder-depth { transform:none !important; }
+  .sonder-community { display:none !important; }
+  .sonder-sound-toggle { display:none !important; }
 }
 .timeline-view { padding:20px 0; }
 .timeline-groups { display:flex;flex-direction:column;gap:24px; }
@@ -4109,6 +4170,45 @@ body.auth-welcome-active .auth-gate-card {
 .fab.timeline-mode { min-width:138px;padding:0 16px; }
 .fab.timeline-mode .fab-icon { font-family:'DM Sans',sans-serif;font-size:10px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase; }
 .fab.timeline-mode:hover .fab-icon { transform:none; }
+
+/* // ── SONDER LAYER ── */
+.sonder-sound-toggle {
+  position:fixed;
+  left:20px;
+  bottom:20px;
+  height:36px;
+  z-index:50;
+  border-radius:999px;
+  border:1px solid var(--border-hi);
+  background:var(--glass-panel-bg);
+  backdrop-filter:blur(10px);
+  color:var(--text-dim);
+  padding:0 11px;
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  font-family:'DM Sans',sans-serif;
+  font-size:10px;
+  letter-spacing:0.1em;
+  text-transform:uppercase;
+  cursor:pointer;
+  transition:all .2s ease;
+}
+.sonder-sound-toggle:hover {
+  border-color:var(--blush-light);
+  color:var(--text);
+}
+.sonder-sound-toggle.active {
+  border-color:var(--rose);
+  color:var(--rose);
+  box-shadow:var(--glow-rose-sm);
+}
+.sonder-sound-glyph {
+  display:inline-flex;
+  width:14px;
+  height:14px;
+}
+.sonder-sound-glyph svg { width:14px;height:14px;display:block; }
 
 /* Date picker */
 .datepick-overlay { position:fixed;inset:0;z-index:300;background:rgba(0,0,0,0.4);backdrop-filter:blur(8px);display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity .25s;padding:0 0 24px; }
@@ -5068,6 +5168,7 @@ body.auth-welcome-active .auth-gate-card {
   .side-panel { width:100%; }
   .modal,.discover-modal { max-height:95vh; }
   .fab { bottom:18px;right:18px;width:44px;height:44px; }
+  .sonder-sound-toggle { display:none !important; }
   .syn-out { padding:18px; }
 }
 @media (max-width:560px) {
@@ -5107,6 +5208,7 @@ body.auth-welcome-active .auth-gate-card {
   font-size:14px;
   color:var(--text-muted);
   font-style:italic;
+  grid-column:1 / -1;
 }
 .filter-empty-emoji { display:block;margin-bottom:8px; }
 .filter-empty-main { display:block; }
@@ -6305,6 +6407,12 @@ body::before { animation: ambientDrift 18s ease-in-out infinite; }
         <button class="cf-tab" data-filter="stale" onclick="filterCats(this,'stale')">Stale</button>
       </div>
     </div>
+    <div class="sonder-community" id="sonderCommunity" style="display:none;">
+      <div class="sonder-community-scroll" id="sonderCommunityScroll">
+        <div class="sonder-community-rail" id="sonderCommunityRailA"></div>
+        <div class="sonder-community-rail" id="sonderCommunityRailB" aria-hidden="true"></div>
+      </div>
+    </div>
     <div class="masonry" id="catsGrid"></div>
     <div class="timeline-view" id="timelineView" style="display:none;">
       <!-- Timeline content will be populated here -->
@@ -6417,6 +6525,11 @@ body::before { animation: ambientDrift 18s ease-in-out infinite; }
 
 <button class="fab" id="fab" onclick="handleFabAction()" title="Add a dream">
   <span class="fab-icon">+</span>
+</button>
+
+<button class="sonder-sound-toggle" id="sonderSoundToggle" type="button" onclick="toggleSonderAmbientSound()" aria-label="Toggle ambient sounds" title="Toggle ambient sounds">
+  <span class="sonder-sound-glyph" id="sonderSoundGlyph" aria-hidden="true"></span>
+  <span class="sonder-sound-label" id="sonderSoundLabel">Sounds</span>
 </button>
 
 <!-- // ── NEW: Wandering Prompt ── -->
@@ -9233,6 +9346,7 @@ const STORAGE_KEY_SESSION_END_AT = 'qSessionEndAt9';
 const STORAGE_KEY_GUEST_STARTED_AT = 'qGuestStartedAt9';
 const STORAGE_KEY_GUEST_LOCKED = 'qGuestPreviewLocked9';
 const STORAGE_KEY_COMMUNITY_STREAM_OPT_IN = 'qCommunityDreamStreamOptIn9';
+const STORAGE_KEY_AMBIENT_SOUND = 'qAmbientSound9';
 const STORAGE_KEY_WANDERING_PROMPT_COUNT = 'qWanderingPromptCount';
 const STORAGE_KEY_CHAPTER_OPENED = 'qChapterOpenedThisSession9';
 const STORAGE_KEY_SYNTHESIS_SEEN = 'qSynthesisSeenThisSession9';
@@ -9252,6 +9366,8 @@ const STORAGE_KEY_SEED_SESSION_COUNT = 'qSeedSessionCount9';
 const STORAGE_KEY_CONFESSIONAL_SEEDS_USED = 'qConfessionalSeedsUsed9';
 const STORAGE_KEY_NIGHT_GREETING_SEEN = 'qNightGreetingSeen9';
 const SUPABASE_SYNC_TABLE = 'dream_sync_state';
+const SUPABASE_STREAM_TABLE = 'dream_stream_entries';
+const SONDER_AMBIENT_AUDIO_URL = 'https://cdn.pixabay.com/audio/2022/03/10/audio_1e5e3db5b4.mp3';
 const SUPABASE_STORAGE_BUCKET = 'dream-media';
 const SUPABASE_METADATA_SYNC_KEY = 'dream_sync_fallback_v1';
 const STORAGE_MEDIA_DATA_URL_MAX = 700 * 1024;
@@ -10159,6 +10275,277 @@ function handleCommunityShareToggle(event){
   // TODO: When Supabase sharing is enabled, write anonymized opted-in dreams to the community stream table.
 }
 
+// ── SONDER LAYER ──
+function isSonderDesktop(){
+  return window.innerWidth > 640;
+}
+
+function nextSonderLocationFallback(){
+  const item=SONDER_LOCATION_FALLBACKS[sonderLocationCursor % SONDER_LOCATION_FALLBACKS.length];
+  sonderLocationCursor+=1;
+  return item;
+}
+
+function normalizeSonderLocation(raw=''){
+  const city=String(raw||'').trim();
+  if(!city)return nextSonderLocationFallback();
+  if(/^someone\s/i.test(city))return city;
+  return `someone in ${city}`;
+}
+
+function truncateSonderText(text='',max=48){
+  const clean=String(text||'').replace(/\s+/g,' ').trim();
+  if(clean.length<=max)return clean;
+  return `${clean.slice(0,max).trim()}…`;
+}
+
+function buildSonderFallbackEntries(){
+  return SEEDED_COMMUNITY_DREAMS.slice(0,40).map(item=>({
+    dream_text:String(item?.text||'').trim(),
+    domain:String(item?.domain||'growth'),
+    created_at:new Date().toISOString(),
+    location:normalizeSonderLocation(item?.location||'')
+  })).filter(item=>item.dream_text);
+}
+
+async function fetchSonderCommunityEntries(){
+  if(!supabaseClient)return buildSonderFallbackEntries();
+  try{
+    const { data, error } = await supabaseClient
+      .from(SUPABASE_STREAM_TABLE)
+      .select('dream_text,domain,created_at')
+      .eq('is_anonymized', true)
+      .order('created_at', { ascending:false })
+      .limit(40);
+    if(error||!Array.isArray(data)||!data.length)return buildSonderFallbackEntries();
+    return data
+      .map((item,idx)=>({
+        dream_text:String(item?.dream_text||'').trim(),
+        domain:String(item?.domain||'growth'),
+        created_at:String(item?.created_at||''),
+        location:normalizeSonderLocation(item?.city||'')
+      }))
+      .filter(item=>item.dream_text)
+      .slice(0,40);
+  }catch{
+    return buildSonderFallbackEntries();
+  }
+}
+
+function buildSonderCommunityPillHtml(entry={}){
+  const rawText=String(entry?.dream_text||'').trim();
+  if(!rawText)return '';
+  const encoded=encodeCommunityDreamText(rawText);
+  const loc=normalizeSonderLocation(entry?.location||'');
+  const clipped=truncateSonderText(rawText,48);
+  return `<button class="sonder-community-pill" type="button" data-sonder-dream="${encoded}"><span class="sonder-community-loc">${esc(loc)}</span><span class="sonder-community-dot">·</span><span class="sonder-community-text">${esc(clipped)}</span></button>`;
+}
+
+function bindSonderCommunityInteractions(){
+  if(sonderTickerBound)return;
+  const host=document.getElementById('sonderCommunity');
+  if(!host)return;
+  host.addEventListener('click',event=>{
+    const pill=event.target.closest('[data-sonder-dream]');
+    if(!pill)return;
+    const input=document.getElementById('dreamInput');
+    if(!input)return;
+    const text=decodeCommunityDreamText(String(pill.getAttribute('data-sonder-dream')||'')).trim();
+    if(!text)return;
+    input.value=text;
+    input.focus();
+    input.setSelectionRange(text.length,text.length);
+  });
+  sonderTickerBound=true;
+}
+
+function renderSonderCommunityTicker(entries=[]){
+  const host=document.getElementById('sonderCommunity');
+  const railA=document.getElementById('sonderCommunityRailA');
+  const railB=document.getElementById('sonderCommunityRailB');
+  if(!host||!railA||!railB)return;
+  const hasEntries=Array.isArray(entries)&&entries.length>0;
+  const isChapterView=document.querySelector('.view-tab.active')?.dataset.view==='chapters';
+  host.style.display=(hasEntries&&isChapterView)?'block':'none';
+  if(!hasEntries)return;
+  const html=entries.map(buildSonderCommunityPillHtml).filter(Boolean).join('');
+  railA.innerHTML=html;
+  railB.innerHTML=html;
+  host.style.setProperty('--sonder-ticker-duration','40s');
+  bindSonderCommunityInteractions();
+}
+
+function requestSonderCommunityTicker(force=false){
+  const maxAge=1000*60*3;
+  const fresh=Date.now()-sonderTickerFetchedAt<maxAge;
+  if(!force&&fresh&&sonderTickerEntries.length){
+    renderSonderCommunityTicker(sonderTickerEntries);
+    return;
+  }
+  if(sonderTickerPromise)return;
+  sonderTickerPromise=fetchSonderCommunityEntries()
+    .then(entries=>{
+      sonderTickerEntries=entries.length?entries:buildSonderFallbackEntries();
+      sonderTickerFetchedAt=Date.now();
+      renderSonderCommunityTicker(sonderTickerEntries);
+    })
+    .catch(()=>{
+      sonderTickerEntries=buildSonderFallbackEntries();
+      sonderTickerFetchedAt=Date.now();
+      renderSonderCommunityTicker(sonderTickerEntries);
+    })
+    .finally(()=>{sonderTickerPromise=null;});
+}
+
+async function maybePublishDreamToCommunityStream(dream){
+  if(!dream||!supabaseClient||!supabaseUser||!getCommunityStreamOptIn())return;
+  const dreamText=String(dream?.text||'').trim();
+  if(!dreamText)return;
+  try{
+    await supabaseClient
+      .from(SUPABASE_STREAM_TABLE)
+      .insert([{
+        user_id:supabaseUser.id,
+        dream_text:dreamText,
+        domain:String(dream?.domain||'growth'),
+        source:'opt_in',
+        is_anonymized:true,
+        consented_at:new Date().toISOString()
+      }]);
+    requestSonderCommunityTicker(true);
+  }catch{}
+}
+
+function tickSonderParallax(){
+  sonderParallaxRaf=0;
+  sonderParallaxCurrent += (sonderParallaxTarget - sonderParallaxCurrent) * 0.12;
+  const rightCol=document.querySelector('#catsGrid .masonry-column.sonder-depth');
+  if(rightCol)rightCol.style.setProperty('--sonder-depth-offset', `${sonderParallaxCurrent.toFixed(2)}px`);
+  if(Math.abs(sonderParallaxTarget - sonderParallaxCurrent) > 0.12){
+    sonderParallaxRaf=requestAnimationFrame(tickSonderParallax);
+  }
+}
+
+function queueSonderParallaxUpdate(){
+  if(!isSonderDesktop()){
+    sonderParallaxTarget=0;
+    sonderParallaxCurrent=0;
+    const rightCol=document.querySelector('#catsGrid .masonry-column.sonder-depth');
+    if(rightCol)rightCol.style.setProperty('--sonder-depth-offset','0px');
+    return;
+  }
+  sonderParallaxTarget = -window.scrollY * 0.08;
+  if(!sonderParallaxRaf)sonderParallaxRaf=requestAnimationFrame(tickSonderParallax);
+}
+
+function setupSonderMasonryParallax(){
+  const rightCol=document.querySelector('#catsGrid .masonry-column.sonder-depth');
+  if(!rightCol)return;
+  if(!sonderParallaxBound){
+    window.addEventListener('scroll',queueSonderParallaxUpdate,{passive:true});
+    window.addEventListener('resize',queueSonderParallaxUpdate,{passive:true});
+    sonderParallaxBound=true;
+  }
+  queueSonderParallaxUpdate();
+}
+
+function getSonderGlyphMarkup(active=false){
+  if(active){
+    return '<svg viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="7" width="2" height="9" rx="1" fill="currentColor" opacity="0.95"/><rect x="8" y="3" width="2" height="13" rx="1" fill="currentColor"/><rect x="14" y="5" width="2" height="11" rx="1" fill="currentColor" opacity="0.85"/></svg>';
+  }
+  return '<svg viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 9H16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>';
+}
+
+function isSonderAmbientPreferred(){
+  return safeLocalStorageGet(STORAGE_KEY_AMBIENT_SOUND,'0')==='1';
+}
+
+function setSonderAmbientPreferred(active){
+  safeLocalStorageSet(STORAGE_KEY_AMBIENT_SOUND,active?'1':'0');
+}
+
+function syncSonderSoundToggle(active){
+  const btn=document.getElementById('sonderSoundToggle');
+  const label=document.getElementById('sonderSoundLabel');
+  const glyph=document.getElementById('sonderSoundGlyph');
+  if(!btn||!label||!glyph)return;
+  btn.classList.toggle('active',Boolean(active));
+  label.textContent=active?'Sounds on':'Sounds';
+  glyph.innerHTML=getSonderGlyphMarkup(Boolean(active));
+}
+
+function ensureSonderAmbientController(){
+  if(sonderAmbientController)return sonderAmbientController;
+  const AudioCtx=window.AudioContext||window.webkitAudioContext;
+  if(!AudioCtx)return null;
+  const ctx=new AudioCtx();
+  const gainNode=ctx.createGain();
+  gainNode.gain.value=0;
+  const audioEl=new Audio(SONDER_AMBIENT_AUDIO_URL);
+  audioEl.loop=true;
+  audioEl.crossOrigin='anonymous';
+  const sourceNode=ctx.createMediaElementSource(audioEl);
+  sourceNode.connect(gainNode);
+  gainNode.connect(ctx.destination);
+  sonderAmbientController={ ctx, gainNode, audioEl, playing:false, stopTimer:0 };
+  return sonderAmbientController;
+}
+
+async function playSonderAmbientSound(){
+  const controller=ensureSonderAmbientController();
+  if(!controller)return;
+  if(controller.stopTimer){
+    clearTimeout(controller.stopTimer);
+    controller.stopTimer=0;
+  }
+  await controller.ctx.resume();
+  await controller.audioEl.play();
+  const now=controller.ctx.currentTime;
+  controller.gainNode.gain.cancelScheduledValues(now);
+  controller.gainNode.gain.setValueAtTime(controller.gainNode.gain.value, now);
+  controller.gainNode.gain.linearRampToValueAtTime(1, now + 2);
+  controller.playing=true;
+  setSonderAmbientPreferred(true);
+  syncSonderSoundToggle(true);
+}
+
+function stopSonderAmbientSound(){
+  const controller=sonderAmbientController;
+  if(!controller){
+    setSonderAmbientPreferred(false);
+    syncSonderSoundToggle(false);
+    return;
+  }
+  const now=controller.ctx.currentTime;
+  controller.gainNode.gain.cancelScheduledValues(now);
+  controller.gainNode.gain.setValueAtTime(controller.gainNode.gain.value, now);
+  controller.gainNode.gain.linearRampToValueAtTime(0, now + 2);
+  if(controller.stopTimer)clearTimeout(controller.stopTimer);
+  controller.stopTimer=setTimeout(()=>{
+    controller.audioEl.pause();
+    controller.stopTimer=0;
+  },2100);
+  controller.playing=false;
+  setSonderAmbientPreferred(false);
+  syncSonderSoundToggle(false);
+}
+
+async function toggleSonderAmbientSound(){
+  if(!isSonderDesktop())return;
+  const active=Boolean(sonderAmbientController?.playing);
+  if(active){
+    stopSonderAmbientSound();
+    return;
+  }
+  try{
+    await playSonderAmbientSound();
+  }catch{
+    stopSonderAmbientSound();
+  }
+}
+
+window.toggleSonderAmbientSound = toggleSonderAmbientSound;
+
 // ── NEW: Wandering Prompt ──
 function getWanderingPromptGate(){
   const nextCount=(parseInt(safeLocalStorageGet(STORAGE_KEY_WANDERING_PROMPT_COUNT,'0')||'0',10)||0)+1;
@@ -10198,6 +10585,17 @@ let communityDreamLiveCount = 360 + Math.floor(Math.random()*41);
 let communityDreamCountTimer = null;
 let communityDreamDirection = 1;
 let communityDreamHoverHintTimer = null;
+const SONDER_LOCATION_FALLBACKS = ['someone at 2am','someone on a layover','someone nearby','someone you\'ll never meet'];
+let sonderLocationCursor = 0;
+let sonderTickerEntries = [];
+let sonderTickerPromise = null;
+let sonderTickerFetchedAt = 0;
+let sonderTickerBound = false;
+let sonderParallaxBound = false;
+let sonderParallaxRaf = 0;
+let sonderParallaxCurrent = 0;
+let sonderParallaxTarget = 0;
+let sonderAmbientController = null;
 let wanderingPromptShowTimer = null;
 let wanderingPromptHideTimer = null;
 let chatHistories = JSON.parse(safeLocalStorageGet(STORAGE_KEY_CHATS,'{}')||'{}');
@@ -11451,6 +11849,7 @@ function addDreamEntry(dreamObj){
   render(true);
   if(document.querySelector('.view-tab.active')?.dataset.view==='timeline')renderTimeline();
   if(dreamDashboardId===normalized.id)renderDreamDashboard();
+  void maybePublishDreamToCommunityStream(normalized);
   return normalized;
 }
 /** Removes a dream entry by id and returns the removed dream, if found. */
@@ -14023,6 +14422,7 @@ function render(rebuildTabs=true){
   const grid=document.getElementById('catsGrid');
   const filterBar=document.getElementById('catFilterBar');
   const controls=document.getElementById('catsControls');
+  const sonderCommunity=document.getElementById('sonderCommunity');
   const seedChips=document.getElementById('seedChips');
   const addBtn=document.getElementById('addBtn');
   const daysSinceFirst=getDaysSinceFirstSession();
@@ -14104,8 +14504,22 @@ function render(rebuildTabs=true){
     }
   }else filterBar.style.display='none';
 
+  if(sonderCommunity){
+    const isChapterView=document.querySelector('.view-tab.active')?.dataset.view==='chapters';
+    sonderCommunity.style.display=isChapterView?'block':'none';
+  }
+  if(!sonderTickerEntries.length)sonderTickerEntries=buildSonderFallbackEntries();
+  renderSonderCommunityTicker(sonderTickerEntries);
+  requestSonderCommunityTicker();
+
   grid.innerHTML='';
   let delay=0;
+  const leftColumn=document.createElement('div');
+  leftColumn.className='masonry-column';
+  const rightColumn=document.createElement('div');
+  rightColumn.className='masonry-column sonder-depth';
+  let leftLoad=0;
+  let rightLoad=0;
 
   // Sort by: coverage gap × weight (most needed first)
   const sortedGroups=Object.entries(groups).sort(([a],[b])=>{
@@ -14133,13 +14547,26 @@ function render(rebuildTabs=true){
     filteredDd.forEach(d=>{
       const card=document.createElement('div');
       card.innerHTML=buildDreamCardHTML(d,dom,now,delay++).trim();
-      grid.appendChild(card.firstElementChild);
+      const dreamEl=card.firstElementChild;
+      if(!dreamEl)return;
+      const estimate=130+Math.min(String(d.text||'').length*0.35,90)+(d.imageUrl?90:0);
+      if(leftLoad<=rightLoad){
+        leftColumn.appendChild(dreamEl);
+        leftLoad+=estimate;
+      }else{
+        rightColumn.appendChild(dreamEl);
+        rightLoad+=estimate;
+      }
     });
   }
 
-  if(!grid.children.length&&(domainFilter!=='all'||statusFilter!=='all'||searchFilter)){
+  if(leftColumn.children.length)grid.appendChild(leftColumn);
+  if(rightColumn.children.length)grid.appendChild(rightColumn);
+
+  if(!leftColumn.children.length&&!rightColumn.children.length&&(domainFilter!=='all'||statusFilter!=='all'||searchFilter)){
     grid.innerHTML=`<div class="filter-empty-state"><span class="filter-empty-emoji">◦</span><span class="filter-empty-main">Nothing here for this filter.</span><span class="filter-empty-sub">Try a different filter or add a new dream.</span></div>`;
   }
+  setupSonderMasonryParallax();
 }
 
 // ═══════════════════════════════════════════════════
@@ -16794,6 +17221,7 @@ document.addEventListener('keydown',e=>{
   handleStripeCheckoutReturn();
   syncCloudUi();
   scheduleGuestPreviewEnforcement();
+  syncSonderSoundToggle(isSonderAmbientPreferred() && isSonderDesktop());
   render();
   tickCommunityDreamCount();
   maybeScheduleWanderingPrompt();
