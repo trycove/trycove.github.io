@@ -5653,6 +5653,30 @@ body::before { animation: ambientDrift 18s ease-in-out infinite; }
   .toast, .toast.toast-exit { animation: none; transition: opacity 160ms ease; }
   .toast.toast-exit { opacity: 0; }
 }
+
+/* Text Settling Animation */
+@keyframes settleIn {
+  from {
+    opacity: 0.85;
+    transform: translateY(3px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.settling {
+  animation: settleIn 250ms cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .settling {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+}
 </style>
 </head>
 <body class="auth-gate-active">
@@ -6633,6 +6657,26 @@ body::before { animation: ambientDrift 18s ease-in-out infinite; }
 <div class="cov-tooltip" id="covTooltip"></div>
 
 <script>
+// ═══════════════════════════════════════════════════
+// TEXT SETTLING ANIMATION
+// ═══════════════════════════════════════════════════
+/**
+ * Animates an element with a subtle "text settling" motion.
+ * @param {HTMLElement} element - The element to animate
+ */
+function animateTextSettling(element) {
+  if (!element) return;
+  
+  // Add settling class to trigger animation
+  element.classList.add('settling');
+  
+  // Remove class after animation completes so it can re-trigger if needed
+  const animationDuration = 250; // ms (matches CSS duration)
+  setTimeout(() => {
+    element.classList.remove('settling');
+  }, animationDuration);
+}
+
 // ═══════════════════════════════════════════════════
 // DEBUG LAYER (Non-Invasive Diagnostics)
 // ═══════════════════════════════════════════════════
