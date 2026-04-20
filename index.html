@@ -3358,10 +3358,6 @@ body.auth-welcome-active .auth-gate-card {
   box-shadow:0 8px 24px rgba(200,118,106,0.12),var(--glow-rose-sm);
 }
 .dd-attachments-grid { position:relative;z-index:1;display:flex;align-items:flex-start;gap:8px;min-height:120px;padding:10px 8px 10px 2px;transition:all .35s cubic-bezier(.16,1,.3,1); }
-.dd-attachments-grid.floating { flex-wrap:wrap;align-content:center;justify-content:center; }
-.dd-attachments-grid.floating .dd-attachment-card { width:86px;min-height:92px;transform:translate(calc(var(--float-x,0px) + var(--drag-x,0px)),calc(var(--float-y,0px) + var(--drag-y,0px))) rotate(var(--float-r,0deg));margin-right:-10px;box-shadow:0 12px 24px rgba(60,37,32,0.10);animation:ddFloatDrift var(--float-speed,7.2s) ease-in-out infinite;animation-delay:var(--float-delay,0s);transform-origin:center center;will-change:transform;cursor:grab;touch-action:none;user-select:none; }
-.dd-attachments-grid.floating .dd-attachment-card:hover { animation-play-state:paused; }
-.dd-attachments-grid.floating .dd-att-preview { min-height:42px;max-height:42px;aspect-ratio:1/1; }
 .dd-attachments-stage.expanded { padding-right:46px; }
 .dd-attachments-stage.expanded .dd-attachments-grid,
 .dd-attachments-grid.expanded { flex-wrap:nowrap;overflow-x:auto;overflow-y:hidden;align-items:stretch;scroll-snap-type:x proximity;padding-right:58px; }
@@ -3369,10 +3365,8 @@ body.auth-welcome-active .auth-gate-card {
 .dd-attachments-grid.expanded .dd-attachment-card { flex:0 0 118px;width:118px;min-height:106px;transform:translate(0,0) rotate(0deg);margin-right:0;scroll-snap-align:start;animation:none; }
 .dd-attachments-stage.expanded .dd-att-preview,
 .dd-attachments-grid.expanded .dd-att-preview { min-height:54px;max-height:54px;aspect-ratio:4/3; }
-.dd-attachment-card { position:relative;isolation:isolate;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:6px;display:flex;flex-direction:column;gap:5px;min-height:108px;transition:transform .35s cubic-bezier(.16,1,.3,1),box-shadow .25s ease,width .35s ease; }
+.dd-attachment-card { position:relative;isolation:isolate;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:6px;display:flex;flex-direction:column;gap:5px;min-height:108px;transition:box-shadow .25s ease,width .35s ease; }
 .dd-attachment-card:hover { box-shadow:0 12px 22px rgba(60,37,32,0.10); }
-.dd-attachment-card.dragging { cursor:grabbing;z-index:6;animation-play-state:paused;box-shadow:0 16px 28px rgba(60,37,32,0.16); }
-.dd-attachment-card.just-dragged { transition:box-shadow .18s ease,transform .18s ease; }
 .dd-attachment-remove { position:absolute;top:4px;right:4px;z-index:12;background:var(--floating-control-bg);border:1px solid var(--border-hi);border-radius:999px;width:20px;height:20px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--text-dim);transition:all .2s;font-size:10px; }
 .dd-attachment-remove:hover { border-color:var(--rose);color:var(--rose); }
 .dd-att-preview { position:relative;z-index:1;background:var(--surface2);border-radius:8px;overflow:hidden;display:flex;align-items:center;justify-content:center;aspect-ratio:4/3;min-height:54px;max-height:54px; }
@@ -3390,15 +3384,8 @@ body.auth-welcome-active .auth-gate-card {
 .dd-attach-scroll { position:absolute;right:12px;top:50%;transform:translateY(-50%);z-index:4;display:none;align-items:center;justify-content:center;width:30px;height:30px;border-radius:999px;border:1px solid var(--border-hi);background:var(--floating-control-bg);color:var(--text-dim);cursor:pointer;transition:all .2s;box-shadow:0 6px 16px rgba(60,37,32,0.14); }
 .dd-attachments-stage.expanded .dd-attach-scroll { display:inline-flex; }
 .dd-attach-scroll:hover { border-color:var(--rose);color:var(--rose);box-shadow:var(--glow-rose-sm); }
-@keyframes ddFloatDrift {
-  0%,100% { transform:translate(calc(var(--float-x,0px) + var(--drag-x,0px)),calc(var(--float-y,0px) + var(--drag-y,0px))) rotate(var(--float-r,0deg)); }
-  35% { transform:translate(calc(var(--float-x,0px) + var(--drag-x,0px) + 5px),calc(var(--float-y,0px) + var(--drag-y,0px) - 7px)) rotate(calc(var(--float-r,0deg) + 1.5deg)); }
-  68% { transform:translate(calc(var(--float-x,0px) + var(--drag-x,0px) - 4px),calc(var(--float-y,0px) + var(--drag-y,0px) + 5px)) rotate(calc(var(--float-r,0deg) - 1.2deg)); }
-}
 @media (min-width:900px){
   .dd-attachments-stage { padding:14px 16px;min-height:164px; }
-  .dd-attachments-grid.floating { padding-top:14px;padding-bottom:16px; }
-  .dd-attachments-grid.floating .dd-attachment-card { margin-right:-14px; }
 }
 .dd-attachments-grid::-webkit-scrollbar { height:4px; }
 .dd-attachments-grid::-webkit-scrollbar-thumb { background:var(--border-hi);border-radius:999px; }
@@ -10165,8 +10152,7 @@ let capsuleRevealPromptedThisSession = false;
 let capsuleTooltipHideTimer = 0;
 let timelineEditMode = false;
 let dreamboxChatOpen = false;
-let dreamboxAttachmentsExpanded = false;
-let dreamboxAttachmentDragState = null;
+let dreamboxAttachmentsExpanded = true;
 let dreamboxPreviewAttachmentList = [];
 let dreamboxPreviewAttachmentIndex = -1;
 let dreamboxSelectedNoteId = '';
@@ -14059,21 +14045,18 @@ function scrollDreamboxTo(sectionId,focusSelector=''){
 }
 
 function toggleDreamAttachmentLayout(forceOpen){
-  const nextState=typeof forceOpen==='boolean'?forceOpen:!dreamboxAttachmentsExpanded;
-  if(nextState)endDreamAttachmentDrag();
+  const nextState=true;
   dreamboxAttachmentsExpanded=nextState;
   const stage=document.getElementById('dreamAttachmentStage');
   const grid=document.getElementById('dreamAttachmentGrid');
   if(stage)stage.classList.toggle('expanded',nextState);
   if(grid){
-    grid.classList.toggle('floating',!nextState);
     grid.classList.toggle('expanded',nextState);
   }
 }
 
 function handleDreamAttachmentStageClick(event){
-  if(event?.target?.closest('.dd-attachment-card, .dd-attach-scroll, .dd-attachment-remove, .dd-att-link, a, button, video, audio'))return;
-  toggleDreamAttachmentLayout();
+  return;
 }
 
 function handleDreamAttachmentDragOver(event){
@@ -14097,62 +14080,6 @@ async function handleDreamAttachmentDrop(event,dreamId){
   const files=Array.from(event?.dataTransfer?.files||[]);
   if(!files.length)return;
   await processDreamAttachmentFiles(files,dreamId);
-}
-
-function startDreamAttachmentDrag(event,cardEl){
-  if(!cardEl||dreamboxAttachmentsExpanded)return;
-  if(event?.button!==undefined&&event.button!==0)return;
-  if(event?.target?.closest('button,a,video,audio'))return;
-  const baseX=parseFloat(cardEl.dataset.dragX||'0')||0;
-  const baseY=parseFloat(cardEl.dataset.dragY||'0')||0;
-  dreamboxAttachmentDragState={
-    cardEl,
-    pointerId:event?.pointerId,
-    startX:event?.clientX||0,
-    startY:event?.clientY||0,
-    baseX,
-    baseY,
-    moved:false
-  };
-  cardEl.classList.add('dragging');
-  if(cardEl.setPointerCapture&&event?.pointerId!==undefined){
-    try{cardEl.setPointerCapture(event.pointerId);}catch{}
-  }
-}
-
-function moveDreamAttachmentDrag(event){
-  const drag=dreamboxAttachmentDragState;
-  if(!drag?.cardEl||dreamboxAttachmentsExpanded)return;
-  const dx=(event?.clientX||0)-drag.startX;
-  const dy=(event?.clientY||0)-drag.startY;
-  if(Math.abs(dx)>3||Math.abs(dy)>3)drag.moved=true;
-  const stage=drag.cardEl.closest('.dd-attachments-stage');
-  const maxX=Math.max(24,Math.round(((stage?.clientWidth||220)-drag.cardEl.offsetWidth)/3));
-  const maxY=Math.max(18,Math.round(((stage?.clientHeight||150)-drag.cardEl.offsetHeight)/3));
-  const nextX=Math.max(-maxX,Math.min(maxX,drag.baseX+dx));
-  const nextY=Math.max(-maxY,Math.min(maxY,drag.baseY+dy));
-  drag.cardEl.dataset.dragX=String(nextX);
-  drag.cardEl.dataset.dragY=String(nextY);
-  drag.cardEl.style.setProperty('--drag-x',`${nextX}px`);
-  drag.cardEl.style.setProperty('--drag-y',`${nextY}px`);
-}
-
-function endDreamAttachmentDrag(event){
-  const drag=dreamboxAttachmentDragState;
-  if(!drag?.cardEl)return;
-  if(event?.pointerId!==undefined&&drag.pointerId!==undefined&&event.pointerId!==drag.pointerId)return;
-  const cardEl=drag.cardEl;
-  cardEl.classList.remove('dragging');
-  if(cardEl.releasePointerCapture&&drag.pointerId!==undefined){
-    try{cardEl.releasePointerCapture(drag.pointerId);}catch{}
-  }
-  if(drag.moved){
-    cardEl.classList.add('just-dragged');
-    setTimeout(()=>cardEl.classList.remove('just-dragged'),180);
-  }else if(event&&!event.target?.closest('button,a,video,audio')){
-    openDreamAttachment(event,cardEl,true);
-  }
-  dreamboxAttachmentDragState=null;
 }
 
 function ensureDreamAttachmentPreviewOverlay(){
@@ -14260,7 +14187,7 @@ function closeDreamAttachmentPreview(){
 
 function openDreamAttachment(event,cardEl,fromPointerRelease=false,fromActionButton=false){
   if(event)event.stopPropagation();
-  if(!cardEl||(!fromPointerRelease&&cardEl.classList.contains('just-dragged')))return;
+  if(!cardEl)return;
   if(!fromActionButton&&event?.target?.closest('button,a,video,audio'))return;
   const url=sanitizeUrl(cardEl.dataset.url,{allowData:true,allowBlob:true});
   if(!url)return;
@@ -14284,7 +14211,7 @@ function scrollDreamAttachmentStrip(direction='right'){
 }
 
 function selectCommandCenterDream(id,section='overview'){
-  if(dreamDashboardId!==id)dreamboxAttachmentsExpanded=false;
+  if(dreamDashboardId!==id)dreamboxAttachmentsExpanded=true;
   dreamDashboardId=id;
   dreamDashboardFocusSection=section;
   const dd=(groupedDreams()[currentCategory]||[]);
@@ -14309,7 +14236,7 @@ function openDreamDashboard(id,section='overview'){
   if(!dream)return;
   closeAllPops();
   cancelAllEdits();
-  if(dreamDashboardId!==id)dreamboxAttachmentsExpanded=false;
+  if(dreamDashboardId!==id)dreamboxAttachmentsExpanded=true;
   lastDreamboxOpenedAt=Date.now();
   safeLocalStorageSet(STORAGE_KEY_LAST_DREAMBOX_OPENED,String(lastDreamboxOpenedAt));
   openModal(dream.domain,id,section);
@@ -14357,11 +14284,9 @@ function renderDreamDashboard(){
   if(noteEl)noteEl.textContent=`${attachments.length} attachment${attachments.length!==1?'s':''} · ${statusLabel.toLowerCase()} · ${formatHorizonDate(dream)}`;
   const hasAttachmentCluster=attachments.length>1;
   const attachmentStageClass=`dd-attachments-stage${hasAttachmentCluster?' is-interactive':''}${dreamboxAttachmentsExpanded?' expanded':''}`;
-  const attachmentGridClass=`dd-attachments-grid ${hasAttachmentCluster?(dreamboxAttachmentsExpanded?'expanded':'floating'):'expanded'}`;
-  const attachmentNote=hasAttachmentCluster
-    ? (dreamboxAttachmentsExpanded?'Tap + Add files, or drag files here. Use the arrow to glide across attachments, or tap white space to let them float again.':'Tap + Add files, or drag files here. They drift like little keepsakes until you line them up.')
-    : 'Tap + Add files, or drag files here. Use the × on any card to remove it.';
-  const attachmentsHtml=attachments.length?attachments.map((att,idx)=>{
+  const attachmentGridClass='dd-attachments-grid expanded';
+  const attachmentNote='Tap + Add files, or drag files here. Use the × on any card to remove it.';
+  const attachmentsHtml=attachments.length?attachments.map(att=>{
     const kind=classifyAttachmentKind(att.type,att.kind||'file');
     const safeAttachmentUrl=sanitizeUrl(att.url,{allowData:true,allowBlob:true});
     const preview=kind==='image'
@@ -14378,13 +14303,8 @@ function renderDreamDashboard(){
     const downloadAction=safeAttachmentUrl
       ? `<button class="dd-att-download" type="button" aria-label="Download ${esc(att.name||'attachment')}" title="Download" onclick="downloadDreamAttachment(event,this.closest('.dd-attachment-card'))">↓</button>`
       : '';
-    const floatX=[-16,18,6,22,-12,12][idx%6];
-    const floatY=[10,-10,16,-4,12,2][idx%6];
-    const floatR=[-6,4,-3,6,-4,3][idx%6];
-    const floatDelay=(idx*0.42).toFixed(2);
-    const floatSpeed=(6.3+(idx%4)*0.7).toFixed(1);
     return `
-      <div class="dd-attachment-card" role="button" tabindex="0" data-url="${esc(safeAttachmentUrl)}" data-kind="${kind}" data-name="${esc(att.name||'Attachment')}" data-created-at="${esc(att.createdAt||'')}" style="--float-x:${floatX}px;--float-y:${floatY}px;--float-r:${floatR}deg;--float-delay:${floatDelay}s;--float-speed:${floatSpeed}s;--drag-x:0px;--drag-y:0px;" onclick="openDreamAttachment(event,this,true)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openDreamAttachment(event,this,true)}" onpointerdown="startDreamAttachmentDrag(event,this)" onpointermove="moveDreamAttachmentDrag(event)" onpointerup="endDreamAttachmentDrag(event)" onpointercancel="endDreamAttachmentDrag(event)">
+      <div class="dd-attachment-card" role="button" tabindex="0" data-url="${esc(safeAttachmentUrl)}" data-kind="${kind}" data-name="${esc(att.name||'Attachment')}" data-created-at="${esc(att.createdAt||'')}" onclick="openDreamAttachment(event,this,true)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openDreamAttachment(event,this,true)}">
         <button class="dd-attachment-remove" type="button" aria-label="Remove attachment" onclick="event.stopPropagation();removeDreamAttachment('${dream.id}','${att.id}')">✕</button>
         <div class="dd-att-preview"${previewStop}>${preview}</div>
         <div class="dd-att-name">${esc(att.name)}</div>
