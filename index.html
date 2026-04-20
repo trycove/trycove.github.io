@@ -2171,6 +2171,50 @@ body.auth-welcome-active .auth-gate-card {
   max-height:28px;
   margin-top:10px;
 }
+.first-dream-note.resonance {
+  max-height:0;
+  margin-top:0;
+  padding:0;
+  border:0 solid rgba(78,126,168,0.2);
+  border-radius:12px;
+  background:linear-gradient(180deg,rgba(78,126,168,0.05),rgba(255,255,255,0.86));
+  box-shadow:0 8px 20px rgba(43,63,82,0.08);
+  transition:opacity .28s ease,max-height .32s ease,margin-top .32s ease,padding .32s ease,border-width .32s ease;
+}
+.first-dream-note.resonance.visible {
+  max-height:180px;
+  margin-top:10px;
+  padding:12px 14px;
+  border-width:1px;
+}
+.first-dream-note.resonance .resonance-body { display:flex;align-items:flex-start;gap:10px; }
+.first-dream-note.resonance .resonance-text { flex:1;font-size:13.5px;line-height:1.65;color:var(--text-mid); }
+.first-dream-note.resonance .resonance-close { border:none;background:transparent;color:var(--text-muted);font-size:12px;cursor:pointer;padding:2px;line-height:1; }
+.first-dream-note.resonance .resonance-close:hover { color:var(--rose); }
+.cdr-articulation {
+  opacity:0;
+  max-height:0;
+  overflow:hidden;
+  display:flex;
+  align-items:flex-start;
+  gap:8px;
+  margin-top:0;
+  padding:0;
+  border:0 solid var(--blush-light);
+  border-radius:10px;
+  background:rgba(200,118,106,0.04);
+  transition:opacity .35s ease,max-height .35s ease,margin-top .35s ease,padding .35s ease,border-width .35s ease;
+}
+.cdr-articulation.visible {
+  opacity:1;
+  max-height:120px;
+  margin-top:8px;
+  padding:8px 10px;
+  border-width:1px;
+}
+.cdr-articulation-text { flex:1;font-family:'Lora',Georgia,serif;font-size:12.5px;line-height:1.6;color:var(--text-mid);font-style:italic; }
+.cdr-articulation-close { border:none;background:transparent;color:var(--text-muted);font-size:11px;cursor:pointer;padding:2px;line-height:1; }
+.cdr-articulation-close:hover { color:var(--rose); }
 
 /* Image upload area */
 .img-upload-btn {
@@ -9025,6 +9069,12 @@ const STORAGE_KEY_MILESTONE_DAY30_SHOWN = 'qMilestoneDay30Shown';
 const STORAGE_KEY_MILESTONE_DAY30_NO_CAPSULE_SHOWN = 'qMilestoneDay30NoCapsuleShown';
 const STORAGE_KEY_MILESTONE_DAY90_SHOWN = 'qMilestoneDay90Shown';
 const STORAGE_KEY_MILESTONE_DAY180_SHOWN = 'qMilestoneDay180Shown';
+const STORAGE_KEY_ARTICULATION_STATE = 'qArticulationMomentState9';
+const STORAGE_KEY_RESONANCE_SEEN = 'qResonanceMomentSeen9';
+const STORAGE_KEY_STATUS_SNAPSHOT = 'qDreamStatusSnapshot9';
+const STORAGE_KEY_SEED_SESSION_COUNT = 'qSeedSessionCount9';
+const STORAGE_KEY_CONFESSIONAL_SEEDS_USED = 'qConfessionalSeedsUsed9';
+const STORAGE_KEY_NIGHT_GREETING_SEEN = 'qNightGreetingSeen9';
 const SUPABASE_SYNC_TABLE = 'dream_sync_state';
 const SUPABASE_STORAGE_BUCKET = 'dream-media';
 const SUPABASE_METADATA_SYNC_KEY = 'dream_sync_fallback_v1';
@@ -9221,20 +9271,20 @@ const DomainRegistry=(()=>{
 })();
 
 const GAP_INSIGHTS={
-  people:`Your dreams are rich, but <strong>Relationships</strong> has nothing here yet. If that matters to you, it may be worth naming directly instead of leaving it implied.`,
-  growth:`You're reaching toward a lot, but <strong>Health & Wellbeing</strong> is still blank. Sometimes what supports the rest of life is the easiest thing to skip.`,
-  career:`<strong>Purpose & Work</strong> is still unexplored. If work matters to how you want life to feel, it may deserve clearer language.`,
-  freedom:`Your dreams don't yet include <strong>Financial Security</strong>. If freedom from money stress matters, it may help to name it plainly.`,
-  creative:`<strong>Creative Expression</strong> has nothing yet. If making something matters to you, this map will miss it unless you write it down.`,
-  mind:`<strong>Growth & Learning</strong> is unexplored. Curiosity can matter even when it does not look urgent.`,
-  home:`<strong>Home & Belonging</strong> has nothing yet. The life around your dreams may matter as much as the dreams themselves.`,
-  people_identity:`<strong>Relationships</strong> is still empty, and with this many dreams elsewhere, that's worth noticing. What would a relationship dream require you to become?`,
-  growth_identity:`<strong>Health & Wellbeing</strong> has no dreams yet. Sometimes we avoid the life areas where change feels most personal.`,
-  career_identity:`<strong>Purpose & Work</strong> remains unexplored. What would a work dream require you to let go of?`,
-  freedom_identity:`<strong>Financial Security</strong> has no dreams. Sometimes naming what we want financially feels like admitting something uncomfortable.`,
-  creative_identity:`<strong>Creative Expression</strong> is still empty. Calling yourself creative can feel like a claim you haven't earned. That may be exactly the identity tension worth sitting with.`,
-  mind_identity:`<strong>Growth & Learning</strong> has no dreams yet. What would it mean to be curious about something without needing to fix yourself?`,
-  home_identity:`<strong>Home & Belonging</strong> is still unexplored. Sometimes where we live feels too fixed to dream about.`,
+  people:`You\'ve named meaningful things, and none of them are in <strong>Relationships</strong>. Something worth noticing. What do you make of that?`,
+  growth:`These dreams carry energy, and none of them touch <strong>Health & Wellbeing</strong>. Something worth noticing. What do you make of that?`,
+  career:`You\'ve named what matters, and none of these touch <strong>Purpose & Work</strong>. Something worth noticing. What do you make of that?`,
+  freedom:`These dreams point somewhere, and none of them are in <strong>Financial Security</strong>. Something worth noticing. What do you make of that?`,
+  creative:`You\'ve put real wants on the page, and none of them touch <strong>Creative Expression</strong>. Something worth noticing. What do you make of that?`,
+  mind:`There\'s clear momentum here, and none of these touch <strong>Growth & Learning</strong>. Something worth noticing. What do you make of that?`,
+  home:`You\'ve named a lot that matters, and none of these touch <strong>Home & Belonging</strong>. Something worth noticing. What do you make of that?`,
+  people_identity:`You\'ve named several directions, and none of them touch <strong>Relationships</strong>. Something worth noticing. What do you make of that?`,
+  growth_identity:`You\'ve named several directions, and none of them touch <strong>Health & Wellbeing</strong>. Something worth noticing. What do you make of that?`,
+  career_identity:`You\'ve named several directions, and none of them touch <strong>Purpose & Work</strong>. Something worth noticing. What do you make of that?`,
+  freedom_identity:`You\'ve named several directions, and none of them touch <strong>Financial Security</strong>. Something worth noticing. What do you make of that?`,
+  creative_identity:`You\'ve named several directions, and none of them touch <strong>Creative Expression</strong>. Something worth noticing. What do you make of that?`,
+  mind_identity:`You\'ve named several directions, and none of them touch <strong>Growth & Learning</strong>. Something worth noticing. What do you make of that?`,
+  home_identity:`You\'ve named several directions, and none of them touch <strong>Home & Belonging</strong>. Something worth noticing. What do you make of that?`,
 };
 
 const TOTAL_WEIGHT = DomainRegistry.list.reduce((s,d)=>s+d.weight,0);
@@ -10109,6 +10159,7 @@ let lastUploadedFile = null;
 let hasAttemptedUpload = false;
 let firstDreamNoteShown = false;
 let firstDreamNoteTimer = null;
+let resonanceMomentInFlight = false;
 let capsuleCreationTimer = 0;
 let capsuleRevealPromptedThisSession = false;
 let capsuleTooltipHideTimer = 0;
@@ -10129,6 +10180,37 @@ let timelineDragPreviewList = null;
 let timelineDragPreviewY = 0;
 let dreamDashboardId = null;
 let dreamDashboardFocusSection = 'overview';
+let articulationMomentState = (()=>{
+  try{
+    const parsed=JSON.parse(safeLocalStorageGet(STORAGE_KEY_ARTICULATION_STATE,'{}')||'{}');
+    return parsed&&typeof parsed==='object'?parsed:{};
+  }catch{
+    return {};
+  }
+})();
+let resonanceMomentSeen = safeLocalStorageGet(STORAGE_KEY_RESONANCE_SEEN,'0')==='1';
+let statusSnapshotAtStart = (()=>{
+  try{
+    const parsed=JSON.parse(safeLocalStorageGet(STORAGE_KEY_STATUS_SNAPSHOT,'{}')||'{}');
+    if(parsed&&typeof parsed==='object')return parsed;
+  }catch{}
+  const fallback=Object.fromEntries((Array.isArray(dreams)?dreams:[]).map(d=>[String(d.id||''),String(d.status||'dreaming')]));
+  safeLocalStorageSet(STORAGE_KEY_STATUS_SNAPSHOT,JSON.stringify(fallback));
+  return fallback;
+})();
+let seedSessionCount = Math.max(0,parseInt(safeLocalStorageGet(STORAGE_KEY_SEED_SESSION_COUNT,'0')||'0',10)||0);
+seedSessionCount+=1;
+safeLocalStorageSet(STORAGE_KEY_SEED_SESSION_COUNT,String(seedSessionCount));
+let confessionalSeedUsedOrder = (()=>{
+  try{
+    const parsed=JSON.parse(safeLocalStorageGet(STORAGE_KEY_CONFESSIONAL_SEEDS_USED,'[]')||'[]');
+    return Array.isArray(parsed)?parsed.map(item=>String(item||'')).filter(Boolean):[];
+  }catch{
+    return [];
+  }
+})();
+const articulationMomentTimers = new Map();
+const sessionAddedDreamIds = [];
 let lastRenderedcoverage = null;
 let covWeightListRendered = false;
 let lastSynGateDreamsCount = null;
@@ -10887,6 +10969,15 @@ document.addEventListener('DOMContentLoaded', () => {
   initEaster3amBanner();
   syncRecPanelState;
   setupInputCardDragDrop();
+  const dreamInput=document.getElementById('dreamInput');
+  if(dreamInput){
+    dreamInput.addEventListener('input',()=>{
+      if(!dreamInput.value.trim()&&seedPlaceholderLockedByConfessional){
+        seedPlaceholderLockedByConfessional=false;
+        rotateSeed();
+      }
+    });
+  }
   if (recPanelOpen && firstGlow && window.innerWidth > 1023) {
     const sidePanel = document.getElementById('sidePanel');
     sidePanel.classList.add('glow');
@@ -10906,10 +10997,159 @@ function hideFirstDreamNote(){
   if(!note)return;
   note.onclick=null;
   note.classList.remove('aha-link');
+  note.classList.remove('resonance');
   note.classList.remove('visible');
   setTimeout(()=>{
-    if(!note.classList.contains('visible'))note.textContent='';
+    if(!note.classList.contains('visible'))note.innerHTML='';
   },400);
+}
+
+function persistArticulationMomentState(){
+  safeLocalStorageSet(STORAGE_KEY_ARTICULATION_STATE,JSON.stringify(articulationMomentState||{}));
+}
+
+function hideDreamArticulation(dreamId){
+  const panel=document.getElementById(`articulation-${dreamId}`);
+  const timer=articulationMomentTimers.get(dreamId);
+  if(timer){
+    clearTimeout(timer);
+    articulationMomentTimers.delete(dreamId);
+  }
+  if(!panel)return;
+  panel.classList.remove('visible');
+  setTimeout(()=>{
+    if(!panel.classList.contains('visible'))panel.innerHTML='';
+  },320);
+}
+
+function dismissDreamArticulation(dreamId){
+  articulationMomentState[dreamId]={status:'dismissed',updatedAt:new Date().toISOString()};
+  persistArticulationMomentState();
+  hideDreamArticulation(dreamId);
+}
+
+function showDreamArticulation(dreamId,text){
+  let panel=document.getElementById(`articulation-${dreamId}`);
+  if(!panel){
+    setTimeout(()=>{
+      const retry=document.getElementById(`articulation-${dreamId}`);
+      if(retry)showDreamArticulation(dreamId,text);
+    },260);
+    return;
+  }
+  const sentence=trimText(String(text||''),220).replace(/[\r\n]+/g,' ').trim();
+  if(!sentence)return;
+  panel.innerHTML=`<div class="cdr-articulation-text"><em>${esc(sentence)}</em></div><button class="cdr-articulation-close" type="button" onclick="dismissDreamArticulation('${dreamId}')" aria-label="Dismiss">✕</button>`;
+  requestAnimationFrame(()=>panel.classList.add('visible'));
+  const autoTimer=setTimeout(()=>hideDreamArticulation(dreamId),8000);
+  articulationMomentTimers.set(dreamId,autoTimer);
+}
+
+async function generateDreamArticulationSentence(dream){
+  const fallback=`There\'s something here about ${DomainRegistry.get(dream?.domain).label.toLowerCase()} feeling more livable, not just more successful.`;
+  try{
+    const raw=await callClaude(
+      `You are writing one quiet reflective sentence for a dream-tracking app.
+Write exactly one sentence, plain text, no quotes, no markdown.
+Principles:
+- Frame as possibility, never conclusion.
+- Use language like: one reading of this, this might be reaching for, there\'s something here about.
+- Never tell the person who they are or what they want.
+- Speak about the dream, not the person.
+- Name underlying need with warmth and distance.
+- This sentence appears unprompted, so keep it gentle and relieving rather than interrogative.
+- Keep it emotionally precise and specific to the dream text.
+- Max 26 words.`,
+      `Domain: ${DomainRegistry.get(dream?.domain).label}\nDream text: ${String(dream?.text||'').trim()}`
+    );
+    const sentence=trimText(String(raw||''),220).replace(/[\r\n]+/g,' ').trim();
+    return sentence||fallback;
+  }catch(err){
+    reportDebug('info','Articulation moment used fallback',{dreamId:dream?.id,error:err?.message});
+    return fallback;
+  }
+}
+
+function scheduleDreamArticulationMoment(dreamId,source='main-input'){
+  if(source!=='main-input')return;
+  const existing=articulationMomentState[dreamId]?.status;
+  if(existing==='dismissed'||existing==='shown')return;
+  articulationMomentState[dreamId]={status:'queued',updatedAt:new Date().toISOString()};
+  persistArticulationMomentState();
+  window.setTimeout(async ()=>{
+    const state=articulationMomentState[dreamId]?.status;
+    if(state==='dismissed'||state==='shown')return;
+    const dream=dreams.find(item=>item.id===dreamId);
+    if(!dream)return;
+    const sentence=await generateDreamArticulationSentence(dream);
+    articulationMomentState[dreamId]={status:'shown',updatedAt:new Date().toISOString()};
+    persistArticulationMomentState();
+    showDreamArticulation(dreamId,sentence);
+  },4000);
+}
+
+function dismissResonanceMoment(){
+  resonanceMomentSeen=true;
+  safeLocalStorageSet(STORAGE_KEY_RESONANCE_SEEN,'1');
+  hideFirstDreamNote();
+}
+
+function showResonanceMoment(sentence=''){
+  const note=document.getElementById('firstDreamNote');
+  if(!note)return;
+  const clean=trimText(String(sentence||''),220).replace(/[\r\n]+/g,' ').trim();
+  if(!clean)return;
+  note.classList.remove('aha-link');
+  note.classList.add('resonance');
+  note.innerHTML=`<div class="resonance-body"><div class="resonance-text"><em>${esc(clean)}</em></div><button class="resonance-close" type="button" onclick="dismissResonanceMoment()" aria-label="Dismiss">✕</button></div>`;
+  requestAnimationFrame(()=>note.classList.add('visible'));
+}
+
+async function generateResonanceSentence(dreamList=[]){
+  const fallback='One way of reading these three is that they might all be reaching for a life with more room to breathe.';
+  const domainKeys=(Array.isArray(dreamList)?dreamList:[]).map(d=>String(d?.domain||'')).filter(Boolean);
+  const uniqueDomains=[...new Set(domainKeys)];
+  const payload=(Array.isArray(dreamList)?dreamList:[])
+    .slice(0,3)
+    .map((dream,idx)=>`${idx+1}. [${DomainRegistry.get(dream?.domain).label}] ${String(dream?.text||'').trim()}`)
+    .join('\n');
+  if(!payload)return fallback;
+  try{
+    const raw=await callClaude(
+      `Write exactly one sentence (max 30 words) naming the most honest connecting thread across three dreams.
+Rules:
+- Hedged, warm language only.
+- Speak about the dreams, not the person.
+- Use phrasing like one way of reading these three, there\'s something that keeps showing up here, these might all be reaching for.
+- No diagnosis, no personality labels, no advice.
+- Avoid generic themes like growth, success, happiness, balance.
+- If all three dreams are in one domain, name that domain with rich, concrete texture.
+- If they span multiple domains, name the connecting thread across them.
+- Be specific to what was actually written.
+- Return plain text only.`,
+  `Domain spread: ${uniqueDomains.length===1?`single (${DomainRegistry.get(uniqueDomains[0]).label})`:`multi (${uniqueDomains.map(key=>DomainRegistry.get(key).label).join(', ')})`}\n\nThree dreams:\n${payload}`
+    );
+    const sentence=trimText(String(raw||''),220).replace(/[\r\n]+/g,' ').trim();
+    return sentence||fallback;
+  }catch(err){
+    reportDebug('info','Resonance moment used fallback',{error:err?.message});
+    return fallback;
+  }
+}
+
+async function maybeTriggerResonanceMoment(){
+  if(resonanceMomentSeen||resonanceMomentInFlight)return;
+  if(sessionAddedDreamIds.length!==3)return;
+  const dreamList=sessionAddedDreamIds
+    .map(id=>dreams.find(item=>item.id===id))
+    .filter(Boolean);
+  if(dreamList.length<3)return;
+  resonanceMomentInFlight=true;
+  const sentence=await generateResonanceSentence(dreamList);
+  resonanceMomentSeen=true;
+  safeLocalStorageSet(STORAGE_KEY_RESONANCE_SEEN,'1');
+  showResonanceMoment(sentence);
+  resonanceMomentInFlight=false;
 }
 
 function maybeShowFirstDreamNote(prevCount){
@@ -10918,17 +11158,9 @@ function maybeShowFirstDreamNote(prevCount){
     hideFirstDreamNote();
     return;
   }
-  if(prevCount<3&&nextCount>=3){
-    const note=document.getElementById('firstDreamNote');
-    if(note){
-      note.textContent="You've mapped 3 dreams. Open one in Dreambox to articulate it further.";
-      note.classList.remove('aha-link');
-      note.onclick=null;
-      requestAnimationFrame(()=>note.classList.add('visible'));
-    }
-    return;
-  }
   if(nextCount>=2){
+    const note=document.getElementById('firstDreamNote');
+    if(note?.classList.contains('resonance'))return;
     hideFirstDreamNote();
     return;
   }
@@ -10939,8 +11171,11 @@ function maybeShowFirstDreamNote(prevCount){
     const note=document.getElementById('firstDreamNote');
     if(!note)return;
     firstDreamNoteShown=true;
-    note.textContent='That\'s one. Add one more from a different life area to broaden the picture.';
+    note.textContent=isNightVisitWindow()
+      ? 'Some things are clearer at this hour. Good that you wrote it down.'
+      : 'That\'s one. Add one more from a different life area to broaden the picture.';
     note.classList.remove('aha-link');
+    note.classList.remove('resonance');
     note.onclick=null;
     requestAnimationFrame(()=>note.classList.add('visible'));
     firstDreamNoteTimer=setTimeout(()=>hideFirstDreamNote(),8000);
@@ -11027,7 +11262,10 @@ function save(){
 function addDreamEntry(dreamObj){
   const normalized=normalizeDreamEntry(dreamObj);
   dreams.unshift(normalized);
+  sessionAddedDreamIds.push(normalized.id);
+  if(sessionAddedDreamIds.length>3)sessionAddedDreamIds.shift();
   activationSessionState.dreamAdds+=1;
+  void maybeTriggerResonanceMoment();
   maybeMarkAhaMoment();
   if(dreams.length<3 && capsuleCreationTimer){
     clearTimeout(capsuleCreationTimer);
@@ -11044,6 +11282,11 @@ function addDreamEntry(dreamObj){
 function removeDreamEntry(id){
   const removed=dreams.find(d=>d.id===id);
   if(!removed)return null;
+  const timer=articulationMomentTimers.get(id);
+  if(timer){
+    clearTimeout(timer);
+    articulationMomentTimers.delete(id);
+  }
   dreams=dreams.filter(d=>d.id!==id);
   if(dreamDashboardId===id)closeDreamDashboard();
   markDataUpdated();
@@ -11464,7 +11707,20 @@ function showOnboarding(){
   // Onboarding is shown by default unless dismissed
 }
 
+const ASPIRATIONAL_SEED_CHIPS = [
+  {label:'Write a novel',value:'Write a novel someday'},
+  {label:'Feel financially free',value:'Feel financially free'},
+  {label:'Build a company',value:'Build a company'},
+  {label:'Find my people',value:'Find my people'},
+  {label:'Feel at home in my body',value:'Feel at home in my body'}
+];
+const CONFESSIONAL_SEED_CHIPS = [
+  {id:'gave-up',label:'A dream I gave up on',value:'A dream I gave up on'},
+  {id:'embarrassing',label:'Something I want that feels embarrassing',value:'Something I want that feels embarrassing'},
+  {id:'unwatched',label:'What I\'d want if no one was watching',value:'What I\'d want if no one was watching'}
+];
 let seedIdx=Math.floor(Math.random()*DomainRegistry.seedPrompts.length);
+let seedPlaceholderLockedByConfessional=false;
 const lastHeaderCopy={ h1Line1:'', h1Chrome:'', hSub:'' };
 function getTopDreamDomain(groups=groupedDreams()){
   let topDomain=null;
@@ -11490,9 +11746,85 @@ function sanitizeDomainLabel(raw=''){
     .replace(/\s+/g,' ')
     .trim();
 }
+function getNightVisitHour(){
+  return new Date().getHours();
+}
+function isNightVisitWindow(){
+  const hour=getNightVisitHour();
+  return getUiTimeTheme()==='night' && (hour>=21 || hour<4);
+}
+function getNightVisitKey(){
+  const date=new Date();
+  if(date.getHours()<4)date.setDate(date.getDate()-1);
+  const y=date.getFullYear();
+  const m=String(date.getMonth()+1).padStart(2,'0');
+  const d=String(date.getDate()).padStart(2,'0');
+  return `${y}-${m}-${d}`;
+}
+function ensureStatusSnapshotCoverage(){
+  if(!statusSnapshotAtStart||typeof statusSnapshotAtStart!=='object')statusSnapshotAtStart={};
+  let changed=false;
+  dreams.forEach(d=>{
+    const id=String(d?.id||'');
+    if(!id||statusSnapshotAtStart[id]!==undefined)return;
+    statusSnapshotAtStart[id]=String(d?.status||'dreaming');
+    changed=true;
+  });
+  if(changed)safeLocalStorageSet(STORAGE_KEY_STATUS_SNAPSHOT,JSON.stringify(statusSnapshotAtStart));
+}
+function getMovedDreamsSinceStartCount(){
+  ensureStatusSnapshotCoverage();
+  if(!statusSnapshotAtStart||typeof statusSnapshotAtStart!=='object')return 0;
+  let moved=0;
+  dreams.forEach(d=>{
+    const id=String(d?.id||'');
+    if(!id||statusSnapshotAtStart[id]===undefined)return;
+    const currentStatus=String(d?.status||'dreaming');
+    if(String(statusSnapshotAtStart[id]||'dreaming')!==currentStatus)moved+=1;
+  });
+  return moved;
+}
+function getFeltProgressLine(){
+  if(getDaysSinceFirstSession()<2)return '';
+  const moved=getMovedDreamsSinceStartCount();
+  if(moved<1)return '';
+  return `${moved} of your dreams have moved since you started.`;
+}
+function pickNextConfessionalSeed(){
+  const usedSet=new Set(confessionalSeedUsedOrder);
+  let pool=CONFESSIONAL_SEED_CHIPS.filter(item=>!usedSet.has(item.id));
+  if(!pool.length){
+    confessionalSeedUsedOrder=[];
+    pool=[...CONFESSIONAL_SEED_CHIPS];
+  }
+  const next=pool[Math.floor(Math.random()*pool.length)]||CONFESSIONAL_SEED_CHIPS[0];
+  confessionalSeedUsedOrder=[...confessionalSeedUsedOrder.filter(id=>id!==next.id),next.id].slice(-CONFESSIONAL_SEED_CHIPS.length);
+  safeLocalStorageSet(STORAGE_KEY_CONFESSIONAL_SEEDS_USED,JSON.stringify(confessionalSeedUsedOrder));
+  return next;
+}
+function renderSeedChips(){
+  const host=document.getElementById('seedChips');
+  if(!host)return;
+  const chips=[...ASPIRATIONAL_SEED_CHIPS];
+  if(seedSessionCount%3===0&&chips.length){
+    const confessional=pickNextConfessionalSeed();
+    const swapIndex=Math.floor(Math.random()*chips.length);
+    chips.splice(swapIndex,1,confessional);
+  }
+  host.innerHTML=chips
+    .map(chip=>`<span class="seed-chip" data-seed-kind="${CONFESSIONAL_SEED_CHIPS.some(item=>item.id===chip.id)?'confessional':'aspirational'}" data-seed-value="${esc(chip.value)}">${esc(chip.label)}</span>`)
+    .join('');
+  host.querySelectorAll('.seed-chip').forEach(chip=>{
+    chip.addEventListener('click',()=>{
+      const value=String(chip.dataset.seedValue||'').trim();
+      const isConfessional=String(chip.dataset.seedKind||'')==='confessional';
+      prefill(value,{confessional:isConfessional});
+    });
+  });
+}
 function rotateSeed(){
   const inp=document.getElementById('dreamInput');
-  if(!inp||inp.value)return;
+  if(!inp||inp.value||seedPlaceholderLockedByConfessional)return;
   const stripWrappingBraces=(raw='')=>String(raw||'').replace(/^\{+|\}+$/g,'').trim();
   const groups=groupedDreams();
   const uncovered=DomainRegistry.list.filter(domain=>!groups[domain.key]?.length);
@@ -11516,6 +11848,7 @@ function rotateSeed(){
   inp.placeholder=stripWrappingBraces(nextPlaceholder);
   seedIdx++;
 }
+renderSeedChips();
 rotateSeed();
 setInterval(()=>{if(!document.getElementById('dreamInput').value)rotateSeed();},6000);
 
@@ -11544,18 +11877,57 @@ function syncOnboardEntryState(){
 }
 
 function selectHorizon(btn){document.querySelectorAll('.hz-btn').forEach(b=>b.classList.remove('selected'));btn.classList.add('selected');selectedHorizon=btn.dataset.hz;}
-function prefill(text){const inp=document.getElementById('dreamInput');inp.value=text;inp.focus();}
+function prefill(text,options={}){
+  const inp=document.getElementById('dreamInput');
+  if(!inp)return;
+  inp.value=String(text||'');
+  const isConfessional=Boolean(options?.confessional||CONFESSIONAL_SEED_CHIPS.some(chip=>chip.value===String(text||'')));
+  if(isConfessional){
+    inp.placeholder='Say it plainly. This stays yours.';
+    seedPlaceholderLockedByConfessional=true;
+  }else if(!inp.value.trim()){
+    seedPlaceholderLockedByConfessional=false;
+    rotateSeed();
+  }
+  inp.focus();
+}
 
 // ═══════════════════════════════════════════════════
 // RETURN GREETING
 // ═══════════════════════════════════════════════════
+function getNightReturnGreetingLine(){
+  if(!isNightVisitWindow())return '';
+  const nightKey=getNightVisitKey();
+  const lastShown=String(safeLocalStorageGet(STORAGE_KEY_NIGHT_GREETING_SEEN,'')||'').trim();
+  if(lastShown===nightKey)return '';
+  const variants=[
+    'You\'re here late.',
+    'Late is a good time for this.',
+    'This hour can make things clearer.',
+    'Quiet hours can hold honest things.'
+  ];
+  const line=variants[Math.floor(Math.random()*variants.length)]||variants[0];
+  safeLocalStorageSet(STORAGE_KEY_NIGHT_GREETING_SEEN,nightKey);
+  return line;
+}
+
+function getNightDreamboxOpenerClause(){
+  if(!isNightVisitWindow())return '';
+  const variants=[
+    'Late can be a reflective hour. ',
+    'The hour is quiet, which can help. ',
+    'Night can make some things easier to name. '
+  ];
+  return variants[Math.floor(Math.random()*variants.length)]||variants[0];
+}
+
 function buildReturnGreeting(){
   if(!dreams.length)return;
   const now=Date.now();
   const daysSince=Math.floor((now-lastVisit)/(1000*60*60*24));
   const daysSinceFirst=getDaysSinceFirstSession();
+  const nightLine=daysSinceFirst>=2?getNightReturnGreetingLine():'';
   safeLocalStorageSet(STORAGE_KEY_LAST_VISIT,now.toString());
-  if(daysSince<1)return; // same day, no greeting needed
   const rg=document.getElementById('returnGreeting');
   const hl=document.getElementById('rgHeadline');
   const sub=document.getElementById('rgSub');
@@ -11564,19 +11936,27 @@ function buildReturnGreeting(){
   const welcomeLead=displayName ? `${timeGreeting}, ${displayName}.` : `${timeGreeting}.`;
   const groups=groupedDreams();
   const primaryGap=getPrimaryMissingDomain(groups);
+  const feltProgressLine=getFeltProgressLine();
   if(!rg||!hl||!sub)return;
+  if(daysSince<1){
+    if(!nightLine)return;
+    hl.textContent=welcomeLead;
+    sub.textContent=[`You\'ve got ${dreams.length} dreams on the page already.`,nightLine].filter(Boolean).join(' ');
+    rg.style.display='block';
+    return;
+  }
 
   if(daysSinceFirst===2){
     const mostRecent=dreams[0]?.text||'that dream';
     hl.textContent=welcomeLead;
-    sub.textContent=`Yesterday you wrote ${mostRecent}. How does that feel today?`;
+    sub.textContent=[`Yesterday you wrote ${mostRecent}. How does that feel today?`,feltProgressLine,nightLine].filter(Boolean).join(' ');
     rg.style.display='block';
     return;
   }
 
   if(daysSinceFirst>=3&&daysSinceFirst<=6&&primaryGap){
     hl.textContent=welcomeLead;
-    sub.textContent=`You haven't touched ${primaryGap.label} yet. What would a dream there look like?`;
+    sub.textContent=[`You\'ve named ${dreams.length} thing${dreams.length===1?'':'s'} you want. None of these touch ${primaryGap.label}. What do you make of that?`,feltProgressLine,nightLine].filter(Boolean).join(' ');
     rg.style.display='block';
     return;
   }
@@ -11589,7 +11969,7 @@ function buildReturnGreeting(){
       const firstMs=new Date(firstSessionAt||0).getTime()||0;
       const addedSince=firstMs?dreams.filter(d=>new Date(d?.createdAt||0).getTime()>firstMs).length:0;
       hl.textContent=welcomeLead;
-      sub.textContent=`A week ago you wrote ${snippet||'a hard honest pulse'}. You've added ${addedSince} dreams since then.`;
+      sub.textContent=[`A week ago you wrote ${snippet||'a hard honest pulse'}. You\'ve added ${addedSince} dreams since then.`,feltProgressLine,nightLine].filter(Boolean).join(' ');
       rg.style.display='block';
       return;
     }
@@ -11597,7 +11977,7 @@ function buildReturnGreeting(){
 
   if(daysSince>=1){
     hl.textContent=welcomeLead;
-    sub.textContent=`You've got ${dreams.length} dreams in motion already. There's room to keep shaping them in your own way.`;
+    sub.textContent=[`You\'ve got ${dreams.length} dreams in motion already. There\'s room to keep shaping them in your own way.`,feltProgressLine,nightLine].filter(Boolean).join(' ');
     rg.style.display='block';
   }
 }
@@ -12661,12 +13041,12 @@ function coverageSub(pct, groups){
   if(covered<=2)return"You've started putting shape around what matters to you.";
   if(covered<=4){
     return primaryGap
-      ? `You've built a meaningful start. ${primaryGap.label} hasn't come up yet. What do you notice about that?`
+      ? `You've named ${dreams.length} thing${dreams.length===1?'':'s'} you want. None of these touch ${primaryGap.label}. What do you make of that?`
       : "You've built a meaningful start across what matters to you.";
   }
   if(covered<=6){
     return primaryGap
-      ? `You've touched most of COVE's life areas. ${primaryGap.label} is still missing. What version of it matters to you, if any?`
+      ? `You\'ve touched most life areas. None of these touch ${primaryGap.label}. What do you make of that?`
       : "You've touched most of COVE's life areas.";
   }
   return"You've named dreams in every area on this map. That doesn't mean complete. It means visible.";
@@ -13258,6 +13638,7 @@ function buildDreamRowHTML(d,dom,now){
               <button class="cdr-edit-btn" data-dream-id="${esc(d.id)}" data-dream-text="${esc(d.text)}" onclick="event.stopPropagation();openEditRowFromBtn(this)">edit</button>
             </div>
           </div>
+          <div class="cdr-articulation" id="articulation-${d.id}" onclick="event.stopPropagation()"></div>
         </div>
         <div class="cdr-edit-wrap" id="edit-${d.id}">
           <input class="cdr-edit-input" id="edit-input-${d.id}" value="${esc(d.text)}" onkeydown="editKey(event,'${d.id}')">
@@ -13401,7 +13782,10 @@ function render(rebuildTabs=true){
   syncHeaderCopy();
   renderMemoryCard();
   syncOnboardEntryState();
-  if(dreams.length!==1)hideFirstDreamNote();
+  if(dreams.length!==1){
+    const noteEl=document.getElementById('firstDreamNote');
+    if(!noteEl?.classList.contains('resonance'))hideFirstDreamNote();
+  }
   renderImageJournal();
   renderCommunityDreamStream();
   if(!dreams.length){
@@ -15191,10 +15575,14 @@ async function addDream(){
   const dk=DomainRegistry.detect(t);
   const prevCount=dreams.length;
   justAdded=true;
-  addDreamEntry({id:Date.now().toString(),text:t,domain:dk,status:'dreaming',horizon:'someday',nextAction:'',nextActionSaved:false,createdAt:new Date().toISOString()});
+  const added=addDreamEntry({id:Date.now().toString(),text:t,domain:dk,status:'dreaming',horizon:'someday',nextAction:'',nextActionSaved:false,createdAt:new Date().toISOString()});
   revealNewDreamInChapters(dk);
   showAddDreamSuccess();
-  maybeShowFirstDreamNote(prevCount);inp.value='';rotateSeed();
+  maybeShowFirstDreamNote(prevCount);
+  inp.value='';
+  seedPlaceholderLockedByConfessional=false;
+  rotateSeed();
+  if(added?.id)scheduleDreamArticulationMoment(added.id,'main-input');
   const card=document.querySelector(`.cat-card[data-domkey="${dk}"]`);if(card)card.classList.add('expanded');
 }
 
@@ -15858,10 +16246,11 @@ async function showWelcome(dk,dd){
   const focusDream=dd.find(d=>d.id===dreamDashboardId);
   const memory=normalizeMemoryEntry(aiMemory[dk]||{});
   const hasMemory=memory.sessionCount>0;
+  const nightClause=getNightDreamboxOpenerClause();
   const sys=document.createElement('div');sys.className='chat-system';
-  sys.textContent=hasMemory
+  sys.textContent=nightClause+(hasMemory
     ? `This is your ${dom.label} Dreambox. ${focusDream?`The thread around "${focusDream.text}" still feels live here. `:''}Use this space to pick things up where they last felt meaningful.`
-    : `This is your ${dom.label} Dreambox. ${focusDream?`Right now you're working on "${focusDream.text}". `:''}Talk through it, build it, challenge it, and I'll help you shape it into something real.`;
+    : `This is your ${dom.label} Dreambox. ${focusDream?`Right now you're working on "${focusDream.text}". `:''}Talk through it, build it, challenge it, and I'll help you shape it into something real.`);
   ca.appendChild(sys);
   const th=buildThinking();ca.appendChild(th);scrollChat();
   const dl=dd.map(d=>`"${d.text}"`).join('\n');
