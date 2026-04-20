@@ -3346,46 +3346,6 @@ body.auth-welcome-active .auth-gate-card {
 .dd-attach-scroll { position:absolute;right:12px;top:50%;transform:translateY(-50%);z-index:4;display:none;align-items:center;justify-content:center;width:30px;height:30px;border-radius:999px;border:1px solid var(--border-hi);background:var(--floating-control-bg);color:var(--text-dim);cursor:pointer;transition:all .2s;box-shadow:0 6px 16px rgba(60,37,32,0.14); }
 .dd-attachments-stage.expanded .dd-attach-scroll { display:inline-flex; }
 .dd-attach-scroll:hover { border-color:var(--rose);color:var(--rose);box-shadow:var(--glow-rose-sm); }
-.dd-scrapbook-wrap { margin-top:12px;padding:12px;border:1px solid var(--border);border-radius:12px;background:linear-gradient(180deg,rgba(255,255,255,0.92),rgba(250,240,238,0.55)); }
-.dd-scrapbook-top { display:flex;align-items:flex-start;justify-content:space-between;gap:10px;flex-wrap:wrap; }
-.dd-scrapbook-note { font-size:11px;color:var(--text-muted);line-height:1.6;max-width:520px; }
-.dd-scrapbook-template { display:inline-flex;align-items:center;gap:8px;padding:6px 10px;border-radius:999px;border:1px solid var(--border-hi);font-size:10px;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-dim);background:var(--surface); }
-.dd-scrapbook-actions { display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-top:10px; }
-.dd-scrapbook-btn { border:1px solid var(--border-hi);background:var(--surface);color:var(--text-dim);border-radius:999px;padding:7px 10px;font-size:10px;letter-spacing:0.08em;text-transform:uppercase;cursor:pointer;transition:all .2s;font-weight:600; }
-.dd-scrapbook-btn:hover { border-color:var(--rose);color:var(--rose);box-shadow:var(--glow-rose-sm); }
-.dd-scrapbook-btn[disabled] { opacity:0.5;cursor:not-allowed;box-shadow:none; }
-.dd-scrapbook-gate { margin-top:8px;font-size:11px;color:var(--amber);font-weight:600;letter-spacing:0.02em; }
-.dd-scrapbook-stage { margin-top:10px;border:1px dashed rgba(200,118,106,0.24);border-radius:12px;padding:12px;background:rgba(255,255,255,0.72); }
-.dd-scrapbook-empty { font-size:12px;color:var(--text-muted);font-style:italic;line-height:1.6; }
-.dd-scrapbook-flip { perspective:1400px; }
-.dd-scrapbook-flip-inner { position:relative;transform-style:preserve-3d;transition:transform .6s cubic-bezier(.16,1,.3,1); }
-.dd-scrapbook-flip-inner.flipped { transform:rotateY(180deg); }
-.dd-scrapbook-face { backface-visibility:hidden;-webkit-backface-visibility:hidden; }
-.dd-scrapbook-face.back { position:absolute;inset:0;transform:rotateY(180deg); }
-.dd-scrapbook-sheet { border-radius:12px;border:1px solid var(--border);padding:12px;background:var(--surface); }
-.dd-scrapbook-sheet.template-polaroid { background:linear-gradient(160deg,#fffef9,#f6efe8); }
-.dd-scrapbook-sheet.template-film { background:linear-gradient(160deg,#f6fbff,#eef4ff); }
-.dd-scrapbook-sheet.template-sticker { background:linear-gradient(160deg,#fffdf8,#fff3ea); }
-.dd-scrapbook-title { font-family:'Lora',Georgia,serif;font-size:15px;color:var(--text);font-style:italic;line-height:1.5; }
-.dd-scrapbook-story { margin-top:6px;font-size:12px;color:var(--text-mid);line-height:1.7; }
-.dd-scrapbook-grid { margin-top:10px;display:grid;gap:9px; }
-.dd-scrapbook-sheet.template-polaroid .dd-scrapbook-grid { grid-template-columns:repeat(3,minmax(0,1fr)); }
-.dd-scrapbook-sheet.template-film .dd-scrapbook-grid { grid-template-columns:repeat(5,minmax(0,1fr)); }
-.dd-scrapbook-sheet.template-sticker .dd-scrapbook-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
-.dd-scrapbook-photo { background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:6px; }
-.dd-scrapbook-grid.editing .dd-scrapbook-photo { cursor:grab;border-style:dashed;border-color:rgba(200,118,106,0.34);touch-action:none; }
-.dd-scrapbook-grid.editing .dd-scrapbook-photo.dragging { opacity:0.5;cursor:grabbing; }
-.dd-scrapbook-grid.editing .dd-scrapbook-photo.drop-target { border-color:var(--rose);box-shadow:var(--glow-rose-sm); }
-.dd-scrapbook-photo img { width:100%;height:90px;object-fit:cover;border-radius:8px;display:block; }
-.dd-scrapbook-caption { margin-top:5px;font-size:10px;color:var(--text-muted);line-height:1.45; }
-.dd-scrapbook-back-title { font-family:'DM Sans',sans-serif;font-size:12px;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-muted);margin-bottom:8px; }
-.dd-scrapbook-back-list { display:flex;flex-direction:column;gap:8px; }
-.dd-scrapbook-back-item { padding:8px 10px;border-radius:9px;border:1px solid var(--border);background:var(--surface);font-size:11px;color:var(--text-mid);line-height:1.5; }
-@media (max-width:760px){
-  .dd-scrapbook-sheet.template-polaroid .dd-scrapbook-grid,
-  .dd-scrapbook-sheet.template-film .dd-scrapbook-grid,
-  .dd-scrapbook-sheet.template-sticker .dd-scrapbook-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
-}
 @keyframes ddFloatDrift {
   0%,100% { transform:translate(calc(var(--float-x,0px) + var(--drag-x,0px)),calc(var(--float-y,0px) + var(--drag-y,0px))) rotate(var(--float-r,0deg)); }
   35% { transform:translate(calc(var(--float-x,0px) + var(--drag-x,0px) + 5px),calc(var(--float-y,0px) + var(--drag-y,0px) - 7px)) rotate(calc(var(--float-r,0deg) + 1.5deg)); }
@@ -9445,12 +9405,6 @@ const PRE_MORTEM_STEPS=[
 // ═══════════════════════════════════════════════════
 const DREAM_ATTACHMENT_MAX_BYTES = 2 * 1024 * 1024;
 const DREAM_ATTACHMENT_MAX_COUNT = 10;
-const DREAM_SCRAPBOOK_MIN_PHOTOS = 5;
-const DREAM_SCRAPBOOK_TEMPLATES = [
-  { key:'polaroid', label:'Polaroid Story' },
-  { key:'film', label:'Film Strip' },
-  { key:'sticker', label:'Sticker Collage' }
-];
 
 function classifyAttachmentKind(type='', fallback='file'){
   const raw=String(type||fallback||'').toLowerCase();
@@ -9465,18 +9419,6 @@ function normalizeWoopState(woop={}){
     outcome:String(woop?.outcome||''),
     obstacle:String(woop?.obstacle||''),
     plan:String(woop?.plan||'')
-  };
-}
-
-function normalizeScrapbookState(scrapbook={}){
-  return {
-    templateKey:String(scrapbook?.templateKey||DREAM_SCRAPBOOK_TEMPLATES[0].key),
-    title:String(scrapbook?.title||''),
-    story:String(scrapbook?.story||''),
-    captions:Array.isArray(scrapbook?.captions)?scrapbook.captions.map(item=>String(item||'')).slice(0,8):[],
-    generatedAt:String(scrapbook?.generatedAt||''),
-    flipped:Boolean(scrapbook?.flipped),
-    photoOrder:Array.isArray(scrapbook?.photoOrder)?scrapbook.photoOrder.map(item=>String(item||'')).filter(Boolean).slice(0,8):[]
   };
 }
 
@@ -9712,7 +9654,7 @@ function normalizeLifeCapsule(capsule={}){
 }
 
 function normalizeDreamEntry(d){
-  const base={status:'dreaming',horizon:'someday',nextAction:'',nextActionSaved:false,attachments:[],dashboardNote:'',dashboardNoteTitle:'',dashboardNoteSavedAt:'',savedNotes:[],woop:{},scrapbook:{},...d};
+  const base={status:'dreaming',horizon:'someday',nextAction:'',nextActionSaved:false,attachments:[],dashboardNote:'',dashboardNoteTitle:'',dashboardNoteSavedAt:'',savedNotes:[],woop:{},...d};
   const text=String(base.text||'').trim();
   const allowedDomains=new Set(DomainRegistry.list.map(item=>item.key));
   const rawDomain=String(base.domain||'').trim();
@@ -9755,8 +9697,7 @@ function normalizeDreamEntry(d){
     dashboardNoteTitle:String(base.dashboardNoteTitle||''),
     dashboardNoteSavedAt:String(base.dashboardNoteSavedAt||''),
     savedNotes,
-    woop:normalizeWoopState(base.woop),
-    scrapbook:normalizeScrapbookState(base.scrapbook)
+    woop:normalizeWoopState(base.woop)
   };
 }
 
@@ -10178,10 +10119,6 @@ let dreamboxAttachmentDragState = null;
 let dreamboxPreviewAttachmentList = [];
 let dreamboxPreviewAttachmentIndex = -1;
 let dreamboxSelectedNoteId = '';
-let dreamboxScrapbookLoadingId = '';
-let dreamboxScrapbookEditId = '';
-let dreamboxScrapbookDragState = null;
-let dreamboxScrapbookPointerDrag = null;
 let activeTimelineMoveId = null;
 let draggedTimelineDreamId = null;
 let timelineLockedDreamId = null;
@@ -13668,395 +13605,6 @@ function getDreamImageAttachments(dream){
     .slice(0,8);
 }
 
-function getDreamScrapbookTemplate(templateKey=''){
-  return DREAM_SCRAPBOOK_TEMPLATES.find(item=>item.key===templateKey)||DREAM_SCRAPBOOK_TEMPLATES[0];
-}
-
-function getOrderedDreamScrapbookPhotos(dream,scrapbookState,limit=DREAM_SCRAPBOOK_MIN_PHOTOS){
-  const images=getDreamImageAttachments(dream);
-  const scrapbook=normalizeScrapbookState(scrapbookState||dream?.scrapbook||{});
-  if(!images.length)return [];
-  const byId=new Map(images.map(item=>[String(item.id||''),item]));
-  const ordered=[];
-  scrapbook.photoOrder.forEach(id=>{
-    const hit=byId.get(String(id||''));
-    if(hit)ordered.push(hit);
-  });
-  images.forEach(item=>{
-    if(!ordered.some(entry=>entry.id===item.id))ordered.push(item);
-  });
-  return ordered.slice(0,limit);
-}
-
-function moveArrayItem(list,fromIndex,toIndex){
-  const next=[...(Array.isArray(list)?list:[])];
-  if(fromIndex<0||toIndex<0||fromIndex>=next.length||toIndex>=next.length)return next;
-  const [item]=next.splice(fromIndex,1);
-  next.splice(toIndex,0,item);
-  return next;
-}
-
-function toggleDreamScrapbookFlip(dreamId){
-  const dream=dreams.find(item=>item.id===dreamId);
-  if(!dream)return;
-  const scrapbook=normalizeScrapbookState(dream.scrapbook||{});
-  updateDreamEntry(dreamId,{scrapbook:{...scrapbook,flipped:!scrapbook.flipped}});
-  dreamDashboardFocusSection='attachments';
-}
-
-function toggleDreamScrapbookEdit(dreamId){
-  dreamboxScrapbookEditId=dreamboxScrapbookEditId===dreamId?'':dreamId;
-  renderDreamDashboard();
-  dreamDashboardFocusSection='attachments';
-}
-
-function startDreamScrapbookPhotoDrag(event,dreamId,index){
-  if(dreamboxScrapbookEditId!==dreamId)return;
-  dreamboxScrapbookDragState={dreamId,fromIndex:Number(index)};
-  if(event?.dataTransfer){
-    event.dataTransfer.effectAllowed='move';
-    event.dataTransfer.setData('text/plain',String(index));
-  }
-  event?.currentTarget?.classList.add('dragging');
-}
-
-function overDreamScrapbookPhotoDrag(event){
-  if(!dreamboxScrapbookDragState)return;
-  event.preventDefault();
-  if(event?.dataTransfer)event.dataTransfer.dropEffect='move';
-}
-
-function endDreamScrapbookPhotoDrag(event){
-  event?.currentTarget?.classList.remove('dragging');
-}
-
-function reorderDreamScrapbookPhotos(dreamId,fromIndex,toIndex){
-  const from=Math.max(0,Number(fromIndex)||0);
-  const destination=Math.max(0,Number(toIndex)||0);
-  if(from===destination)return;
-  const dream=dreams.find(item=>item.id===dreamId);
-  if(!dream)return;
-  const scrapbook=normalizeScrapbookState(dream.scrapbook||{});
-  const orderedPhotos=getOrderedDreamScrapbookPhotos(dream,scrapbook,8);
-  const movedPhotos=moveArrayItem(orderedPhotos,from,destination);
-  const movedCaptions=moveArrayItem(scrapbook.captions,from,destination);
-  updateDreamEntry(dreamId,{
-    scrapbook:{
-      ...scrapbook,
-      photoOrder:movedPhotos.map(item=>String(item.id||'')).filter(Boolean),
-      captions:movedCaptions
-    }
-  });
-  dreamDashboardFocusSection='attachments';
-}
-
-function dropDreamScrapbookPhoto(event,dreamId,toIndex){
-  event.preventDefault();
-  const dragState=dreamboxScrapbookDragState;
-  dreamboxScrapbookDragState=null;
-  if(!dragState||dragState.dreamId!==dreamId)return;
-  reorderDreamScrapbookPhotos(dreamId,dragState.fromIndex,toIndex);
-}
-
-function startDreamScrapbookPointerDrag(event,dreamId,index){
-  if(dreamboxScrapbookEditId!==dreamId)return;
-  if(event?.pointerType==='mouse')return;
-  const cardEl=event?.currentTarget;
-  if(!cardEl)return;
-  dreamboxScrapbookPointerDrag={
-    dreamId,
-    fromIndex:Number(index),
-    toIndex:Number(index),
-    pointerId:event?.pointerId,
-    cardEl,
-    targetEl:cardEl
-  };
-  cardEl.classList.add('dragging','drop-target');
-  if(cardEl.setPointerCapture&&event?.pointerId!==undefined){
-    try{cardEl.setPointerCapture(event.pointerId);}catch{}
-  }
-}
-
-function moveDreamScrapbookPointerDrag(event){
-  const drag=dreamboxScrapbookPointerDrag;
-  if(!drag||event?.pointerType==='mouse')return;
-  event.preventDefault();
-  const target=document.elementFromPoint(event.clientX,event.clientY)?.closest('.dd-scrapbook-photo');
-  if(!target)return;
-  const targetDreamId=target.dataset.scrapbookDreamId;
-  if(targetDreamId!==drag.dreamId)return;
-  const nextIndex=Number(target.dataset.scrapbookIndex);
-  if(!Number.isFinite(nextIndex))return;
-  if(drag.targetEl&&drag.targetEl!==target)drag.targetEl.classList.remove('drop-target');
-  drag.targetEl=target;
-  drag.toIndex=nextIndex;
-  target.classList.add('drop-target');
-}
-
-function endDreamScrapbookPointerDrag(event){
-  const drag=dreamboxScrapbookPointerDrag;
-  if(!drag)return;
-  const pointerId=event?.pointerId;
-  if(pointerId!==undefined&&drag.pointerId!==undefined&&pointerId!==drag.pointerId)return;
-  drag.cardEl?.classList.remove('dragging','drop-target');
-  drag.targetEl?.classList.remove('drop-target');
-  if(drag.cardEl?.releasePointerCapture&&drag.pointerId!==undefined){
-    try{drag.cardEl.releasePointerCapture(drag.pointerId);}catch{}
-  }
-  reorderDreamScrapbookPhotos(drag.dreamId,drag.fromIndex,drag.toIndex);
-  dreamboxScrapbookPointerDrag=null;
-}
-
-function stepDreamScrapbookTemplate(dreamId,direction=1){
-  const dream=dreams.find(item=>item.id===dreamId);
-  if(!dream)return;
-  const scrapbook=normalizeScrapbookState(dream.scrapbook||{});
-  const currentIndex=Math.max(0,DREAM_SCRAPBOOK_TEMPLATES.findIndex(item=>item.key===scrapbook.templateKey));
-  const delta=direction>=0?1:-1;
-  const nextIndex=(currentIndex+delta+DREAM_SCRAPBOOK_TEMPLATES.length)%DREAM_SCRAPBOOK_TEMPLATES.length;
-  updateDreamEntry(dreamId,{scrapbook:{...scrapbook,templateKey:DREAM_SCRAPBOOK_TEMPLATES[nextIndex].key}});
-  dreamDashboardFocusSection='attachments';
-}
-
-async function attachmentUrlToVisionPart(url=''){
-  const safeUrl=sanitizeUrl(url,{allowData:true,allowBlob:true});
-  if(!safeUrl)return null;
-  try{
-    const response=await fetch(safeUrl);
-    if(!response.ok)return null;
-    const blob=await response.blob();
-    const mediaType=blob.type&&blob.type.startsWith('image/')?blob.type:'image/jpeg';
-    const base64=await new Promise((resolve,reject)=>{
-      const reader=new FileReader();
-      reader.onload=()=>resolve(String(reader.result||'').split(',')[1]||'');
-      reader.onerror=reject;
-      reader.readAsDataURL(blob);
-    });
-    if(!base64)return null;
-    return {type:'image',source:{type:'base64',media_type:mediaType,data:base64}};
-  }catch(_){
-    return null;
-  }
-}
-
-async function generateDreamScrapbook(dreamId){
-  const dream=dreams.find(item=>item.id===dreamId);
-  if(!dream)return;
-  const scrapbookSeed=normalizeScrapbookState(dream.scrapbook||{});
-  const imageAttachments=getOrderedDreamScrapbookPhotos(dream,scrapbookSeed,8);
-  if(imageAttachments.length<DREAM_SCRAPBOOK_MIN_PHOTOS){
-    showToast('Add 5 photos to make your scrap book', 'info');
-    return;
-  }
-  if(dreamboxScrapbookLoadingId===dreamId)return;
-  dreamboxScrapbookLoadingId=dreamId;
-  renderDreamDashboard();
-  try{
-    const selectedImages=imageAttachments.slice(0,DREAM_SCRAPBOOK_MIN_PHOTOS);
-    const contentParts=[];
-    for(const img of selectedImages){
-      const visionPart=await attachmentUrlToVisionPart(img.safeUrl);
-      if(visionPart)contentParts.push(visionPart);
-    }
-    contentParts.push({
-      type:'text',
-      text:`Dream: ${dream.text}\nDomain: ${DomainRegistry.get(dream.domain).label}\nGenerate a scrapbook concept from these photos. Return strict JSON with keys: title, story, captions. captions must be an array of ${selectedImages.length} short lines (max 8 words each). story max 45 words.`
-    });
-
-    let nextScrapbook={
-      ...normalizeScrapbookState(dream.scrapbook||{}),
-      title:'A scrapbook of this dream in motion',
-      story:'These moments are fragments of one direction. Together, they show how this dream is becoming more real.',
-      captions:selectedImages.map((img,idx)=>trimText(img.name||`Moment ${idx+1}`,32)),
-      generatedAt:new Date().toISOString()
-    };
-
-    if(contentParts.length>1){
-      try{
-        const raw=await callClaudeVision(
-          'You are a poetic scrapbook assistant. Return only valid JSON with keys title, story, captions. Keep title under 8 words, story under 45 words, and each caption under 8 words. Do not include markdown.',
-          contentParts
-        );
-        const parsed=safeJsonParse(raw)||{};
-        if(parsed&&typeof parsed==='object'){
-          nextScrapbook={
-            ...nextScrapbook,
-            title:trimText(String(parsed.title||nextScrapbook.title),80),
-            story:trimText(String(parsed.story||nextScrapbook.story),280),
-            captions:Array.isArray(parsed.captions)
-              ? parsed.captions.map(item=>trimText(String(item||''),48)).filter(Boolean).slice(0,selectedImages.length)
-              : nextScrapbook.captions
-          };
-        }
-      }catch(err){
-        reportDebug('info','Scrapbook generation fallback used',{dreamId,error:err?.message});
-      }
-    }
-
-    const paddedCaptions=[...nextScrapbook.captions];
-    while(paddedCaptions.length<selectedImages.length){
-      const idx=paddedCaptions.length;
-      paddedCaptions.push(trimText(selectedImages[idx]?.name||`Moment ${idx+1}`,32));
-    }
-    nextScrapbook.captions=paddedCaptions.slice(0,selectedImages.length);
-    updateDreamEntry(dreamId,{scrapbook:nextScrapbook});
-    dreamDashboardFocusSection='attachments';
-  }finally{
-    dreamboxScrapbookLoadingId='';
-  }
-}
-
-function sanitizeFileStem(value=''){
-  return String(value||'')
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g,'-')
-    .replace(/^-+|-+$/g,'')
-    .slice(0,50)||'scrapbook';
-}
-
-async function loadImageForCanvas(url=''){
-  return new Promise((resolve,reject)=>{
-    const img=new Image();
-    img.onload=()=>resolve(img);
-    img.onerror=reject;
-    img.crossOrigin='anonymous';
-    img.src=url;
-  });
-}
-
-function roundedRectPath(ctx,x,y,w,h,r){
-  const radius=Math.max(0,Math.min(r,Math.min(w,h)/2));
-  ctx.beginPath();
-  ctx.moveTo(x+radius,y);
-  ctx.arcTo(x+w,y,x+w,y+h,radius);
-  ctx.arcTo(x+w,y+h,x,y+h,radius);
-  ctx.arcTo(x,y+h,x,y,radius);
-  ctx.arcTo(x,y,x+w,y,radius);
-  ctx.closePath();
-}
-
-function drawWrappedLines(ctx,text,x,y,maxWidth,lineHeight,maxLines=6){
-  const words=String(text||'').split(/\s+/).filter(Boolean);
-  const lines=[];
-  let current='';
-  words.forEach(word=>{
-    const test=current?`${current} ${word}`:word;
-    if(ctx.measureText(test).width<=maxWidth){
-      current=test;
-    }else{
-      if(current)lines.push(current);
-      current=word;
-    }
-  });
-  if(current)lines.push(current);
-  lines.slice(0,maxLines).forEach((line,idx)=>ctx.fillText(line,x,y+idx*lineHeight));
-}
-
-async function downloadDreamScrapbook(dreamId){
-  const dream=dreams.find(item=>item.id===dreamId);
-  if(!dream)return;
-  const scrapbook=normalizeScrapbookState(dream.scrapbook||{});
-  const photos=getOrderedDreamScrapbookPhotos(dream,scrapbook,DREAM_SCRAPBOOK_MIN_PHOTOS);
-  if(photos.length<DREAM_SCRAPBOOK_MIN_PHOTOS){
-    showToast('Add 5 photos to make your scrap book', 'info');
-    return;
-  }
-  const template=getDreamScrapbookTemplate(scrapbook.templateKey);
-  const width=1280;
-  const height=900;
-  const canvas=document.createElement('canvas');
-  canvas.width=width;
-  canvas.height=height;
-  const ctx=canvas.getContext('2d');
-  if(!ctx){
-    showToast('Could not export scrapbook right now.', 'error');
-    return;
-  }
-
-  const bgByTemplate={
-    polaroid:['#fffef9','#f6efe8'],
-    film:['#f6fbff','#eef4ff'],
-    sticker:['#fffdf8','#fff3ea']
-  };
-  const bg=bgByTemplate[template.key]||bgByTemplate.polaroid;
-  const grad=ctx.createLinearGradient(0,0,width,height);
-  grad.addColorStop(0,bg[0]);
-  grad.addColorStop(1,bg[1]);
-  ctx.fillStyle=grad;
-  ctx.fillRect(0,0,width,height);
-
-  ctx.fillStyle='rgba(60,37,32,0.08)';
-  roundedRectPath(ctx,40,40,width-80,height-80,26);
-  ctx.fill();
-  ctx.fillStyle='#ffffff';
-  roundedRectPath(ctx,30,30,width-60,height-60,26);
-  ctx.fill();
-
-  ctx.fillStyle='#2f2621';
-  ctx.font='italic 48px Lora, Georgia, serif';
-  ctx.fillText(scrapbook.title||'Your scrapbook',76,116);
-
-  ctx.fillStyle='#6f5f58';
-  ctx.font='28px Lora, Georgia, serif';
-  drawWrappedLines(ctx,scrapbook.story||'A scrapbook of this dream in motion.',76,166,width-152,38,3);
-
-  const layoutByTemplate={
-    polaroid:[
-      {x:76,y:290,w:360,h:215},{x:460,y:290,w:360,h:215},{x:844,y:290,w:360,h:215},
-      {x:172,y:540,w:360,h:215},{x:652,y:540,w:360,h:215}
-    ],
-    film:[
-      {x:56,y:300,w:224,h:360},{x:296,y:300,w:224,h:360},{x:536,y:300,w:224,h:360},{x:776,y:300,w:224,h:360},{x:1016,y:300,w:224,h:360}
-    ],
-    sticker:[
-      {x:76,y:300,w:520,h:260},{x:644,y:300,w:560,h:220},{x:644,y:548,w:560,h:220},{x:76,y:586,w:260,h:182},{x:356,y:586,w:260,h:182}
-    ]
-  };
-  const photoSlots=layoutByTemplate[template.key]||layoutByTemplate.polaroid;
-
-  for(let i=0;i<Math.min(photoSlots.length,photos.length);i++){
-    const slot=photoSlots[i];
-    const photo=photos[i];
-    const label=(scrapbook.captions[i]||photo.name||`Photo ${i+1}`).trim();
-    try{
-      const img=await loadImageForCanvas(photo.safeUrl);
-      ctx.fillStyle='rgba(0,0,0,0.06)';
-      roundedRectPath(ctx,slot.x+4,slot.y+4,slot.w,slot.h,16);
-      ctx.fill();
-      ctx.fillStyle='#fff';
-      roundedRectPath(ctx,slot.x,slot.y,slot.w,slot.h,16);
-      ctx.fill();
-      ctx.save();
-      roundedRectPath(ctx,slot.x+8,slot.y+8,slot.w-16,slot.h-58,12);
-      ctx.clip();
-      ctx.drawImage(img,slot.x+8,slot.y+8,slot.w-16,slot.h-58);
-      ctx.restore();
-      ctx.fillStyle='#6f5f58';
-      ctx.font='22px DM Sans, sans-serif';
-      drawWrappedLines(ctx,label,slot.x+12,slot.y+slot.h-28,slot.w-24,26,2);
-    }catch(_){
-      ctx.fillStyle='#fff';
-      roundedRectPath(ctx,slot.x,slot.y,slot.w,slot.h,16);
-      ctx.fill();
-      ctx.fillStyle='#99867e';
-      ctx.font='20px DM Sans, sans-serif';
-      ctx.fillText(label,slot.x+14,slot.y+slot.h-26);
-    }
-  }
-
-  const stamp=`${DomainRegistry.get(dream.domain).label} · ${new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})}`;
-  ctx.fillStyle='rgba(80,63,55,0.58)';
-  ctx.font='18px DM Sans, sans-serif';
-  ctx.fillText(stamp,76,height-56);
-
-  const link=document.createElement('a');
-  link.href=canvas.toDataURL('image/png');
-  link.download=`${sanitizeFileStem(scrapbook.title||dream.text)}-scrapbook.png`;
-  document.body.appendChild(link);
-  link.click();
-  link.remove();
-}
-
 function buildDreamAttachmentBadges(dream,variant='chapter'){
   const attachments=getDreamDashboardAttachments(dream);
   if(!attachments.length)return '';
@@ -14352,10 +13900,7 @@ function scrollDreamAttachmentStrip(direction='right'){
 }
 
 function selectCommandCenterDream(id,section='overview'){
-  if(dreamDashboardId!==id){
-    dreamboxAttachmentsExpanded=false;
-    dreamboxScrapbookEditId='';
-  }
+  if(dreamDashboardId!==id)dreamboxAttachmentsExpanded=false;
   dreamDashboardId=id;
   dreamDashboardFocusSection=section;
   const dd=(groupedDreams()[currentCategory]||[]);
@@ -14380,10 +13925,7 @@ function openDreamDashboard(id,section='overview'){
   if(!dream)return;
   closeAllPops();
   cancelAllEdits();
-  if(dreamDashboardId!==id){
-    dreamboxAttachmentsExpanded=false;
-    dreamboxScrapbookEditId='';
-  }
+  if(dreamDashboardId!==id)dreamboxAttachmentsExpanded=false;
   lastDreamboxOpenedAt=Date.now();
   safeLocalStorageSet(STORAGE_KEY_LAST_DREAMBOX_OPENED,String(lastDreamboxOpenedAt));
   openModal(dream.domain,id,section);
@@ -14429,12 +13971,6 @@ function renderDreamDashboard(){
     : '<span class="dd-note-tab-empty">No saved notes yet</span>';
   const noteEl=document.getElementById('modalCcNote');
   if(noteEl)noteEl.textContent=`${attachments.length} attachment${attachments.length!==1?'s':''} · ${statusLabel.toLowerCase()} · ${formatHorizonDate(dream)}`;
-  const scrapbook=normalizeScrapbookState(dream.scrapbook||{});
-  const imageAttachments=getOrderedDreamScrapbookPhotos(dream,scrapbook,8);
-  const scrapbookTemplate=getDreamScrapbookTemplate(scrapbook.templateKey);
-  const scrapbookCanGenerate=imageAttachments.length>=DREAM_SCRAPBOOK_MIN_PHOTOS;
-  const scrapbookLoading=dreamboxScrapbookLoadingId===dream.id;
-  const scrapbookEditing=dreamboxScrapbookEditId===dream.id;
   const hasAttachmentCluster=attachments.length>1;
   const attachmentStageClass=`dd-attachments-stage${hasAttachmentCluster?' is-interactive':''}${dreamboxAttachmentsExpanded?' expanded':''}`;
   const attachmentGridClass=`dd-attachments-grid ${hasAttachmentCluster?(dreamboxAttachmentsExpanded?'expanded':'floating'):'expanded'}`;
@@ -14476,37 +14012,6 @@ function renderDreamDashboard(){
       </div>`;
   }).join(''):`<div class="dd-empty">Add images, audio, video, or small files to make this dream feel like its own little Dreambox.</div>`;
 
-  const scrapbookPhotos=imageAttachments.slice(0,DREAM_SCRAPBOOK_MIN_PHOTOS);
-  const scrapbookPhotosHtml=scrapbookPhotos.map((att,idx)=>`<div class="dd-scrapbook-photo" data-scrapbook-dream-id="${dream.id}" data-scrapbook-index="${idx}" draggable="${scrapbookEditing?'true':'false'}" ondragstart="startDreamScrapbookPhotoDrag(event,'${dream.id}',${idx})" ondragover="overDreamScrapbookPhotoDrag(event)" ondrop="dropDreamScrapbookPhoto(event,'${dream.id}',${idx})" ondragend="endDreamScrapbookPhotoDrag(event)" onpointerdown="startDreamScrapbookPointerDrag(event,'${dream.id}',${idx})" onpointermove="moveDreamScrapbookPointerDrag(event)" onpointerup="endDreamScrapbookPointerDrag(event)" onpointercancel="endDreamScrapbookPointerDrag(event)"><img src="${esc(att.safeUrl)}" alt="${esc(att.name||`Photo ${idx+1}`)}"><div class="dd-scrapbook-caption">${esc(scrapbook.captions[idx]||att.name||`Photo ${idx+1}`)}</div></div>`).join('');
-  const scrapbookBackListHtml=scrapbookPhotos.map((att,idx)=>`<div class="dd-scrapbook-back-item"><strong>${idx+1}.</strong> ${esc(scrapbook.captions[idx]||att.name||`Photo ${idx+1}`)}</div>`).join('');
-  const scrapbookStoryHtml=esc(scrapbook.story||'').replace(/\n/g,'<br>');
-  const scrapbookGeneratedStamp=scrapbook.generatedAt?`Generated ${new Date(scrapbook.generatedAt).toLocaleString('en-US',{month:'short',day:'numeric',hour:'numeric',minute:'2-digit'})}`:'Not generated yet';
-  const scrapbookPreviewHtml=(scrapbook.title||scrapbook.story||scrapbook.captions.length)
-    ? `<div class="dd-scrapbook-flip"><div class="dd-scrapbook-flip-inner${scrapbook.flipped?' flipped':''}"><div class="dd-scrapbook-face front"><div class="dd-scrapbook-sheet template-${scrapbookTemplate.key}"><div class="dd-scrapbook-title">${esc(scrapbook.title||'Your scrapbook')}</div><div class="dd-scrapbook-story">${scrapbookStoryHtml||'Tap generate to create a scrapbook story from your photos.'}</div><div class="dd-scrapbook-grid${scrapbookEditing?' editing':''}">${scrapbookPhotosHtml}</div></div></div><div class="dd-scrapbook-face back"><div class="dd-scrapbook-sheet template-${scrapbookTemplate.key}"><div class="dd-scrapbook-back-title">Back of scrapbook</div><div class="dd-scrapbook-story">Reordered photos keep this side updated. Flip back anytime.</div><div class="dd-scrapbook-back-list">${scrapbookBackListHtml}</div></div></div></div></div>`
-    : '<div class="dd-scrapbook-empty">Use AI Generate to turn your photos into a scrapbook page with a title, short story, and captions.</div>';
-  const scrapbookHtml=`
-      <div class="dd-scrapbook-wrap">
-        <div class="dd-scrapbook-top">
-          <div>
-            <div class="dd-label">Scrapbook</div>
-            <div class="dd-scrapbook-note">Turn your dream photos into a designed scrapbook page. You can switch templates any time.</div>
-          </div>
-          <div class="dd-scrapbook-template">Template: ${esc(scrapbookTemplate.label)}</div>
-        </div>
-        <div class="dd-scrapbook-actions">
-          <button class="dd-scrapbook-btn" type="button" onclick="stepDreamScrapbookTemplate('${dream.id}',-1)">← Prev template</button>
-          <button class="dd-scrapbook-btn" type="button" onclick="stepDreamScrapbookTemplate('${dream.id}',1)">Next template →</button>
-          <button class="dd-scrapbook-btn" type="button" onclick="generateDreamScrapbook('${dream.id}')" ${scrapbookCanGenerate&&!scrapbookLoading?'':'disabled'}>${scrapbookLoading?'Generating…':'AI Generate scrapbook'}</button>
-          <button class="dd-scrapbook-btn" type="button" onclick="toggleDreamScrapbookFlip('${dream.id}')">${scrapbook.flipped?'Flip to front':'Flip to back'}</button>
-          <button class="dd-scrapbook-btn" type="button" onclick="toggleDreamScrapbookEdit('${dream.id}')" ${scrapbookCanGenerate?'':'disabled'}>${scrapbookEditing?'Done editing':'Edit placement'}</button>
-          <button class="dd-scrapbook-btn" type="button" onclick="downloadDreamScrapbook('${dream.id}')" ${scrapbookCanGenerate?'':'disabled'}>Download scrapbook</button>
-          <span class="dd-scrapbook-note">${esc(scrapbookGeneratedStamp)}</span>
-        </div>
-        ${scrapbookCanGenerate?'':'<div class="dd-scrapbook-gate">add 5 photos to make your scrap book</div>'}
-        <div class="dd-scrapbook-stage">${scrapbookPreviewHtml}</div>
-      </div>`;
-
-
   body.innerHTML=`
     <div class="dd-section" id="dreamOverviewSection">
       <div class="dd-label">Selected dream</div>
@@ -14545,7 +14050,6 @@ function renderDreamDashboard(){
         <div class="${attachmentGridClass}" id="dreamAttachmentGrid">${attachmentsHtml}</div>
         ${hasAttachmentCluster?'<button class="dd-attach-scroll" type="button" aria-label="Scroll attachments right" onclick="event.stopPropagation();scrollDreamAttachmentStrip()">→</button>':''}
       </div>
-      ${scrapbookHtml}
     </div>
     <div class="dd-section" id="dreamNoteSection">
       <div class="dd-label">Notes</div>
