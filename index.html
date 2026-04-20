@@ -13879,7 +13879,8 @@ function setView(view){
   const timeline=document.getElementById('timelineView');
   const label=document.getElementById('catsLabel');
   if(view==='chapters'){
-    grid.style.display='flex';
+    // Let the stylesheet control masonry layout (grid on desktop, single column on mobile).
+    grid.style.display='';
     timeline.style.display='none';
     label.textContent='Your Life by Chapter';
   }else{
