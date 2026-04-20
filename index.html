@@ -5817,8 +5817,8 @@ body::before { animation: ambientDrift 18s ease-in-out infinite; }
 <template id="privacyDocTemplate">
   <div class="legal-doc">
     <p class="legal-effective"><strong>Privacy Policy</strong></p>
-    <p class="legal-effective">Effective date: April 2026 · Operated by Vineet Singh / Qonsensus</p>
-    <p>COVE is built around private, honest reflection. We collect as little as possible and never sell or share your data with advertisers. When you buy a plan or the Unplugged bundle, we use Stripe to process the payment and only keep the minimum information needed to manage your subscription or fulfill your order.</p>
+    <p class="legal-effective">Effective date: April 20, 2026 · Operated by Vineet Singh / Qonsensus</p>
+    <p>COVE is built around private reflection. We collect only what is needed to run the app, sync your account, and provide optional paid features. We do not sell your personal data and we do not use advertising trackers.</p>
     <p class="legal-scroll-hint">Scroll to read the full document.</p>
     <div class="legal-divider"></div>
     <div class="legal-toc">
@@ -5835,59 +5835,61 @@ body::before { animation: ambientDrift 18s ease-in-out infinite; }
     <p>COVE is a personal life design tool that helps you articulate, track, and reflect on your dreams across seven life areas. It is a reflective space, not a clinical, therapeutic, or medical service.</p>
 
     <h3 id="privacy-collect">What we collect</h3>
-    <p>When you use COVE without an account, everything stays in your browser's local storage — nothing leaves your device.</p>
-    <p>When you create an account, we store the following in Supabase, our cloud provider:</p>
+    <p>When you browse without creating an account, your entries are stored locally in your browser. If you close or clear browser storage, unsynced local data can be lost.</p>
+    <p>When you create an account, we store data in our cloud providers so your data can sync across devices. This can include:</p>
     <ul>
       <li>Your email address</li>
       <li>A nickname, if you choose to set one</li>
-      <li>Your dream entries, notes, attachments, and reflection data</li>
-      <li>If you opt in, an anonymized copy of dreams you choose to share in the Ambient Dream Stream</li>
-      <li>App preferences (theme, horizon settings)</li>
-      <li>AI session memory tied to your account (used to personalise coaching context)</li>
+      <li>Your dream entries, notes, horizons, status updates, and check-in responses</li>
+      <li>Attachments you upload (for example images and other files) and related metadata</li>
+      <li>Optional AI memory summaries used to keep reflective context between sessions</li>
+      <li>App preferences and onboarding state (for example theme and layout preferences)</li>
+      <li>If you opt in, anonymized dream text snippets for the community stream experience</li>
     </ul>
-    <p>We do not collect your name, phone number, or any information beyond what you actively type into the app. If you purchase a paid plan or the Unplugged bundle, Stripe processes your payment details and we may receive transaction metadata, billing status, customer identifiers, and plan selection so we can unlock features, handle billing, and support refunds or disputes. We do not store full card numbers or CVV codes.</p>
-    <p>If you buy the Unplugged bundle, we also collect the shipping name and address you provide so the journal can be delivered to you. We use that information only for fulfillment, support, and legally required record keeping.</p>
+    <p>If you purchase a subscription or physical product, Stripe processes payment information and we receive limited billing metadata (such as plan, status, and transaction identifiers). We do not store full card numbers or CVV codes.</p>
+    <p>If you order a physical product, we collect shipping details you provide at checkout to fulfill delivery and customer support.</p>
 
     <h3 id="privacy-ai">How AI works in COVE</h3>
-    <p>COVE uses Claude (by Anthropic) to generate reflections, coaching responses, and image insights. When you interact with an AI feature, the relevant content (your dream text, a question you asked, or an image you uploaded) is sent to Anthropic's API to generate a response. Anthropic's own privacy policy governs how they handle that data.</p>
-    <p>We do not use your data to train AI models, and we do not store raw API responses beyond what is needed to display them to you.</p>
+    <p>COVE uses AI services (currently Claude by Anthropic) to generate reflections and image-based insights. When you use AI features, relevant content (for example your prompt, dream text, or uploaded image) is sent to our AI processing pipeline, which may include a Cloudflare Worker proxy before the model provider.</p>
+    <p>Model providers process this data under their own terms and privacy policies. We configure our services for product functionality, not advertising. We do not intentionally use your private journal content to train our own models.</p>
 
     <h3>How we use your data</h3>
     <ul>
       <li>To sync your dreams and reflections across devices when you're signed in</li>
-      <li>To personalise your coaching context between sessions (AI memory)</li>
+      <li>To support optional AI context memory between sessions</li>
       <li>To display your own data back to you</li>
-      <li>To surface opt-in anonymized dreams in the Ambient Dream Stream</li>
+      <li>To run optional community sharing features when you explicitly opt in</li>
+      <li>To process payments, subscriptions, and physical-product fulfillment</li>
+      <li>To prevent abuse, secure the service, and respond to support requests</li>
     </ul>
-    <p>That's it. We do not analyse your data to serve ads, share it with third parties, or use it for any purpose beyond running the app for you.</p>
+    <p>We do not sell your personal information or share it with advertisers.</p>
 
     <h3>Third-party services</h3>
-    <p>COVE uses the following third parties to function:</p>
+    <p>COVE uses service providers to operate core functionality:</p>
     <ul>
-      <li>Supabase — cloud database and authentication. Data is stored on Supabase servers.</li>
-      <li>Anthropic — AI responses. Content you send to AI features is processed by Anthropic.</li>
-      <li>Cloudflare — API proxy and rate limiting. Requests pass through a Cloudflare Worker.</li>
-      <li>Stripe — payment processing, billing, subscription management, and checkout.</li>
+      <li>Supabase for authentication, database sync, and file storage</li>
+      <li>Anthropic (and potentially successor model providers) for AI features</li>
+      <li>Cloudflare for worker routing, API protection, and availability controls</li>
+      <li>Stripe for checkout, billing, subscriptions, and payment records</li>
     </ul>
 
     <h3>Your rights</h3>
-    <p>You can delete your account at any time from Settings inside the app. This removes your synced cloud data. If you have an active subscription, you must also cancel it through the billing portal or account settings to stop future charges. You can also clear your local data by clearing your browser's storage for this site.</p>
-    <p>If you want a copy of your data or have questions about what we hold, email vineet-s@outlook.com.</p>
+    <p>You can delete your account from Settings. This removes cloud-synced app data associated with your account, subject to short retention required for fraud prevention, legal compliance, billing, tax, and dispute handling.</p>
+    <p>You can also clear local browser data at any time through browser settings.</p>
+    <p>You may request access or deletion support by emailing vineet-s@outlook.com from the account email address.</p>
 
     <h3>Data retention</h3>
-    <p>Your data is kept for as long as you have an active account. When you delete your account, your cloud data is deleted. Local browser data persists until you clear it yourself. We may retain limited billing, tax, refund, dispute, and shipping records for as long as required by law or for legitimate accounting and fulfillment purposes.</p>
+    <p>We retain account data while your account is active. After deletion, operational data is removed within our normal deletion workflows. Some records may be retained where required by law or for payment, tax, shipping, fraud, or dispute resolution.</p>
 
     <h3>Children</h3>
     <p>COVE is intended for people 16 and older. We do not knowingly collect data from anyone under 16.</p>
 
     <h3 id="privacy-cookies">Local storage and cookies</h3>
-    <p>COVE stores data in your browser's local storage to keep your dreams, preferences, and app state available between sessions. This happens automatically when you use the app and does not require your consent to function, as it is strictly necessary for the service to work.</p>
-    <p>When you create an account, Supabase sets authentication cookies to keep you signed in. These are session-management cookies only — they are not used for advertising or tracking.</p>
-    <p>We do not use third-party tracking cookies, analytics cookies, or advertising cookies of any kind.</p>
-    <p>You can clear local storage at any time through your browser settings. Note that doing so will erase any dreams or reflections you have not synced to a cloud account.</p>
+    <p>COVE uses local storage for essential app state and draft persistence. When signed in, authentication/session cookies are used to keep your session active. These are functional cookies, not ad trackers.</p>
+    <p>You can clear local storage in your browser settings. Unsynced local entries may be lost if cleared.</p>
 
     <h3 id="privacy-breach">Data breach notification</h3>
-    <p>In the event of a data breach that affects your personal information, we will notify you within 72 hours of becoming aware of it, where technically feasible, using the email address associated with your account. We will also notify the relevant supervisory authority where required by applicable law.</p>
+    <p>If we become aware of a confirmed breach affecting your personal data, we will notify affected users and regulators where required by applicable law.</p>
 
     <h3>Crisis and mental health</h3>
     <p>COVE is a reflection and life design tool, not a mental health service. If you are experiencing a mental health crisis, thoughts of self-harm, or any situation that feels urgent, please stop and reach out to a qualified professional or crisis service immediately.</p>
@@ -5897,16 +5899,16 @@ body::before { animation: ambientDrift 18s ease-in-out infinite; }
     <p>Nothing in COVE is a substitute for professional support. If something you encounter in the app brings up difficult feelings, please talk to someone you trust.</p>
 
     <h3 id="privacy-jurisdiction">Jurisdiction</h3>
-    <p>COVE is operated from Ontario, Canada. Your data is governed by Canadian federal privacy law (PIPEDA). If you are located outside Canada and choose to use COVE, you acknowledge that your data will be processed in Canada.</p>
+    <p>COVE is operated from Ontario, Canada. Depending on your location and the services used, data may be processed in other jurisdictions where our providers operate. By using COVE, you acknowledge potential cross-border processing.</p>
 
     <h3>Payments and fulfillment</h3>
-    <p>Stripe handles payment processing for subscriptions and physical product purchases. Stripe may collect and process payment information, subscription details, and billing-related data according to its own privacy practices. For physical products like the Unplugged journal, we use the shipping information you provide to create and deliver the order. We do not sell shipping information or payment data.</p>
+    <p>Stripe handles payment processing for subscriptions and physical purchases. For physical orders, shipping data is used for fulfillment and customer support.</p>
 
     <h3>How to make a data request</h3>
-    <p>You can request a copy of your data, ask us to delete your data, or ask what information we hold about you by emailing vineet-s@outlook.com. Please include the email address associated with your COVE account in your message. We will respond within 30 days. In some cases we may need to verify your identity before fulfilling the request.</p>
+    <p>You can request access, correction, or deletion help by emailing vineet-s@outlook.com. Please include your account email. We may verify identity before processing requests.</p>
 
     <h3>Changes to this policy</h3>
-    <p>If we make meaningful changes, we'll note the updated date at the top of this page. Continued use of COVE after changes constitutes acceptance.</p>
+    <p>If we make material updates, we will update the effective date and post the revised policy in-app.</p>
 
     <h3 id="privacy-contact">Contact</h3>
     <p>Questions or concerns? Reach out at vineet-s@outlook.com.</p>
@@ -5922,8 +5924,13 @@ body::before { animation: ambientDrift 18s ease-in-out infinite; }
       </thead>
       <tbody>
         <tr>
+          <td>1.1</td>
+          <td>April 20, 2026</td>
+          <td>Updated for current app features: uploads, optional community sharing, AI pipeline wording, and subscription/fulfillment flows</td>
+        </tr>
+        <tr>
           <td>1.0</td>
-          <td>May 2026</td>
+          <td>April 2026</td>
           <td>Initial policy</td>
         </tr>
       </tbody>
@@ -5934,8 +5941,8 @@ body::before { animation: ambientDrift 18s ease-in-out infinite; }
 <template id="termsDocTemplate">
   <div class="legal-doc">
     <p class="legal-effective"><strong>Terms of Service</strong></p>
-    <p class="legal-effective">Effective date: April 2026 · Operated by Vineet Singh / Qonsensus</p>
-    <p>These terms are written plainly. By using COVE, you agree to them. If something isn't clear, email us. These terms also cover any paid subscription, checkout flow, or physical product you buy through COVE.</p>
+    <p class="legal-effective">Effective date: April 20, 2026 · Operated by Vineet Singh / Qonsensus</p>
+    <p>By using COVE, you agree to these terms. If you do not agree, please do not use the app. These terms also apply to paid plans, checkout, and physical products offered through COVE.</p>
     <p class="legal-scroll-hint">Scroll to read the full document.</p>
     <div class="legal-divider"></div>
     <div class="legal-toc">
@@ -5954,6 +5961,7 @@ body::before { animation: ambientDrift 18s ease-in-out infinite; }
     <h3 id="terms-using">Using COVE</h3>
     <p>To use COVE you must be 16 or older. By using the app you confirm this.</p>
     <p>You are responsible for keeping your account credentials private. If you believe your account has been accessed without your permission, let us know at vineet-s@outlook.com.</p>
+    <p>You are responsible for content you add to your account, including text and uploaded attachments.</p>
     <p>Please do not use COVE to:</p>
     <ul>
       <li>Attempt to access or interfere with other users' data</li>
@@ -5967,11 +5975,11 @@ body::before { animation: ambientDrift 18s ease-in-out infinite; }
     <p>If you opt into the Ambient Dream Stream, you also grant us permission to store and display a sanitized, anonymized version of the dream text you choose to share in that public stream. We do not show your name or account identifiers in the stream.</p>
 
     <h3 id="terms-ai">AI-generated content</h3>
-    <p>COVE uses AI (Claude by Anthropic) to generate reflections, coaching responses, and image insights. These are for personal reflection only. They are not professional advice — not mental health advice, not life coaching, not medical or financial guidance. Please treat them as prompts to think with, not conclusions to act on without your own judgment.</p>
+    <p>COVE uses AI services (currently Claude by Anthropic) to generate reflections and image insights. These outputs are for personal reflection only. They are not medical, mental health, legal, or financial advice.</p>
     <p>AI can make mistakes. We make no guarantee that AI responses are accurate, complete, or appropriate for your situation.</p>
 
     <h3>Service availability</h3>
-    <p>We aim to keep COVE available and working well, but we cannot guarantee uninterrupted access. The service may be updated, paused, or changed at any time. We will try to give notice for significant changes.</p>
+    <p>We aim to keep COVE available, but we cannot guarantee uninterrupted service. Features may change, be paused, or be removed at any time.</p>
 
     <h3>Free and paid tiers</h3>
     <p>COVE offers a free tier with limited features and paid offerings with additional access. Paid features are noted within the app. Pricing may change over time; changes will be communicated before they take effect for existing users.</p>
@@ -5984,7 +5992,7 @@ body::before { animation: ambientDrift 18s ease-in-out infinite; }
     <p>You can delete your account at any time from the Settings panel inside the app. Deletion removes your cloud-synced data. You remain responsible for canceling any active subscription before or after deleting your account. We do not offer refunds for unused portions of a paid period unless required by applicable law.</p>
 
     <h3>Physical products</h3>
-    <p>Some paid offerings may include a physical item, such as the Unplugged journal. If you purchase a physical product, you must provide accurate shipping information. We may use a third-party payment processor and fulfillment workflow to complete the order. Risk of loss transfers when the item is handed to the carrier, unless applicable law requires otherwise.</p>
+    <p>Some paid offerings may include a physical item, such as the Unplugged journal. If you purchase a physical product, you must provide accurate shipping information. We may use third-party payment and fulfillment providers to complete the order. Risk of loss transfers when the item is handed to the carrier, unless applicable law requires otherwise.</p>
     <p>Shipping estimates, if shown at checkout, are only estimates. Delivery times may vary. We are not responsible for delays caused by carriers, customs, or inaccurate address information provided by you.</p>
 
     <h3>Limitation of liability</h3>
@@ -5997,7 +6005,7 @@ body::before { animation: ambientDrift 18s ease-in-out infinite; }
     <p>Refunds are limited to what is required by applicable law. If you believe there is a billing error, contact us first so we can review it. Chargebacks or payment disputes may result in suspension of the associated account while we investigate.</p>
 
     <h3 id="terms-cookies">Local storage and cookies</h3>
-    <p>By using COVE, you acknowledge that the app uses browser local storage to save your data on your device and that Supabase sets authentication cookies when you are signed in. These are necessary for the app to function. You can clear this data at any time through your browser settings.</p>
+    <p>By using COVE, you acknowledge that the app uses browser local storage and required authentication/session cookies for core app functionality.</p>
 
     <h3>Crisis and mental health</h3>
     <p>COVE is not a crisis service. If you are in distress or experiencing a mental health emergency, please contact a crisis line or mental health professional immediately rather than relying on this app.</p>
@@ -6010,6 +6018,9 @@ body::before { animation: ambientDrift 18s ease-in-out infinite; }
     <p>Where COVE offers paid features, subscriptions are billed on a recurring basis (monthly or annually, depending on the plan you choose). You may cancel your subscription at any time through your account settings or the billing portal. Cancellation takes effect at the end of the current billing period.</p>
     <p>Payments are generally non-refundable except where required by applicable law, including the Ontario Consumer Protection Act. If you believe you are entitled to a refund under applicable law, contact vineet-s@outlook.com within 30 days of the charge.</p>
     <p>We reserve the right to change pricing with reasonable notice. Existing subscribers will be notified at least 30 days before any price increase takes effect.</p>
+
+    <h3>Account termination</h3>
+    <p>You may stop using COVE at any time. We may suspend or terminate access for serious abuse, security risk, fraud, or repeated violations of these terms.</p>
 
     <h3 id="terms-disputes">Dispute resolution</h3>
     <p>Before filing any formal legal claim, we ask that you contact us at vineet-s@outlook.com and give us a reasonable opportunity to resolve the issue informally. Most concerns can be resolved this way. If we cannot reach an informal resolution within 30 days of your first contact, either party may pursue the matter through the courts of Ontario as set out in the Governing Law section.</p>
@@ -6034,8 +6045,13 @@ body::before { animation: ambientDrift 18s ease-in-out infinite; }
       </thead>
       <tbody>
         <tr>
+          <td>1.1</td>
+          <td>April 20, 2026</td>
+          <td>Updated for current product features, AI and upload behavior, community sharing, and account/subscription flows</td>
+        </tr>
+        <tr>
           <td>1.0</td>
-          <td>May 2026</td>
+          <td>April 2026</td>
           <td>Initial terms</td>
         </tr>
       </tbody>
