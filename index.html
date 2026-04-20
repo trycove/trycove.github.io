@@ -3304,12 +3304,13 @@ body.auth-welcome-active .auth-gate-card {
   background:transparent;
   color:var(--text-faint);
   cursor:pointer;
-  font-size:14px;
+  font-size:16px;
   line-height:1;
-  padding:2px 4px;
+  padding:0 4px;
+  letter-spacing:1px;
   transition:color .2s, transform .2s;
 }
-.dream-card-delete:hover { color:var(--rose); transform:scale(1.05); }
+.dream-card-delete:hover { color:var(--rose); transform:translateY(-1px); }
 .dream-card-media {
   width:100%;
   border-radius:14px;
@@ -14075,7 +14076,7 @@ function buildDreamCardHTML(d,dom,now,delay=0){
   return `
     <article class="dream-card${isStale?' stale':''}" data-dream-id="${esc(d.id)}" data-domain="${esc(d.domain)}" style="--card-color:${dom.color};animation-delay:${delay*45}ms">
       <div class="dream-card-top">
-        <button class="dream-card-delete" type="button" onclick="event.stopPropagation();removeDream('${esc(d.id)}','${esc(d.domain)}')" title="Remove">✕</button>
+        <button class="dream-card-delete" type="button" onclick="event.stopPropagation();removeDream('${esc(d.id)}','${esc(d.domain)}')" title="Remove">⋯</button>
       </div>
       ${imageMarkup}
       <div class="dream-card-domain">${dom.label}</div>
