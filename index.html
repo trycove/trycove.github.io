@@ -3231,7 +3231,7 @@ body.auth-welcome-active .auth-gate-card {
 .cf-tab.active { border-color:var(--rose);color:var(--rose);background:rgba(200,118,106,0.05);box-shadow:none; }
 .masonry { display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;width:100%;align-items:start; }
 .masonry-column { display:flex;flex-direction:column;gap:12px;min-width:0; }
-.masonry-column.sonder-depth { transform:translateY(var(--sonder-depth-offset,0px));will-change:transform; }
+.masonry-column.sonder-depth { transform:none;will-change:auto; }
 .dream-card {
   break-inside:avoid;
   margin:0;
@@ -10439,32 +10439,21 @@ async function maybePublishDreamToCommunityStream(dream){
 
 function runSonderParallaxFrame(){
   sonderParallaxRaf=0;
-  sonderParallaxCurrent += (sonderParallaxTarget - sonderParallaxCurrent) * 0.11;
-  const rightCol=document.querySelector('#catsGrid .masonry-column.sonder-depth');
-  if(rightCol)rightCol.style.setProperty('--sonder-depth-offset', `${sonderParallaxCurrent.toFixed(2)}px`);
-  if(Math.abs(sonderParallaxTarget - sonderParallaxCurrent) > 0.1){
-    sonderParallaxRaf=requestAnimationFrame(runSonderParallaxFrame);
-  }
 }
 
 function updateSonderParallaxTarget(){
-  if(!isSonderDesktop()){
-    sonderParallaxTarget=0;
-    sonderParallaxCurrent=0;
-    const rightCol=document.querySelector('#catsGrid .masonry-column.sonder-depth');
-    if(rightCol)rightCol.style.setProperty('--sonder-depth-offset','0px');
-    return;
-  }
-  sonderParallaxTarget = -window.scrollY * 0.08;
-  if(!sonderParallaxRaf)sonderParallaxRaf=requestAnimationFrame(runSonderParallaxFrame);
+  sonderParallaxTarget=0;
+  sonderParallaxCurrent=0;
+  const rightCol=document.querySelector('#catsGrid .masonry-column.sonder-depth');
+  if(rightCol)rightCol.style.setProperty('--sonder-depth-offset','0px');
 }
 
 function setupSonderMasonryParallax(){
-  if(!sonderParallaxBound){
-    window.addEventListener('scroll',updateSonderParallaxTarget,{passive:true});
-    window.addEventListener('resize',updateSonderParallaxTarget,{passive:true});
-    sonderParallaxBound=true;
+  if(sonderParallaxRaf){
+    cancelAnimationFrame(sonderParallaxRaf);
+    sonderParallaxRaf=0;
   }
+  sonderParallaxBound=false;
   updateSonderParallaxTarget();
 }
 
