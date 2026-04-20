@@ -3287,6 +3287,9 @@ body.auth-welcome-active .auth-gate-card {
   animation:riseIn 0.5s cubic-bezier(.16,1,.3,1) forwards;
   transition:transform .22s ease, box-shadow .22s ease, border-color .22s ease;
 }
+.card-reflow-stagger .dream-card {
+  transition-delay:var(--card-reflow-delay, 0ms), 0ms, 0ms;
+}
 .dream-card:hover {
   transform:translateY(-2px);
   border-color:var(--blush-light);
@@ -3340,6 +3343,26 @@ body.auth-welcome-active .auth-gate-card {
   box-shadow:0 0 0 1px rgba(186,74,74,0.08);
 }
 .dream-card.show-delete-menu .dream-card-delete-menu { display:inline-flex; }
+#afterglowOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 900ms cubic-bezier(.16,1,.3,1);
+  mix-blend-mode: soft-light;
+}
+#afterglowOverlay.active { opacity: 0.12; }
+#afterglowOverlay.warm {
+  background:
+    radial-gradient(ellipse 85% 60% at 14% 22%, rgba(232,168,158,0.34) 0%, transparent 62%),
+    radial-gradient(ellipse 70% 52% at 78% 74%, rgba(232,196,160,0.26) 0%, transparent 60%);
+}
+#afterglowOverlay.cool {
+  background:
+    radial-gradient(ellipse 86% 64% at 18% 28%, rgba(126,163,193,0.24) 0%, transparent 62%),
+    radial-gradient(ellipse 68% 56% at 76% 76%, rgba(177,196,214,0.22) 0%, transparent 60%);
+}
 .dream-card-media {
   width:100%;
   border-radius:14px;
@@ -5681,11 +5704,14 @@ body::before { animation: ambientDrift 18s ease-in-out infinite; }
 @media (prefers-reduced-motion: reduce) {
   .toast, .toast.toast-exit { animation: none; transition: opacity 160ms ease; }
   .toast.toast-exit { opacity: 0; }
+  #afterglowOverlay { transition: none; }
+  #afterglowOverlay.active { opacity: 0; }
 }
 </style>
 </head>
 <body class="auth-gate-active">
 <canvas id="bgCanvas" aria-hidden="true"></canvas>
+<div id="afterglowOverlay" aria-hidden="true"></div>
 <div id="toastContainer" role="status" aria-live="polite" aria-atomic="false" aria-label="Notifications"></div>
 
 <div class="auth-gate show" id="authGate" role="dialog" aria-modal="true" aria-labelledby="authGateTitle" aria-live="polite">
@@ -11346,6 +11372,7 @@ function requestWindowRerender(){
   windowRerenderTimer=setTimeout(()=>{
     windowRerenderTimer=null;
     render(false);
+    applyCardReflowStagger();
     renderRecommendations();
     syncRecPanelState();
     if(document.getElementById('modalOverlay')?.classList.contains('open') && currentCategory){
@@ -11665,6 +11692,48 @@ let isThinking = false;
 let currentCategory = null;
 let miAbortController = null;
 let pendingImgDomain = null;
+let cardReflowStaggerTimer = 0;
+let afterglowFadeTimer = 0;
+let afterglowCleanupTimer = 0;
+
+function applyCardReflowStagger(){
+  if(window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+  const cards=[...document.querySelectorAll('.dream-card')];
+  if(!cards.length)return;
+  const cadenceMs=30;
+  const maxDelayMs=240;
+  cards.forEach((card,index)=>{
+    const delay=Math.min(index*cadenceMs,maxDelayMs);
+    card.style.setProperty('--card-reflow-delay',`${delay}ms`);
+  });
+  document.documentElement.classList.add('card-reflow-stagger');
+  if(cardReflowStaggerTimer)clearTimeout(cardReflowStaggerTimer);
+  cardReflowStaggerTimer=setTimeout(()=>{
+    document.documentElement.classList.remove('card-reflow-stagger');
+    cards.forEach(card=>card.style.removeProperty('--card-reflow-delay'));
+    cardReflowStaggerTimer=0;
+  },520);
+}
+
+function triggerEmotionalAfterglow(mode='auto'){
+  if(window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+  const overlay=document.getElementById('afterglowOverlay');
+  if(!overlay)return;
+  const nextMode=mode==='cool'?'cool':(mode==='warm'?'warm':(Math.random()<0.5?'warm':'cool'));
+  overlay.classList.remove('active','warm','cool');
+  overlay.classList.add(nextMode);
+  requestAnimationFrame(()=>overlay.classList.add('active'));
+  if(afterglowFadeTimer)clearTimeout(afterglowFadeTimer);
+  if(afterglowCleanupTimer)clearTimeout(afterglowCleanupTimer);
+  afterglowFadeTimer=setTimeout(()=>{
+    overlay.classList.remove('active');
+    afterglowFadeTimer=0;
+  },2600);
+  afterglowCleanupTimer=setTimeout(()=>{
+    overlay.classList.remove('warm','cool');
+    afterglowCleanupTimer=0;
+  },3600);
+}
 
 function markDataUpdated(timestamp=new Date().toISOString()){
   dataUpdatedAt=String(timestamp || new Date().toISOString());
@@ -11711,6 +11780,8 @@ function addDreamEntry(dreamObj){
   markDataUpdated();
   save();
   render(true);
+  applyCardReflowStagger();
+  triggerEmotionalAfterglow();
   if(document.querySelector('.view-tab.active')?.dataset.view==='timeline')renderTimeline();
   if(dreamDashboardId===normalized.id)renderDreamDashboard();
   return normalized;
@@ -14102,7 +14173,7 @@ function buildDreamCardHTML(d,dom,now,delay=0){
     ? `<div class="dream-card-media"><img src="${esc(d.imageUrl)}" alt="Dream image for ${esc(dom.label)}"></div>`
     : '';
   return `
-    <article class="dream-card${isStale?' stale':''}" data-dream-id="${esc(d.id)}" data-domain="${esc(d.domain)}" style="--card-color:${dom.color};animation-delay:${delay*45}ms">
+    <article class="dream-card${isStale?' stale':''}" data-dream-id="${esc(d.id)}" data-domain="${esc(d.domain)}" style="--card-color:${dom.color};animation-delay:${delay*30}ms">
       <div class="dream-card-top">
         <button class="dream-card-delete" type="button" onclick="event.stopPropagation();toggleDreamCardDeleteMenu(this)" title="More actions" aria-label="More actions">⋯</button>
         <button class="dream-card-delete-menu" type="button" onclick="event.stopPropagation();removeDream('${esc(d.id)}','${esc(d.domain)}')">Delete</button>
@@ -15466,7 +15537,6 @@ async function fileToAttachmentObject(file,{dreamId=''}={}){
       });
 
   return {
-    ...baseAttachment,
     url,
     storageProvider:'local'
   };
