@@ -2265,6 +2265,152 @@ body.auth-welcome-active .auth-gate-card {
   display:flex;align-items:center;gap:4px;
 }
 .img-upload-btn:hover { border-color:var(--blush);color:var(--rose);box-shadow:var(--glow-rose-sm); }
+.url-insert-btn {
+  font-family:'DM Sans',sans-serif;font-size:9px;letter-spacing:0.1em;text-transform:uppercase;
+  padding:4px 10px;border-radius:4px;cursor:pointer;border:1px solid var(--border);
+  color:var(--text-muted);background:transparent;transition:all .2s;line-height:1;
+  display:flex;align-items:center;gap:4px;
+}
+.url-insert-btn:hover { border-color:var(--blush);color:var(--rose);box-shadow:var(--glow-rose-sm); }
+.image-search-toggle-btn {
+  font-family:'DM Sans',sans-serif;font-size:9px;letter-spacing:0.1em;text-transform:uppercase;
+  padding:4px 10px;border-radius:4px;cursor:pointer;border:1px solid var(--border);
+  color:var(--text-muted);background:transparent;transition:all .2s;line-height:1;
+  display:flex;align-items:center;gap:4px;
+}
+.image-search-toggle-btn:hover,
+.image-search-toggle-btn.is-open { border-color:var(--blush);color:var(--rose);box-shadow:var(--glow-rose-sm); }
+.image-search-panel {
+  display:none;
+  margin:10px 0 12px;
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:10px;
+  background:color-mix(in srgb, var(--surface) 84%, var(--surface2));
+}
+.image-search-panel.open { display:block; }
+.image-search-row { display:flex;gap:8px;align-items:center; }
+.image-search-input {
+  flex:1;
+  min-width:0;
+  border:1px solid var(--border);
+  border-radius:8px;
+  padding:8px 10px;
+  font-family:'DM Sans',sans-serif;
+  font-size:12px;
+  color:var(--text);
+  background:var(--surface);
+  outline:none;
+}
+.image-search-input:focus { border-color:var(--blush); box-shadow:var(--glow-rose-sm); }
+.image-search-go {
+  border:1px solid var(--border-hi);
+  border-radius:8px;
+  padding:8px 12px;
+  background:transparent;
+  color:var(--text-dim);
+  cursor:pointer;
+  font-family:'DM Sans',sans-serif;
+  font-size:10px;
+  letter-spacing:0.08em;
+  text-transform:uppercase;
+}
+.image-search-go:hover { border-color:var(--rose);color:var(--rose); }
+.image-search-status {
+  margin-top:8px;
+  font-family:'DM Sans',sans-serif;
+  font-size:11px;
+  color:var(--text-muted);
+}
+.image-search-suggestions {
+  margin-top:8px;
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+}
+.image-search-suggest-chip {
+  border:1px solid var(--border);
+  border-radius:999px;
+  background:var(--surface);
+  color:var(--text-dim);
+  cursor:pointer;
+  padding:5px 10px;
+  font-family:'DM Sans',sans-serif;
+  font-size:9px;
+  letter-spacing:0.08em;
+  text-transform:uppercase;
+}
+.image-search-suggest-chip:hover { border-color:var(--rose);color:var(--rose);box-shadow:var(--glow-rose-sm); }
+.image-search-actions {
+  margin-top:8px;
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+}
+.image-search-bulk {
+  border:1px solid var(--border-hi);
+  border-radius:999px;
+  background:transparent;
+  color:var(--text-dim);
+  cursor:pointer;
+  font-family:'DM Sans',sans-serif;
+  font-size:9px;
+  letter-spacing:0.08em;
+  text-transform:uppercase;
+  padding:5px 9px;
+}
+.image-search-bulk:hover:not(:disabled) { border-color:var(--rose);color:var(--rose);box-shadow:var(--glow-rose-sm); }
+.image-search-bulk:disabled { opacity:.45; cursor:not-allowed; }
+.image-search-grid {
+  margin-top:10px;
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(118px,1fr));
+  gap:8px;
+}
+.image-search-card {
+  border:1px solid var(--border);
+  border-radius:8px;
+  overflow:hidden;
+  background:var(--surface);
+}
+.image-search-thumb {
+  width:100%;
+  aspect-ratio:1/1;
+  object-fit:cover;
+  display:block;
+  background:var(--surface2);
+}
+.image-search-check {
+  position:absolute;
+  top:6px;
+  left:6px;
+  width:16px;
+  height:16px;
+  accent-color:var(--rose);
+}
+.image-search-thumb-wrap { position:relative; }
+.image-search-meta { padding:6px; display:flex; flex-direction:column; gap:6px; }
+.image-search-title {
+  font-family:'DM Sans',sans-serif;
+  font-size:10px;
+  color:var(--text-dim);
+  line-height:1.4;
+  max-height:2.8em;
+  overflow:hidden;
+}
+.image-search-add {
+  border:1px solid var(--border-hi);
+  border-radius:999px;
+  background:transparent;
+  color:var(--text-dim);
+  cursor:pointer;
+  font-family:'DM Sans',sans-serif;
+  font-size:9px;
+  letter-spacing:0.08em;
+  text-transform:uppercase;
+  padding:5px 8px;
+}
+.image-search-add:hover { border-color:var(--rose);color:var(--rose);box-shadow:var(--glow-rose-sm); }
 #imgFileInput { display:none; }
 
 /* ── SEED CHIPS ── */
@@ -6336,12 +6482,27 @@ body::before { animation: ambientDrift 18s ease-in-out infinite; }
           <span class="input-hint">Press <strong>Enter</strong> to add, or drag a photo here.</span>
           <div class="input-btns">
             <button class="btn btn-expand" id="expandBtn" onclick="expandDream()">✦ Expand</button>
+            <button class="url-insert-btn" type="button" title="Insert a URL" onclick="insertUrlIntoCapture()">🔗 <span>URL</span></button>
+            <button class="image-search-toggle-btn" id="imageSearchToggleBtn" type="button" title="Search images" onclick="toggleCaptureImageSearchPanel()">🖼 <span>Search</span></button>
             <label class="img-upload-btn" title="Add from image">
               📷 <span>Image</span>
               <input type="file" id="imgFileInput" accept="image/*" onchange="handleImageUpload(event)">
             </label>
             <button class="btn btn-add" id="addBtn" onclick="guardedAddDream()">Add Dream →</button>
           </div>
+        </div>
+        <div class="image-search-panel" id="imageSearchPanel" hidden>
+          <div class="image-search-row">
+            <input class="image-search-input" id="imageSearchInput" type="text" placeholder="Search images (e.g. ocean, travel, writing)" onkeydown="if(event.key==='Enter'){event.preventDefault();searchCaptureImages();}">
+            <button class="image-search-go" type="button" onclick="searchCaptureImages()">Search</button>
+          </div>
+          <div class="image-search-suggestions" id="imageSearchSuggestions"></div>
+          <div class="image-search-actions">
+            <button class="image-search-bulk" id="imageSearchAddSelected" type="button" onclick="addSelectedImageResultsToCapture()" disabled>Add selected (0)</button>
+            <button class="image-search-bulk" id="imageSearchClearSelected" type="button" onclick="clearImageSearchSelection()" disabled>Clear selection</button>
+          </div>
+          <div class="image-search-status" id="imageSearchStatus"></div>
+          <div class="image-search-grid" id="imageSearchResults"></div>
         </div>
         <div class="horizon-row">
           <span class="horizon-label">When</span>
@@ -16129,6 +16290,225 @@ async function expandDream(){
   finally{
     inp.disabled=false;
     btn.textContent='✦ Expand';btn.disabled=false;
+  }
+}
+
+function insertUrlIntoCapture(){
+  const inp=document.getElementById('dreamInput');
+  if(!inp)return;
+  const entered=window.prompt('Paste a link to add to your capture (https://...)','');
+  if(entered===null)return;
+  let candidate=String(entered||'').trim();
+  if(!candidate)return;
+  if(!/^https?:\/\//i.test(candidate)&&/^www\./i.test(candidate))candidate=`https://${candidate}`;
+  const safe=sanitizeUrl(candidate,{allowData:false,allowBlob:false});
+  if(!safe||!/^https?:\/\//i.test(safe)){
+    showToast('Please enter a valid http(s) URL.', 'warning');
+    return;
+  }
+  const current=String(inp.value||'');
+  const next=current.trim()?`${current.trim()}\n${safe}`:safe;
+  if(next.length>Number(inp.maxLength||1800)){
+    showToast('That link would exceed the capture length limit.', 'warning');
+    return;
+  }
+  inp.value=next;
+  inp.focus();
+  inp.setSelectionRange(next.length,next.length);
+}
+
+let captureImageSearchRequestId=0;
+let captureImageSearchResultsCache=[];
+let captureImageSearchSelection=new Set();
+
+const IMAGE_SEARCH_DOMAIN_HINTS={
+  people:['friendship','romance','family dinner','community'],
+  growth:['wellbeing','nature walk','calm morning','healthy routine'],
+  career:['creative work desk','leadership','purposeful work','team collaboration'],
+  freedom:['financial planning','independence','minimal living','future planning'],
+  creative:['artist studio','painting','writing desk','cinematic still'],
+  mind:['learning','books and study','travel map','curiosity'],
+  home:['cozy home','interior design','belonging','warm living room']
+};
+
+const IMAGE_SEARCH_HORIZON_HINTS={
+  'this year':['this year goals','small wins','progress'],
+  '3 years':['future vision','long-term growth','next chapter'],
+  'someday':['dream life','aspiration','possibility']
+};
+
+function getImageSearchHintsFromCapture(){
+  const inputText=String(document.getElementById('dreamInput')?.value||'').trim();
+  const inferredDomain=DomainRegistry.detect(inputText||'');
+  const domainHints=IMAGE_SEARCH_DOMAIN_HINTS[inferredDomain]||IMAGE_SEARCH_DOMAIN_HINTS.mind;
+  const selectedHz=document.querySelector('.hz-btn.selected')?.dataset?.hz||'someday';
+  const horizonHints=IMAGE_SEARCH_HORIZON_HINTS[selectedHz]||IMAGE_SEARCH_HORIZON_HINTS.someday;
+  const merged=[...domainHints,...horizonHints];
+  const seen=new Set();
+  return merged.filter(item=>{
+    const key=String(item||'').toLowerCase();
+    if(!key||seen.has(key))return false;
+    seen.add(key);
+    return true;
+  }).slice(0,6);
+}
+
+function renderCaptureImageSearchSuggestions(){
+  const wrap=document.getElementById('imageSearchSuggestions');
+  if(!wrap)return;
+  const hints=getImageSearchHintsFromCapture();
+  wrap.innerHTML=hints.map(hint=>`<button class="image-search-suggest-chip" type="button" onclick="useCaptureImageSearchSuggestion('${esc(String(hint))}')">${esc(String(hint))}</button>`).join('');
+}
+
+function useCaptureImageSearchSuggestion(term=''){
+  const input=document.getElementById('imageSearchInput');
+  if(!input)return;
+  input.value=String(term||'');
+  searchCaptureImages();
+}
+
+function syncCaptureImageSearchSelectionUI(){
+  const addSelectedBtn=document.getElementById('imageSearchAddSelected');
+  const clearBtn=document.getElementById('imageSearchClearSelected');
+  const count=captureImageSearchSelection.size;
+  if(addSelectedBtn){
+    addSelectedBtn.disabled=!count;
+    addSelectedBtn.textContent=`Add selected (${count})`;
+  }
+  if(clearBtn)clearBtn.disabled=!count;
+}
+
+function clearImageSearchSelection(){
+  captureImageSearchSelection.clear();
+  document.querySelectorAll('.image-search-check').forEach(box=>{ box.checked=false; });
+  syncCaptureImageSearchSelectionUI();
+}
+
+function toggleImageSearchResultSelection(index,checked){
+  if(checked)captureImageSearchSelection.add(index);
+  else captureImageSearchSelection.delete(index);
+  syncCaptureImageSearchSelectionUI();
+}
+
+function appendImageReferencesToCapture(items=[]){
+  const inp=document.getElementById('dreamInput');
+  if(!inp||!items.length)return false;
+  const current=String(inp.value||'').trim();
+  const lines=[];
+  items.forEach(item=>{
+    const title=String(item?.title||'Image').trim();
+    const source=String(item?.source||'Wikimedia Commons').trim();
+    const url=String(item?.url||'').trim();
+    if(!url)return;
+    lines.push(`Image reference (${title}): ${url}`);
+    lines.push(`Source: ${source}`);
+  });
+  const block=lines.join('\n');
+  const next=current?`${current}\n${block}`:block;
+  if(next.length>Number(inp.maxLength||1800)){
+    showToast('Adding those image links would exceed the capture length limit.', 'warning');
+    return false;
+  }
+  inp.value=next;
+  inp.focus();
+  inp.setSelectionRange(next.length,next.length);
+  return true;
+}
+
+function addSelectedImageResultsToCapture(){
+  if(!captureImageSearchSelection.size)return;
+  const items=[...captureImageSearchSelection]
+    .map(index=>captureImageSearchResultsCache[index])
+    .filter(Boolean);
+  if(!items.length)return;
+  const inserted=appendImageReferencesToCapture(items);
+  if(inserted){
+    showToast(`${items.length} image link${items.length!==1?'s':''} added to capture.`, 'success');
+    clearImageSearchSelection();
+  }
+}
+
+function toggleCaptureImageSearchPanel(){
+  const panel=document.getElementById('imageSearchPanel');
+  const toggleBtn=document.getElementById('imageSearchToggleBtn');
+  if(!panel)return;
+  const willOpen=!panel.classList.contains('open');
+  panel.classList.toggle('open',willOpen);
+  panel.hidden=!willOpen;
+  if(toggleBtn)toggleBtn.classList.toggle('is-open',willOpen);
+  if(willOpen){
+    renderCaptureImageSearchSuggestions();
+    clearImageSearchSelection();
+    setTimeout(()=>document.getElementById('imageSearchInput')?.focus(),40);
+  }
+}
+
+function addImageSearchResultToCapture(index){
+  const item=captureImageSearchResultsCache[index];
+  if(!item)return;
+  const inserted=appendImageReferencesToCapture([item]);
+  if(inserted)showToast('Image link added to capture.', 'success');
+}
+
+async function searchCaptureImages(){
+  const input=document.getElementById('imageSearchInput');
+  const status=document.getElementById('imageSearchStatus');
+  const resultsEl=document.getElementById('imageSearchResults');
+  if(!input||!status||!resultsEl)return;
+  const query=String(input.value||'').trim();
+  if(query.length<2){
+    showToast('Type at least 2 characters to search images.', 'warning');
+    return;
+  }
+  const requestId=++captureImageSearchRequestId;
+  status.textContent='Searching images…';
+  resultsEl.innerHTML='';
+  captureImageSearchResultsCache=[];
+  clearImageSearchSelection();
+  try{
+    const endpoint=`https://commons.wikimedia.org/w/api.php?action=query&generator=search&gsrnamespace=6&gsrsearch=${encodeURIComponent(query)}&gsrlimit=18&prop=imageinfo&iiprop=url|mime|extmetadata&iiurlwidth=420&format=json&origin=*`;
+    const resp=await fetch(endpoint,{method:'GET'});
+    if(!resp.ok)throw new Error(`Image search failed (${resp.status})`);
+    const data=await resp.json();
+    if(requestId!==captureImageSearchRequestId)return;
+    const pages=Object.values(data?.query?.pages||{});
+    const seen=new Set();
+    const items=pages.map(page=>{
+      const info=page?.imageinfo?.[0]||null;
+      if(!info)return null;
+      if(info.mime&&!String(info.mime).toLowerCase().startsWith('image/'))return null;
+      const rawUrl=String(info.url||'');
+      const url=sanitizeUrl(rawUrl,{allowData:false,allowBlob:false});
+      if(!url)return null;
+      if(seen.has(url))return null;
+      seen.add(url);
+      const thumb=sanitizeUrl(String(info.thumburl||rawUrl),{allowData:false,allowBlob:false})||url;
+      const title=String(page.title||'').replace(/^File:/,'').replace(/_/g,' ').trim()||'Untitled image';
+      return {title,url,thumb,source:'Wikimedia Commons'};
+    }).filter(Boolean);
+    captureImageSearchResultsCache=items;
+    if(!items.length){
+      status.textContent='No matching images found. Try different keywords.';
+      return;
+    }
+    status.textContent=`Found ${items.length} image${items.length!==1?'s':''}.`;
+    resultsEl.innerHTML=items.map((item,idx)=>`
+      <article class="image-search-card">
+        <div class="image-search-thumb-wrap">
+          <input class="image-search-check" type="checkbox" aria-label="Select ${esc(item.title)}" onchange="toggleImageSearchResultSelection(${idx}, this.checked)">
+          <img class="image-search-thumb" src="${item.thumb}" alt="${esc(item.title)}" loading="lazy">
+        </div>
+        <div class="image-search-meta">
+          <div class="image-search-title">${esc(item.title)}</div>
+          <button class="image-search-add" type="button" onclick="addImageSearchResultToCapture(${idx})">Add to capture</button>
+        </div>
+      </article>
+    `).join('');
+    syncCaptureImageSearchSelectionUI();
+  }catch(err){
+    if(requestId!==captureImageSearchRequestId)return;
+    status.textContent='Could not load images right now. Try again in a moment.';
+    showToast(err?.message||'Image search is unavailable right now.', 'warning');
   }
 }
 
