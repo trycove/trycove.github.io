@@ -3295,9 +3295,10 @@ body.auth-welcome-active .auth-gate-card {
 .dream-card-top {
   display:flex;
   align-items:flex-start;
-  justify-content:space-between;
+  justify-content:flex-end;
   gap:10px;
   margin-bottom:12px;
+  position:relative;
 }
 .dream-card-delete {
   border:none;
@@ -3311,6 +3312,34 @@ body.auth-welcome-active .auth-gate-card {
   transition:color .2s, transform .2s;
 }
 .dream-card-delete:hover { color:var(--rose); transform:translateY(-1px); }
+.dream-card-delete-menu {
+  position:absolute;
+  top:24px;
+  right:0;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  min-height:30px;
+  padding:6px 11px;
+  border-radius:10px;
+  border:1px solid rgba(186,74,74,0.42);
+  background:rgba(186,74,74,0.08);
+  color:#A24D4D;
+  font-family:'DM Sans',sans-serif;
+  font-size:10px;
+  letter-spacing:0.08em;
+  text-transform:uppercase;
+  font-weight:600;
+  cursor:pointer;
+  transition:all .2s;
+}
+.dream-card-delete-menu:hover {
+  border-color:#B45454;
+  color:#8F3F3F;
+  background:rgba(186,74,74,0.12);
+  box-shadow:0 0 0 1px rgba(186,74,74,0.08);
+}
+.dream-card.show-delete-menu .dream-card-delete-menu { display:inline-flex; }
 .dream-card-media {
   width:100%;
   border-radius:14px;
@@ -10076,7 +10105,6 @@ function appendCommunityDreamToCapture(rawText=''){
   input.value=nextValue;
   input.focus();
   input.setSelectionRange(nextValue.length,nextValue.length);
-  renderDreamTypingEcho(nextValue);
 }
 
 function extractCommunityDreamFromDataTransfer(dataTransfer){
@@ -11386,9 +11414,9 @@ document.addEventListener('DOMContentLoaded', () => {
         seedPlaceholderLockedByConfessional=false;
         rotateSeed();
       }
-      renderDreamTypingEcho(dreamInput.value);
     });
-    renderDreamTypingEcho(dreamInput.value);
+    const echo=document.getElementById('dreamEcho');
+    if(echo)echo.innerHTML='';
   }
   if (recPanelOpen && firstGlow && window.innerWidth > 1023) {
     const sidePanel = document.getElementById('sidePanel');
@@ -14076,7 +14104,8 @@ function buildDreamCardHTML(d,dom,now,delay=0){
   return `
     <article class="dream-card${isStale?' stale':''}" data-dream-id="${esc(d.id)}" data-domain="${esc(d.domain)}" style="--card-color:${dom.color};animation-delay:${delay*45}ms">
       <div class="dream-card-top">
-        <button class="dream-card-delete" type="button" onclick="event.stopPropagation();removeDream('${esc(d.id)}','${esc(d.domain)}')" title="Remove">⋯</button>
+        <button class="dream-card-delete" type="button" onclick="event.stopPropagation();toggleDreamCardDeleteMenu(this)" title="More actions" aria-label="More actions">⋯</button>
+        <button class="dream-card-delete-menu" type="button" onclick="event.stopPropagation();removeDream('${esc(d.id)}','${esc(d.domain)}')">Delete</button>
       </div>
       ${imageMarkup}
       <div class="dream-card-domain">${dom.label}</div>
@@ -15897,6 +15926,18 @@ function closeMobileActiveRows(scopeCard=null){
   rows.forEach(row=>row.classList.remove('row-active'));
 }
 
+function closeDreamCardDeleteMenus(){
+  document.querySelectorAll('.dream-card.show-delete-menu').forEach(card=>card.classList.remove('show-delete-menu'));
+}
+
+function toggleDreamCardDeleteMenu(trigger){
+  const card=trigger?.closest('.dream-card');
+  if(!card)return;
+  const shouldOpen=!card.classList.contains('show-delete-menu');
+  closeDreamCardDeleteMenus();
+  if(shouldOpen)card.classList.add('show-delete-menu');
+}
+
 function handleDreamRowClick(event,id){
   const row=event?.currentTarget||document.getElementById(`row-${id}`);
   if(!row)return;
@@ -15912,6 +15953,7 @@ function handleDreamRowClick(event,id){
 }
 
 document.addEventListener('click',event=>{
+  if(!event.target.closest('.dream-card-top'))closeDreamCardDeleteMenus();
   if(window.innerWidth>768)return;
   const clickedRow=event.target.closest('.cat-dream-row');
   if(clickedRow)return;
