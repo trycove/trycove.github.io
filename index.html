@@ -2316,6 +2316,29 @@ body.auth-welcome-active .auth-gate-card {
   text-transform:uppercase;
 }
 .image-search-go:hover { border-color:var(--rose);color:var(--rose); }
+.image-search-filter-row {
+  margin-top:8px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+}
+.image-search-filter-label {
+  font-family:'DM Sans',sans-serif;
+  font-size:9px;
+  letter-spacing:0.1em;
+  text-transform:uppercase;
+  color:var(--text-faint);
+}
+.image-search-filter {
+  border:1px solid var(--border);
+  border-radius:8px;
+  background:var(--surface);
+  color:var(--text-dim);
+  font-family:'DM Sans',sans-serif;
+  font-size:10px;
+  padding:6px 8px;
+}
 .image-search-status {
   margin-top:8px;
   font-family:'DM Sans',sans-serif;
@@ -2397,6 +2420,26 @@ body.auth-welcome-active .auth-gate-card {
   line-height:1.4;
   max-height:2.8em;
   overflow:hidden;
+}
+.image-search-license-tag {
+  display:inline-flex;
+  align-items:center;
+  max-width:max-content;
+  border:1px solid rgba(78,150,102,0.25);
+  border-radius:999px;
+  background:rgba(78,150,102,0.08);
+  color:var(--green);
+  font-family:'DM Sans',sans-serif;
+  font-size:8px;
+  letter-spacing:0.1em;
+  text-transform:uppercase;
+  padding:3px 7px;
+}
+.image-search-attribution {
+  font-family:'DM Sans',sans-serif;
+  font-size:9px;
+  color:var(--text-muted);
+  line-height:1.35;
 }
 .image-search-add {
   border:1px solid var(--border-hi);
@@ -6495,6 +6538,13 @@ body::before { animation: ambientDrift 18s ease-in-out infinite; }
           <div class="image-search-row">
             <input class="image-search-input" id="imageSearchInput" type="text" placeholder="Search images (e.g. ocean, travel, writing)" onkeydown="if(event.key==='Enter'){event.preventDefault();searchCaptureImages();}">
             <button class="image-search-go" type="button" onclick="searchCaptureImages()">Search</button>
+          </div>
+          <div class="image-search-filter-row">
+            <span class="image-search-filter-label">License safety</span>
+            <select class="image-search-filter" id="imageSearchLicenseMode" onchange="handleCaptureImageLicenseModeChange()">
+              <option value="safe" selected>Safe only (CC0 / Public Domain)</option>
+              <option value="all">All Creative Commons</option>
+            </select>
           </div>
           <div class="image-search-suggestions" id="imageSearchSuggestions"></div>
           <div class="image-search-actions">
@@ -16403,11 +16453,17 @@ function appendImageReferencesToCapture(items=[]){
   const lines=[];
   items.forEach(item=>{
     const title=String(item?.title||'Image').trim();
-    const source=String(item?.source||'Wikimedia Commons').trim();
+    const source=String(item?.source||'').trim();
+    const creator=String(item?.creator||'').trim();
+    const license=String(item?.license||'').trim();
+    const sourceUrl=String(item?.sourceUrl||'').trim();
     const url=String(item?.url||'').trim();
     if(!url)return;
     lines.push(`Image reference (${title}): ${url}`);
-    lines.push(`Source: ${source}`);
+    if(creator)lines.push(`Creator: ${creator}`);
+    if(license)lines.push(`License: ${license}`);
+    if(source)lines.push(`Source: ${source}`);
+    if(sourceUrl)lines.push(`Source page: ${sourceUrl}`);
   });
   const block=lines.join('\n');
   const next=current?`${current}\n${block}`:block;
@@ -16456,8 +16512,47 @@ function addImageSearchResultToCapture(index){
   if(inserted)showToast('Image link added to capture.', 'success');
 }
 
+function extractTextFromPossibleHtml(raw=''){
+  const div=document.createElement('div');
+  div.innerHTML=String(raw||'');
+  return String(div.textContent||div.innerText||'').replace(/\s+/g,' ').trim();
+}
+
+function normalizeLicenseToken(value=''){
+  return String(value||'').trim().toLowerCase().replace(/[^a-z0-9]+/g,'');
+}
+
+function buildLicenseLabel(base='',version=''){
+  const rawBase=String(base||'').trim();
+  const rawVersion=String(version||'').trim();
+  if(!rawBase)return '';
+  const normalized=normalizeLicenseToken(rawBase);
+  if(['pdm','publicdomain','cc0'].includes(normalized)){
+    if(normalized==='cc0')return 'CC0';
+    if(normalized==='pdm')return 'Public Domain Mark';
+    return 'Public Domain';
+  }
+  const compact=rawBase.toUpperCase().replace(/\s+/g,'-').replace(/_/g,'-');
+  return rawVersion?`${compact}-${rawVersion}`:compact;
+}
+
+function isSafeImageLicense(item){
+  const normalized=normalizeLicenseToken(item?.license||'');
+  return normalized==='cc0'||normalized==='pdm'||normalized==='publicdomain'||normalized==='publicdomainmark';
+}
+
+function getImageSearchLicenseMode(){
+  const select=document.getElementById('imageSearchLicenseMode');
+  return String(select?.value||'safe');
+}
+
+function handleCaptureImageLicenseModeChange(){
+  const query=String(document.getElementById('imageSearchInput')?.value||'').trim();
+  if(query.length>=2)searchCaptureImages();
+}
+
 async function fetchWikimediaImageResults(query,limit=16){
-  const endpoint=`https://commons.wikimedia.org/w/api.php?action=query&generator=search&gsrnamespace=6&gsrsearch=${encodeURIComponent(query)}&gsrlimit=${Math.max(1,Math.min(30,Number(limit)||16))}&prop=imageinfo&iiprop=url|mime|extmetadata&iiurlwidth=420&format=json&origin=*`;
+  const endpoint=`https://commons.wikimedia.org/w/api.php?action=query&generator=search&gsrnamespace=6&gsrsearch=${encodeURIComponent(query)}&gsrlimit=${Math.max(1,Math.min(30,Number(limit)||16))}&prop=imageinfo&iiprop=url|mime|extmetadata&iiurlwidth=420&inprop=url&format=json&origin=*`;
   const resp=await fetch(endpoint,{method:'GET'});
   if(!resp.ok)throw new Error(`Wikimedia search failed (${resp.status})`);
   const data=await resp.json();
@@ -16471,7 +16566,21 @@ async function fetchWikimediaImageResults(query,limit=16){
     if(!url)return null;
     const thumb=sanitizeUrl(String(info.thumburl||rawUrl),{allowData:false,allowBlob:false})||url;
     const title=String(page.title||'').replace(/^File:/,'').replace(/_/g,' ').trim()||'Untitled image';
-    return {title,url,thumb,source:'Wikimedia Commons'};
+    const metadata=info.extmetadata||{};
+    const creator=extractTextFromPossibleHtml(metadata?.Artist?.value||metadata?.Credit?.value||'');
+    const license=buildLicenseLabel(metadata?.LicenseShortName?.value||metadata?.UsageTerms?.value||metadata?.License?.value||'', metadata?.LicenseVersion?.value||'');
+    const licenseUrl=sanitizeUrl(String(metadata?.LicenseUrl?.value||''),{allowData:false,allowBlob:false});
+    const sourceUrl=sanitizeUrl(String(page.fullurl||''),{allowData:false,allowBlob:false});
+    return {
+      title,
+      url,
+      thumb,
+      source:'Wikimedia Commons',
+      creator,
+      license,
+      licenseUrl,
+      sourceUrl
+    };
   }).filter(Boolean);
 }
 
@@ -16489,12 +16598,14 @@ async function fetchOpenverseImageResults(query,limit=16){
     const title=String(item?.title||item?.foreign_landing_url||'Untitled image').trim();
     const provider=String(item?.provider||'').trim();
     const creator=String(item?.creator||'').trim();
-    const license=String(item?.license||'').trim();
+    const license=buildLicenseLabel(item?.license||'', item?.license_version||'');
+    const licenseUrl=sanitizeUrl(String(item?.license_url||''),{allowData:false,allowBlob:false});
+    const sourceUrl=sanitizeUrl(String(item?.foreign_landing_url||item?.detail_url||''),{allowData:false,allowBlob:false});
     const sourceParts=['Openverse'];
     if(provider)sourceParts.push(provider);
     if(creator)sourceParts.push(`by ${creator}`);
     if(license)sourceParts.push(license.toUpperCase());
-    return {title,url,thumb,source:sourceParts.join(' · ')};
+    return {title,url,thumb,source:sourceParts.join(' · '),creator,license,licenseUrl,sourceUrl};
   }).filter(Boolean);
 }
 
@@ -16528,18 +16639,26 @@ async function searchCaptureImages(){
     if(!combined.length)throw new Error(failures[0]||'Image search failed right now.');
 
     const seen=new Set();
-    const items=combined.filter(item=>{
+    const deduped=combined.filter(item=>{
       const key=String(item?.url||'').trim();
       if(!key||seen.has(key))return false;
       seen.add(key);
       return true;
-    }).slice(0,24);
+    });
+    const mode=getImageSearchLicenseMode();
+    const filtered=mode==='safe'?deduped.filter(isSafeImageLicense):deduped;
+    const items=filtered.slice(0,24);
     captureImageSearchResultsCache=items;
     if(!items.length){
-      status.textContent='No matching images found. Try different keywords.';
+      status.textContent=mode==='safe'
+        ? 'No CC0/Public Domain results found. Try a different query or switch license mode to All Creative Commons.'
+        : 'No matching images found. Try different keywords.';
       return;
     }
-    status.textContent=`Found ${items.length} image${items.length!==1?'s':''}.`;
+    const safeCount=deduped.filter(isSafeImageLicense).length;
+    status.textContent=mode==='safe'
+      ? `Found ${items.length} safe image${items.length!==1?'s':''} (CC0/Public Domain).`
+      : `Found ${items.length} image${items.length!==1?'s':''} (${safeCount} are CC0/Public Domain).`;
     resultsEl.innerHTML=items.map((item,idx)=>`
       <article class="image-search-card">
         <div class="image-search-thumb-wrap">
@@ -16548,6 +16667,8 @@ async function searchCaptureImages(){
         </div>
         <div class="image-search-meta">
           <div class="image-search-title">${esc(item.title)}</div>
+          ${item.license?`<div class="image-search-license-tag">${esc(item.license)}</div>`:''}
+          ${item.source||item.creator?`<div class="image-search-attribution">${esc([item.creator?`By ${item.creator}`:'',item.source||''].filter(Boolean).join(' · '))}</div>`:''}
           <button class="image-search-add" type="button" onclick="addImageSearchResultToCapture(${idx})">Add to capture</button>
         </div>
       </article>
