@@ -3562,6 +3562,16 @@ body.auth-welcome-active .auth-gate-card {
   .cna-save { width:100%;padding:7px 10px;margin-left:0; }
 }
 
+/* Simplified mode: hide removed reflective/productivity surfaces */
+.cdr-next-action,
+#preMortemLauncher,
+.premortem-launcher,
+.dd-action.feature.premortem,
+#dreamWoopSection,
+.dd-action.feature.woop {
+  display:none !important;
+}
+
 .cdr-edit-wrap { display:none;padding:10px 16px;gap:8px;align-items:center;border-bottom:1px solid var(--border);background:var(--surface2); }
 .cdr-edit-wrap.open { display:flex; }
 .cdr-edit-input { flex:1;background:transparent;border:none;outline:none;font-family:'Lora',Georgia,serif;font-size:14px;font-style:italic;color:var(--text);line-height:1.6; }
@@ -5824,10 +5834,6 @@ body::before { animation: ambientDrift 18s ease-in-out infinite; }
     </div>
   </div>
 
-  <div class="pulse-streak-wrap" id="pulseStreakWrap" style="display:none;"></div>
-  <div class="pulse-card-wrap" id="pulseCardWrap" style="display:none;"></div>
-  <div class="pulse-confirm-strip" id="pulseConfirmStrip" style="display:none;"></div>
-
   <div class="return-greeting memory-card" id="memoryCard">
     <div class="rg-body">
       <span class="rg-icon" id="memoryCardIcon">✦</span>
@@ -5999,22 +6005,6 @@ body::before { animation: ambientDrift 18s ease-in-out infinite; }
     <div class="image-journal-list" id="imageJournalList"></div>
   </div>
 
-  <div class="micro-insight" id="microInsight" aria-live="polite">
-    <span class="mi-icon">✦</span>
-    <span class="mi-text" id="microInsightText"></span>
-    <span class="mi-domain-tag" id="miDomainTag"></span>
-    <button class="mi-close" onclick="dismissMicroInsight()">✕</button>
-  </div>
-
-  <div class="gap-insight" id="gapInsight">
-    <span class="gi-icon">◎</span>
-    <div class="gi-body">
-      <div class="gi-label">Reflection prompt</div>
-      <div class="gi-text" id="gapInsightText"></div>
-    </div>
-    <button class="gi-close" onclick="dismissGapInsight()">✕</button>
-  </div>
-
   <!-- Life Map Section -->
   <div class="life-map-section">
     <div class="section-header">
@@ -6064,20 +6054,6 @@ body::before { animation: ambientDrift 18s ease-in-out infinite; }
 
   </div>
 
-  <div class="tension-card" id="tensionCard">
-    <span class="tension-icon">◎</span>
-    <div class="tension-body">
-      <div class="tension-label">Something worth noticing</div>
-      <div class="tension-text" id="tensionObservation"></div>
-      <div class="tension-question" id="tensionQuestion"></div>
-      <div class="modal-disclaimer tension-disclaimer">AI can make mistakes. This is a reflection tool, not professional advice.</div>
-      <div class="tension-actions">
-        <button class="tension-btn" onclick="dismissTensionCard()">Sit with this</button>
-        <button class="tension-btn" onclick="exploreTensionInDeepDive()">Explore in Deep Dive →</button>
-      </div>
-    </div>
-  </div>
-
   <!-- Chapters Section -->
   <div class="chapters-section">
     <div class="section-header">
@@ -6118,58 +6094,6 @@ body::before { animation: ambientDrift 18s ease-in-out infinite; }
   </div>
 
   </div>
-
-  <!-- Reflection Section -->
-  <div class="reflection-section">
-    <div class="section-header">
-      <span class="section-label">Reflection</span>
-      <div class="section-line"></div>
-    </div>
-
-    <!-- SYNTHESIS, elevated to a real section -->
-  <div class="syn-section" id="synSection">
-    <div class="syn-rule">
-      <div class="syn-rule-line"></div>
-      <span class="syn-rule-text">Reflection</span>
-      <div class="syn-rule-line"></div>
-    </div>
-    <div class="syn-header">
-      <div class="syn-heading">What do your dreams say about you?</div>
-      <div class="syn-heading-sub">A reflection generated from everything you've written here.</div>
-    </div>
-    <div id="synGate"></div>
-    <div class="syn-out" id="synOut">
-      <div class="syn-out-header">
-        <span class="syn-out-label">Your reflection</span>
-        <button class="syn-copy-btn" onclick="copySynthesis()">Copy ↗</button>
-      </div>
-      <div class="syn-text" id="synText"></div>
-    </div>
-    <div class="syn-actions" id="synActions" style="display:none;">
-      <button class="syn-action-btn" onclick="openLifeLetter()">✉ Life Letter from Future You</button>
-      <button class="syn-action-btn" onclick="exportData()">↓ Export Dreams</button>
-      <button class="syn-action-btn" onclick="openPreMortemLauncher()">⚠ Pre-mortem</button>
-    </div>
-    <div class="premortem-launcher" id="preMortemLauncher" style="display:none;">
-      <div class="premortem-launcher-inner">
-        <div class="premortem-launcher-header">
-          <div class="premortem-launcher-title">
-            Stress-test a dream
-          </div>
-          <button class="premortem-launcher-close" onclick="closePreMortemLauncher()">✕</button>
-        </div>
-        <div class="premortem-launcher-sub">Pick a dream to pressure-test. This works best on dreams you care about but haven't moved on.</div>
-        <select class="modal-dream-select" id="preMortemDreamSelect">
-          <!-- populated by openPreMortemLauncher() -->
-        </select>
-        <div class="premortem-launcher-actions">
-          <button class="auth-gate-btn" onclick="startPreMortemFromLauncher()">Run pre-mortem →</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="pulse-history-section" id="pulseHistorySection" style="display:none;"></div>
 
   </div>
 </div>
@@ -6253,24 +6177,6 @@ body::before { animation: ambientDrift 18s ease-in-out infinite; }
     <div class="checkin-list-note">You can also skip this entirely.</div>
     <div class="checkin-list" id="checkinList"></div>
     <button class="checkin-skip" onclick="skipCheckin()">Skip for now</button>
-  </div>
-</div>
-
-<!-- LIFE LETTER -->
-<div class="ll-overlay" id="llOverlay" onclick="if(event.target===this)closeLetter()">
-  <div class="life-letter-modal">
-    <div class="ll-head">
-      <div class="ll-title">A letter from your future self</div>
-      <div class="ll-sub">Written as though everything you're dreaming of has come true.</div>
-      <button class="ll-close" onclick="closeLetter()">✕</button>
-    </div>
-    <div class="ll-body">
-      <div class="ll-text" id="llText"></div>
-    </div>
-    <div class="ll-footer">
-      <button class="ll-copy" onclick="copyLetter()">Copy letter</button>
-      <button class="ll-regenerate" onclick="generateLetter(true)">Regenerate</button>
-    </div>
   </div>
 </div>
 
@@ -6794,7 +6700,7 @@ function checkMissingDeps() {
       reportDebug('error', `Required function ${fn} is not defined`, { where: 'boot check' });
     }
   });
-  const requiredElements = ['dreamInput', 'addBtn', 'catsGrid', 'synText', 'returnGreeting', 'onboardBanner', 'mainHeader', 'inputSection', 'seedChips', 'communityDreamStream', 'communityDreamCount', 'communityDreamTrack', 'communityDreamRailA', 'communityDreamRailB', 'communityDreamShareToggle', 'imgResultContainer', 'microInsight', 'gapInsight', 'tensionCard', 'coverageSection', 'categoriesSection', 'emptyState', 'synSection', 'pulseCardWrap', 'pulseStreakWrap', 'pulseConfirmStrip', 'pulseHistorySection', 'covInfoPopover', 'achievedOverlay', 'checkinOverlay', 'llOverlay', 'fab', 'datepickOverlay', 'modalOverlay', 'modalMemoryDot', 'deepDiveOverlay', 'deepDiveContent', 'discoverOverlay', 'discoveryOverlay', 'discoveryContent', 'capsuleOverlay', 'capsuleContent', 'capsuleRevealOverlay', 'capsuleRevealContent', 'capsuleEmptyOverlay', 'wanderingPromptOverlay', 'wanderingPromptText', 'covTooltip'];
+  const requiredElements = ['dreamInput', 'addBtn', 'catsGrid', 'returnGreeting', 'onboardBanner', 'mainHeader', 'inputSection', 'seedChips', 'communityDreamStream', 'communityDreamCount', 'communityDreamTrack', 'communityDreamRailA', 'communityDreamRailB', 'communityDreamShareToggle', 'imgResultContainer', 'coverageSection', 'categoriesSection', 'emptyState', 'covInfoPopover', 'achievedOverlay', 'checkinOverlay', 'fab', 'datepickOverlay', 'modalOverlay', 'modalMemoryDot', 'deepDiveOverlay', 'deepDiveContent', 'discoverOverlay', 'discoveryOverlay', 'discoveryContent', 'capsuleOverlay', 'capsuleContent', 'capsuleRevealOverlay', 'capsuleRevealContent', 'capsuleEmptyOverlay', 'wanderingPromptOverlay', 'wanderingPromptText', 'covTooltip'];
   requiredElements.forEach(id => {
     if (!document.getElementById(id)) {
       reportDebug('error', `Required DOM element #${id} is missing`, { where: 'boot check' });
@@ -10210,7 +10116,6 @@ let dreamboxAttachmentDragState = null;
 let dreamboxPreviewAttachmentList = [];
 let dreamboxPreviewAttachmentIndex = -1;
 let dreamboxSelectedNoteId = '';
-let dreamWoopUi = { dreamId:'', expanded:false, stepIndex:0 };
 let activeTimelineMoveId = null;
 let draggedTimelineDreamId = null;
 let timelineLockedDreamId = null;
@@ -10534,8 +10439,7 @@ function isReflectionFlowOpen(){
     getUI('deepDiveOverlay')?.classList.contains('open') ||
     getUI('discoveryOverlay')?.classList.contains('open') ||
     getUI('capsuleOverlay')?.classList.contains('open') ||
-    getUI('capsuleRevealOverlay')?.classList.contains('open') ||
-    getUI('llOverlay')?.classList.contains('open')
+    getUI('capsuleRevealOverlay')?.classList.contains('open')
   );
 }
 
@@ -10605,8 +10509,6 @@ function toggleAdminPerspective(){
   render(true);
   renderRecommendations();
   syncRecPanelState();
-  renderDailyPulseCard();
-  renderPulseHistorySection();
   syncCloudUi();
 }
 
@@ -11016,13 +10918,9 @@ function maybeShowFirstDreamNote(prevCount){
   if(prevCount<3&&nextCount>=3){
     const note=document.getElementById('firstDreamNote');
     if(note){
-      note.textContent="You've mapped 3 dreams. See what they say about you →";
-      note.classList.add('aha-link');
-      note.onclick=()=>{
-        note.onclick=null;
-        note.classList.remove('aha-link');
-        if(dreams.length>=3)synthesize();
-      };
+      note.textContent="You've mapped 3 dreams. Open one in Dreambox to articulate it further.";
+      note.classList.remove('aha-link');
+      note.onclick=null;
       requestAnimationFrame(()=>note.classList.add('visible'));
     }
     return;
@@ -11038,14 +10936,9 @@ function maybeShowFirstDreamNote(prevCount){
     const note=document.getElementById('firstDreamNote');
     if(!note)return;
     firstDreamNoteShown=true;
-    note.textContent="That's one. Before adding more, try WOOP to test the wish against a real obstacle.";
-    note.classList.add('aha-link');
-    note.onclick=()=>{
-      note.onclick=null;
-      note.classList.remove('aha-link');
-      const firstDream=dreams[0];
-      if(firstDream)openModal(firstDream.domain,firstDream.id,'woop');
-    };
+    note.textContent='That\'s one. Add one more from a different life area to broaden the picture.';
+    note.classList.remove('aha-link');
+    note.onclick=null;
     requestAnimationFrame(()=>note.classList.add('visible'));
     firstDreamNoteTimer=setTimeout(()=>hideFirstDreamNote(),8000);
   }
@@ -11090,25 +10983,6 @@ function revealNewDreamInChapters(domainKey=''){
   if(domainKey){
     requestAnimationFrame(()=>document.querySelector(`.cat-card[data-domkey="${domainKey}"]`)?.classList.add('expanded'));
   }
-}
-
-function dismissMicroInsight(){
-  const el=document.getElementById('microInsight');
-  if(!el)return;
-  if(miDismissTimer)clearTimeout(miDismissTimer);
-  el.classList.add('dismissing');
-  setTimeout(()=>{
-    el.classList.remove('visible','dismissing');
-  },200);
-}
-
-function dismissGapInsight(){
-  const el=document.getElementById('gapInsight');
-  if(!el)return;
-  el.classList.add('gap-insight-dismissing');
-  setTimeout(()=>{
-    el.classList.remove('visible','gap-insight-dismissing');
-  },250);
 }
 
 let imageScans = loadScans();
@@ -12390,7 +12264,6 @@ function addSelectedDiscoveryDreams(){
   requestAnimationFrame(()=>{
     [...addedDomains].forEach(domainKey=>document.querySelector(`.cat-card[data-domkey="${domainKey}"]`)?.classList.add('expanded'));
   });
-  if(lastAdded)showMicroInsight(lastAdded.text,lastAdded.domain);
 }
 function renderDiscoveryFlow(){
   const content=document.getElementById('discoveryContent');
@@ -12469,76 +12342,6 @@ function renderDiscoveryFlow(){
     </div>`;
 }
 syncDiscoveryButtonLabel();
-
-function getDreamWoopStartStep(dream){
-  const woop=normalizeWoopState(dream?.woop||{});
-  if(!woop.outcome.trim())return 0;
-  if(!woop.obstacle.trim())return 2;
-  if(!woop.plan.trim())return 3;
-  return 3;
-}
-function syncDreamWoopUi(dream){
-  if(!dream)return;
-  if(dreamWoopUi.dreamId!==dream.id){
-    dreamWoopUi={dreamId:dream.id,expanded:false,stepIndex:getDreamWoopStartStep(dream)};
-  }else{
-    dreamWoopUi.stepIndex=Math.max(0,Math.min(3,Number(dreamWoopUi.stepIndex)||0));
-  }
-  if(dreamDashboardFocusSection==='woop')dreamWoopUi.expanded=true;
-}
-function toggleDreamWoopSection(forceOpen){
-  const dream=dreams.find(item=>item.id===dreamDashboardId);
-  if(!dream)return;
-  syncDreamWoopUi(dream);
-  dreamWoopUi.expanded=typeof forceOpen==='boolean'?forceOpen:!dreamWoopUi.expanded;
-  dreamDashboardFocusSection=dreamWoopUi.expanded?'woop':'overview';
-  renderDreamDashboard();
-  if(dreamWoopUi.expanded){
-    requestAnimationFrame(()=>{
-      scrollDreamboxTo('dreamWoopSection','#dreamWoopInput');
-      if(dreamWoopUi.stepIndex>0)document.getElementById('dreamWoopInput')?.focus();
-    });
-  }
-}
-function goToDreamWoopStep(index){
-  const dream=dreams.find(item=>item.id===dreamDashboardId);
-  if(!dream)return;
-  syncDreamWoopUi(dream);
-  dreamWoopUi.expanded=true;
-  dreamWoopUi.stepIndex=Math.max(0,Math.min(3,Number(index)||0));
-  dreamDashboardFocusSection='woop';
-  renderDreamDashboard();
-  if(dreamWoopUi.stepIndex>0){
-    requestAnimationFrame(()=>document.getElementById('dreamWoopInput')?.focus());
-  }
-}
-function saveDreamWoopStep(){
-  const dream=dreams.find(item=>item.id===dreamDashboardId);
-  if(!dream)return;
-  syncDreamWoopUi(dream);
-  const currentStep=Math.max(0,Math.min(3,Number(dreamWoopUi.stepIndex)||0));
-  if(currentStep===0){
-    goToDreamWoopStep(1);
-    return;
-  }
-  const input=document.getElementById('dreamWoopInput');
-  const value=String(input?.value||'').trim();
-  if(!value){
-    input?.focus();
-    return;
-  }
-  const fieldKey={1:'outcome',2:'obstacle',3:'plan'}[currentStep];
-  const nextWoop={...normalizeWoopState(dream.woop||{}),[fieldKey]:value};
-  dreamWoopUi.expanded=true;
-  dreamWoopUi.stepIndex=currentStep<3?currentStep+1:3;
-  dreamDashboardFocusSection='woop';
-  updateDreamEntry(dream.id,{woop:nextWoop,updatedAt:new Date().toISOString()});
-  renderDreamDashboard();
-  requestAnimationFrame(()=>{
-    scrollDreamboxTo('dreamWoopSection',dreamWoopUi.stepIndex<3?'#dreamWoopInput':'');
-    if(dreamWoopUi.stepIndex<3)document.getElementById('dreamWoopInput')?.focus();
-  });
-}
 
 // ═══════════════════════════════════════════════════
 // WEEKLY CHECK-IN
@@ -12721,21 +12524,7 @@ function updatePulseCharCount(){
 
 function setPulseHistoryView(view='recent'){
   const next=['recent','patterns','reflect'].includes(view)?view:'recent';
-  const canAccessPatterns=isPaid()||isOnboardingUnlocked(5);
-  if(next==='patterns'&&!canAccessPatterns){
-    showAhaNudgeForGate('Pulse patterns');
-    pulseHistoryView='recent';
-    renderPulseHistorySection();
-    return;
-  }
-  if(next==='reflect'&&!isPaid()){
-    tryOpenPaidGate('Daily Pulse reflection');
-    pulseHistoryView='recent';
-    renderPulseHistorySection();
-    return;
-  }
   pulseHistoryView=next;
-  renderPulseHistorySection();
 }
 
 function getPulseMostCommonCategory(){
@@ -12806,10 +12595,7 @@ async function maybeRunMilestoneEvents(){
   if(days>=90&&safeLocalStorageGet(STORAGE_KEY_MILESTONE_DAY90_SHOWN,'0')!=='1'){
     maybePromptCapsuleReveal(true);
     if(safeLocalStorageGet(STORAGE_KEY_THREE_MONTH_SYNTH_SEEN,'0')!=='1'&&dreams.length>=3){
-      const gate=getUI('synGate');
-      if(gate){
-        gate.insertAdjacentHTML('afterbegin','<div class="syn-locked" style="margin-bottom:10px;">3 months in. Here\'s what your dreams say about you so far.</div>');
-      }
+      showMilestoneBanner('3 months in. You have stayed in relationship with your dreams.','Continue','this.closest("#milestoneBanner")?.remove()');
       safeLocalStorageSet(STORAGE_KEY_THREE_MONTH_SYNTH_SEEN,'1');
     }
     safeLocalStorageSet(STORAGE_KEY_MILESTONE_DAY90_SHOWN,'1');
@@ -12834,255 +12620,9 @@ function escapeHtmlBlock(text=''){
   return esc(String(text||'')).replace(/\n/g,'<br>');
 }
 
-function showPulseConfirmStrip(){
-  const strip=getUI('pulseConfirmStrip');
-  if(!strip)return;
-  strip.innerHTML='<div class="pulse-confirm">✦ Saved for today</div>';
-  strip.style.display='block';
-  setTimeout(()=>{
-    strip.style.display='none';
-    strip.innerHTML='';
-  },2000);
-}
-
-function renderDailyPulseCard(){
-  const wrap=getUI('pulseCardWrap');
-  const streakWrap=getUI('pulseStreakWrap');
-  if(!wrap||!streakWrap)return;
-  recalculatePulseStreak();
-  if(hasAnsweredPulseToday()){
-    wrap.style.display='none';
-    wrap.innerHTML='';
-    streakWrap.style.display='none';
-    streakWrap.innerHTML='';
-    return;
-  }
-  const today=getTodayPulseSelection();
-  const question=DAILY_PULSE_QUESTIONS[today.questionIndex]||DAILY_PULSE_QUESTIONS[0];
-  streakWrap.style.display='none';
-  streakWrap.innerHTML='';
-  wrap.style.display='block';
-  wrap.innerHTML=`
-    <div class="pulse-card" id="pulseCard">
-      <div class="pulse-card-inner">
-        <div class="pulse-top">
-          <div class="pulse-kicker">Daily Pulse</div>
-          <div class="pulse-date">${esc(getPulseDisplayDate(today.date))}</div>
-        </div>
-        <div class="pulse-question">${esc(question.question)}</div>
-        <textarea class="deepdive-textarea pulse-textarea" id="pulseInput" placeholder="Write whatever feels true right now." oninput="updatePulseCharCount()"></textarea>
-        <div class="pulse-meta-row">
-          <div class="pulse-char-count" id="pulseCharCount"></div>
-        </div>
-        <div class="pulse-actions">
-          <button class="auth-gate-btn pulse-save-btn" type="button" onclick="saveDailyPulse()">Save →</button>
-          <button class="auth-text-link" type="button" onclick="skipDailyPulse()">Skip for now</button>
-        </div>
-        <div class="pulse-note">A short check-in can help you notice patterns over time, or you can skip it completely.</div>
-      </div>
-    </div>`;
-  updatePulseCharCount();
-}
-
-async function saveDailyPulse(){
-  const textarea=getUI('pulseInput');
-  const card=getUI('pulseCard');
-  if(!textarea||!card)return;
-  const response=String(textarea.value||'').trim();
-  if(!response){
-    textarea.focus();
-    return;
-  }
-  const today=getTodayPulseSelection();
-  const question=DAILY_PULSE_QUESTIONS[today.questionIndex]||DAILY_PULSE_QUESTIONS[0];
-  const counts=getPulseCountsSnapshot();
-  pulseLog=[
-    ...pulseLog.filter(entry=>String(entry?.date||'')!==today.date),
-    {
-      date:today.date,
-      questionIndex:today.questionIndex,
-      question:question.question,
-      response,
-      category:question.category,
-      dreamCount:counts.dreamCount,
-      activeDreamCount:counts.activeDreamCount,
-      doneDreamCount:counts.doneDreamCount
-    }
-  ].sort((a,b)=>String(a.date).localeCompare(String(b.date)));
-  markDataUpdated();
-  save();
-  queueCloudSync(0);
-  card.classList.add('is-collapsing');
-  setTimeout(()=>{
-    renderDailyPulseCard();
-    renderPulseHistorySection();
-    showPulseConfirmStrip();
-  },300);
-}
-
-function skipDailyPulse(){
-  const wrap=getUI('pulseCardWrap');
-  const streakWrap=getUI('pulseStreakWrap');
-  if(wrap){
-    wrap.style.display='none';
-    wrap.innerHTML='';
-  }
-  if(streakWrap){
-    streakWrap.style.display='none';
-    streakWrap.innerHTML='';
-  }
-}
-
-function getPulseRecentEntries(limit=14){
-  return [...(Array.isArray(pulseLog)?pulseLog:[])].sort((a,b)=>String(b.date||'').localeCompare(String(a.date||''))).slice(0,limit);
-}
-
-function getPulseEntryId(entry){
-  return `${String(entry?.date||'')}::${Number.isFinite(Number(entry?.questionIndex))?Number(entry.questionIndex):''}::${String(entry?.createdAt||'')}`;
-}
-
-function findPulseEntryIndex(entryId=''){
-  return (Array.isArray(pulseLog)?pulseLog:[]).findIndex(entry=>getPulseEntryId(entry)===String(entryId||''));
-}
-
-function editPulseEntry(entryId=''){
-  const index=findPulseEntryIndex(entryId);
-  if(index<0)return;
-  const currentEntry=pulseLog[index]||{};
-  const currentText=String(currentEntry.response||'');
-  const updated=window.prompt('Update your Daily Pulse response:',currentText);
-  if(updated===null)return;
-  const response=String(updated||'').trim();
-  if(!response){
-    showToast('Please add a few words, or choose Delete to remove this entry.', 'error');
-    return;
-  }
-  pulseLog[index]={
-    ...currentEntry,
-    response,
-    updatedAt:new Date().toISOString()
-  };
-  pulseStreak=recalculatePulseStreak();
-  markDataUpdated();
-  save();
-  queueCloudSync(0);
-  renderDailyPulseCard();
-  renderPulseHistorySection('Entry updated.');
-}
-
-function deletePulseEntry(entryId=''){
-  const index=findPulseEntryIndex(entryId);
-  if(index<0)return;
-  if(!window.confirm('Remove this Daily Pulse entry?'))return;
-  pulseLog.splice(index,1);
-  pulseStreak=recalculatePulseStreak();
-  markDataUpdated();
-  save();
-  queueCloudSync(0);
-  renderDailyPulseCard();
-  renderPulseHistorySection('Entry deleted.');
-}
-
-function canRefreshPulseReflection(){
-  if(!pulseReflection?.entryCount)return false;
-  return Math.max(0,(Array.isArray(pulseLog)?pulseLog.length:0)-Number(pulseReflection.entryCount||0))>=5;
-}
-
-async function generatePulseReflection(forceRefresh=false){
-  if(!isPaid()){
-    tryOpenPaidGate('Daily Pulse reflection');
-    return;
-  }
-  if(pulseReflectionLoading)return;
-  if(forceRefresh && pulseReflection?.entryCount && !canRefreshPulseReflection()){
-    renderPulseHistorySection('Add 5 new entries to refresh this reflection.');
-    return;
-  }
-  pulseReflectionLoading=true;
-  renderPulseHistorySection();
-  try{
-    const entries=[...(Array.isArray(pulseLog)?pulseLog:[])].sort((a,b)=>String(a.date||'').localeCompare(String(b.date||''))).slice(-30);
-    const raw=await callClaude(
-      'You are reading 30 daily pulse responses from one person over recent weeks. Each response is a raw honest answer to a reflective question. Read them as a whole rather than individually. Write 4 to 5 sentences that name the patterns, the recurring emotional themes, the things that keep showing up, and one thing that seems to be shifting. Be specific to what they actually wrote. Never tell them what to do. Frame everything as observation. End with one question that feels worth sitting with for a while.',
-      entries.map(entry=>`${entry.date}\nQ: ${entry.question}\nA: ${entry.response}`).join('\n\n')
-    );
-    pulseReflection={
-      text:String(raw||'').trim(),
-      generatedAt:new Date().toISOString(),
-      entryCount:Array.isArray(pulseLog)?pulseLog.length:0
-    };
-    markDataUpdated();
-    save();
-    queueCloudSync(0);
-  }catch(err){
-    reportDebug('warn','Daily Pulse reflection failed',{error:err?.message});
-    if(err?.code!=='CRISIS_BLOCKED')showToast(getFriendlyError(err), 'error');
-  }finally{
-    pulseReflectionLoading=false;
-    renderPulseHistorySection();
-  }
-}
-
-function renderPulseHistorySection(note=''){
-  const section=getUI('pulseHistorySection');
-  if(!section)return;
-  if((Array.isArray(pulseLog)?pulseLog.length:0)<1){
-    section.style.display='none';
-    section.innerHTML='';
-    return;
-  }
-  const recentEntries=getPulseRecentEntries();
-  const heatmapDays=getPulseHeatmapDays(90);
-  const topWords=getPulseTopWords(5);
-  const reflectionHtml=pulseReflection?.text
-    ? `<div class="pulse-reflect-card"><div class="pulse-reflect-inner"><div class="pulse-reflect-kicker">Across the last 30 days</div><div class="pulse-reflect-copy">${escapeHtmlBlock(pulseReflection.text)}</div></div></div>`
-    : '';
-  const paidPulse=isPaid();
-  const canAccessPatterns=paidPulse||isOnboardingUnlocked(5);
-  const safePulseView=(pulseHistoryView==='reflect'&&!paidPulse)
-    ? 'recent'
-    : (pulseHistoryView==='patterns'&&!canAccessPatterns?'recent':pulseHistoryView);
-  if(safePulseView!==pulseHistoryView)pulseHistoryView=safePulseView;
-  section.style.display='block';
-  section.innerHTML=`
-    <div class="pulse-history-shell">
-      <div class="section-header">
-        <span class="section-label">Daily Pulse</span>
-        <div class="section-line"></div>
-      </div>
-      <div class="pulse-history-tabs">
-        <button class="view-tab ${safePulseView==='recent'?'active':''}" type="button" onclick="setPulseHistoryView('recent')">Recent</button>
-        <button class="view-tab ${safePulseView==='patterns'?'active':''}" type="button" onclick="setPulseHistoryView('patterns')">Patterns${canAccessPatterns?'':' • Day 5'}</button>
-        <button class="view-tab ${safePulseView==='reflect'?'active':''}" type="button" onclick="setPulseHistoryView('reflect')">Reflect${paidPulse?'':' • Paid'}</button>
-      </div>
-      <div class="pulse-tab-panel ${safePulseView==='recent'?'active':''}">
-        <div class="pulse-recent-list">
-          ${recentEntries.map(entry=>`<div class="pulse-entry-card" data-category="${esc(entry.category||'present')}"><div class="pulse-entry-date">${esc(getPulseDisplayDate(entry.date))}</div><div class="pulse-entry-question">${esc(entry.question||'')}</div><div class="pulse-entry-response">${escapeHtmlBlock(entry.response||'')}</div><div class="pulse-entry-actions"><button class="btn btn-expand pulse-entry-action-btn" type="button" onclick="editPulseEntry('${esc(getPulseEntryId(entry))}')">Edit</button><button class="btn btn-expand pulse-entry-action-btn" type="button" onclick="deletePulseEntry('${esc(getPulseEntryId(entry))}')">Delete</button></div></div>`).join('')}
-        </div>
-      </div>
-      <div class="pulse-tab-panel ${safePulseView==='patterns'?'active':''}">
-        <div class="pulse-pattern-grid">
-          <div class="pulse-pattern-card"><div class="pulse-pattern-label">Most common category answered</div><div class="pulse-pattern-copy">${esc(getPulseMostCommonCategory())}</div></div>
-          <div class="pulse-pattern-card"><div class="pulse-pattern-label">Last 90 days</div><div class="pulse-heatmap">${heatmapDays.map(day=>`<span class="pulse-heat-day ${day.filled?'filled':''}" title="${esc(day.key)}"></span>`).join('')}</div></div>
-          <div class="pulse-pattern-card"><div class="pulse-pattern-label">Words that keep showing up</div><div class="pulse-word-list">${topWords.length?topWords.map(([word,count])=>`<span class="pulse-word-chip">${esc(word)} · ${count}</span>`).join(''):'<span class="pulse-pattern-copy">Not enough writing yet to surface a pattern.</span>'}</div></div>
-        </div>
-      </div>
-      <div class="pulse-tab-panel ${safePulseView==='reflect'?'active':''}">
-        <div class="pulse-reflect-actions">
-          <button class="auth-gate-btn pulse-save-btn" type="button" onclick="generatePulseReflection(false)" ${pulseReflectionLoading?'disabled':''}>${pulseReflectionLoading?'Reflecting…':'Show patterns in my answers'}</button>
-          ${pulseReflection?`<button class="auth-text-link" type="button" onclick="generatePulseReflection(true)">Refresh</button>`:''}
-          ${pulseReflection?.generatedAt?`<span class="pulse-reflect-note">Generated ${esc(new Date(pulseReflection.generatedAt).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}))}</span>`:''}
-        </div>
-        ${note?`<div class="pulse-reflect-note">${esc(note)}</div>`:''}
-        ${reflectionHtml || '<div class="pulse-pattern-card"><div class="pulse-pattern-copy">Look across your recent answers when you are ready. This stays observation-only and grounded in what you actually wrote.</div></div>'}
-      </div>
-    </div>`;
-}
-
 // ═══════════════════════════════════════════════════
-// MICRO INSIGHT
+// AI QUEUE
 // ═══════════════════════════════════════════════════
-let miDismissTimer=null;
 
 function queueAiCall(fn){
   return new Promise((resolve,reject)=>{
@@ -13103,33 +12643,6 @@ async function processAiQueue(){
   }finally{
     aiCallQueue.running=false;
     processAiQueue();
-  }
-}
-
-async function showMicroInsight(dreamText,domainKey){
-  if(miAbortController)miAbortController.abort();
-  miAbortController=new AbortController();
-  const dom=DomainRegistry.get(domainKey);
-  const el=document.getElementById('microInsight');
-  const txt=document.getElementById('microInsightText');
-  const tag=document.getElementById('miDomainTag');
-  txt.textContent='';
-  tag.textContent=`→ ${dom.label}`;
-  el.classList.remove('dismissing');
-  el.classList.add('visible');
-  if(miDismissTimer)clearTimeout(miDismissTimer);
-  try{
-    const raw=await callClaude(
-      `You are a reflective assistant for personal growth. This tool is for reflection and general assistance only, not professional advice. When a user adds a dream, surface a possible insight about it in ONE sentence (max 22 words). Choose whichever lens fits best: a potential psychological need beneath it, a tension it might create, or an identity shift it could imply. Be specific, warm, slightly surprising. Never generic. Frame insights as possibilities, not certainties. Do not use definitive language about the user's identity, psychology, or future. Return ONLY the sentence.`,
-      `Dream: "${dreamText}"\nLife area: ${dom.label}`
-    );
-    if(miAbortController.signal.aborted)return;
-    txt.textContent=raw.trim()||'A meaningful aspiration that feels worth exploring further.';
-    markMicroInsightSeenInSession();
-    miDismissTimer=setTimeout(()=>el.classList.remove('visible'),7000);
-  }catch(err){
-    if(err?.code!=='CRISIS_BLOCKED')showToast(getFriendlyError(err), 'warning');
-    el.classList.remove('visible');
   }
 }
 
@@ -13155,161 +12668,6 @@ function coverageSub(pct, groups){
   }
   return"You've named dreams in every area on this map. That doesn't mean complete. It means visible.";
 }
-function computeGapInsight(){
-  const gapEl=document.getElementById('gapInsight');
-  if(dreams.length<3){gapEl.classList.remove('visible','gap-insight-dismissing');return;}
-  const g=groupedDreams();
-  const missing=DomainRegistry.list.filter(d=>!g[d.key]?.length).sort((a,b)=>b.weight-a.weight);
-  if(!missing.length){gapEl.classList.remove('visible','gap-insight-dismissing');return;}
-  const top=missing[0];
-  const useId=dreams.length>=5;
-  const key=useId&&GAP_INSIGHTS[top.key+'_identity']?top.key+'_identity':top.key;
-  document.getElementById('gapInsightText').innerHTML=GAP_INSIGHTS[key]||`<strong>${top.label}</strong> is unexplored.`;
-  gapEl.classList.remove('gap-insight-dismissing');
-  gapEl.classList.add('visible');
-}
-
-// ═══════════════════════════════════════════════════
-// FEATURE: TENSION SURFACER
-// ═══════════════════════════════════════════════════
-function hideTensionCard(immediate=false){
-  const card=getUI('tensionCard');
-  if(!card)return;
-  if(immediate){
-    card.classList.remove('visible','tension-card-dismissing');
-    return;
-  }
-  card.classList.add('tension-card-dismissing');
-  setTimeout(()=>card.classList.remove('visible','tension-card-dismissing'),240);
-}
-
-function renderTensionCard(){
-  const card=getUI('tensionCard');
-  if(!card)return;
-  if(!tensionCardData){
-    hideTensionCard(true);
-    return;
-  }
-  getUI('tensionObservation').textContent=tensionCardData.observation||'';
-  getUI('tensionQuestion').textContent=tensionCardData.question||'';
-  card.classList.remove('tension-card-dismissing');
-  card.classList.add('visible');
-}
-
-function markTensionSeen(observation=''){
-  lastTensionState={timestamp:new Date().toISOString(),observation:trimText(observation||'',160)};
-  save();
-}
-
-function dismissTensionCard(){
-  if(tensionCardData?.observation)markTensionSeen(tensionCardData.observation);
-  tensionCardData=null;
-  hideTensionCard();
-}
-
-function exploreTensionInDeepDive(){
-  const tension=tensionCardData;
-  if(!tension)return;
-  const dream=dreams.find(item=>item.text===tension.dreamA)
-    || dreams.find(item=>String(item.text||'').toLowerCase()===String(tension.dreamA||'').toLowerCase())
-    || dreams[0];
-  markTensionSeen(tension.observation||'');
-  tensionCardData=null;
-  hideTensionCard(true);
-  if(!dream)return;
-  openDreamDashboard(dream.id);
-  setTimeout(()=>startDeepDive(dream.id),180);
-}
-
-async function maybeSurfaceTension(force=false){
-  if(!isPaid()){
-    hideTensionCard(true);
-    return;
-  }
-  if(tensionCardData){
-    renderTensionCard();
-    return;
-  }
-  const representedDomains=new Set(dreams.map(d=>d.domain).filter(Boolean));
-  if(dreams.length<8||representedDomains.size<3){
-    hideTensionCard(true);
-    return;
-  }
-  if(isDeepDiveOpen())return;
-  if(Date.now()-appStartedAt<30000)return;
-
-  const cooldownMs=21*24*60*60*1000;
-  const lastShownAt=new Date(lastTensionState?.timestamp||0).getTime();
-  if(lastShownAt&&Date.now()-lastShownAt<cooldownMs){
-    hideTensionCard(true);
-    return;
-  }
-
-  const gapVisible=getUI('gapInsight')?.classList.contains('visible');
-  if(gapVisible&&!force){
-    if(!tensionDelayRequested){
-      tensionDelayRequested=true;
-      requestAnimationFrame(()=>{
-        tensionDelayRequested=false;
-        maybeSurfaceTension(true);
-      });
-    }
-    return;
-  }
-  if(tensionCheckInFlight)return;
-  tensionCheckInFlight=true;
-
-  const groups=groupedDreams();
-  const missingDomains=DomainRegistry.list.filter(dom=>!groups[dom.key]?.length).map(dom=>dom.label).join(', ')||'none';
-  const dreamList=dreams.map(d=>`- ${d.text} (${DomainRegistry.get(d.domain).label}, status: ${d.status||'dreaming'}, horizon: ${d.horizon||'someday'})`).join('\n');
-
-  try{
-    const raw=await callClaude(
-      `You are analyzing someone's life dream portfolio for genuine tensions or contradictions worth noticing. A tension is when two or more dreams might pull in different directions, whether practically, emotionally, or in terms of identity.
-
-Return a JSON object with exactly these fields:
-{
-  "dreamA": "exact text of first dream",
-  "dreamB": "exact text of second dream",
-  "observation": "one sentence naming the tension",
-  "question": "one curious, non-confrontational question",
-  "type": "practical" | "emotional" | "identity"
-}
-
-CRITICAL:
-- Only surface a tension if it is genuine and specific
-- Do not manufacture tensions where none exist
-- If no real tension exists in this portfolio, return: { "tension": false }
-- Frame the observation as a possibility, never a conclusion
-- Never imply the tension is a problem to fix
-- The question must be curious, not confrontational
-- Never use 'but', 'however', 'conflict', 'problem', or 'contradiction' in the observation text`,
-      `Dream portfolio:\n${dreamList}\n\nMissing domains entirely: ${missingDomains}`
-    );
-    const parsed=JSON.parse(String(raw||'').replace(/```json|```/gi,'').trim()||'{}');
-    if(!parsed||parsed.tension===false||!parsed.observation||!parsed.question||!parsed.dreamA){
-      reportDebug('info','Tension surfacer found no strong tension',{dreamCount:dreams.length});
-      markTensionSeen('');
-      hideTensionCard(true);
-      return;
-    }
-    tensionCardData={
-      dreamA:String(parsed.dreamA||''),
-      dreamB:String(parsed.dreamB||''),
-      observation:trimText(parsed.observation||'',180),
-      question:trimText(parsed.question||'',120),
-      type:['practical','emotional','identity'].includes(parsed.type)?parsed.type:'identity'
-    };
-    renderTensionCard();
-  }catch(err){
-    reportDebug('info','Tension surfacer skipped',{error:err?.message});
-    markTensionSeen('');
-    hideTensionCard(true);
-  }finally{
-    tensionCheckInFlight=false;
-  }
-}
-
 function rendercoverage(){
   const groups=groupedDreams();
   const pct=computecoverage();
@@ -13428,27 +12786,6 @@ document.addEventListener('click',e=>{
 // ═══════════════════════════════════════════════════
 // RENDER
 // ═══════════════════════════════════════════════════
-function renderSynGate(){
-  const gate=document.getElementById('synGate');
-  if(!gate)return;
-  const wantsLocked=dreams.length<3;
-  const gateShowsLocked=gate.querySelector('.syn-locked')!==null;
-  const paidNow = isPaid();
-  if(dreams.length===lastSynGateDreamsCount&&gate.innerHTML.trim()&&gateShowsLocked===wantsLocked&&gate.dataset.paidState===String(paidNow))return;
-  gate.dataset.paidState = String(paidNow);
-  if(dreams.length>=3){
-    const freeUsed=!isPaid()&&synthesisCount>=1;
-    const weekCard=buildWeekVariantCard();
-    gate.innerHTML=freeUsed
-      ? `${weekCard}<div class="syn-locked">You\'ve used your free synthesis. Upgrade to generate more.</div>`
-      : `${weekCard}<button class="btn-syn" id="synBtn" onclick="synthesize()"><span class="btn-syn-icon">✦</span><span class="btn-syn-text">Generate my reflection</span></button>`;
-  }else{
-    const need=3-dreams.length;
-    gate.innerHTML=`<div class="syn-locked">Add ${need} more dream${need!==1?'s':''} to unlock your personal reflection</div>`;
-  }
-  lastSynGateDreamsCount=dreams.length;
-}
-
 function updateSummaryBar(){
   const bar=getUI('summaryBar');
   if(!bar)return;
@@ -14060,8 +13397,6 @@ function render(rebuildTabs=true){
 
   syncHeaderCopy();
   renderMemoryCard();
-  renderDailyPulseCard();
-  renderPulseHistorySection();
   syncOnboardEntryState();
   if(dreams.length!==1)hideFirstDreamNote();
   renderImageJournal();
@@ -14069,10 +13404,9 @@ function render(rebuildTabs=true){
   if(!dreams.length){
     covWeightListRendered=false;
     lastRenderedcoverage=null;
-    hideTensionCard(true);
     emptyEl.style.display='none';
     catsSection.classList.remove('visible');
-    synSection.classList.remove('visible');
+    synSection?.classList.remove('visible');
     coverageSection.classList.remove('visible');
     sidePanel.style.display='none';
     recPanelOpen=false;
@@ -14081,15 +13415,6 @@ function render(rebuildTabs=true){
     getUI('recPanelBackdrop')?.classList.remove('show');
     const summaryBar=getUI('summaryBar');
     if(summaryBar)summaryBar.style.display='none';
-    const pulseWrap=getUI('pulseCardWrap');
-    const pulseStreakWrap=getUI('pulseStreakWrap');
-    const pulseConfirmStrip=getUI('pulseConfirmStrip');
-    const pulseHistory=getUI('pulseHistorySection');
-    if(pulseWrap){pulseWrap.style.display='none';pulseWrap.innerHTML='';}
-    if(pulseStreakWrap){pulseStreakWrap.style.display='none';pulseStreakWrap.innerHTML='';}
-    if(pulseConfirmStrip){pulseConfirmStrip.style.display='none';pulseConfirmStrip.innerHTML='';}
-    if(pulseHistory){pulseHistory.style.display='none';pulseHistory.innerHTML='';}
-    document.getElementById('gapInsight').classList.remove('visible');
     seedChips.style.display='flex';
     if(addBtn)addBtn.classList.remove('has-dreams');
     syncRecPanelState();
@@ -14103,32 +13428,11 @@ function render(rebuildTabs=true){
   emptyEl.style.display='none';
   catsSection.classList.toggle('visible',dreams.length>=1);
   coverageSection.classList.toggle('visible',dreams.length>=1);
-  synSection.classList.add('visible');
+  synSection?.classList.add('visible');
   sidePanel.style.display=hasSidePanelContent?'':'none';
   if(addBtn)addBtn.classList.add('has-dreams');
   updateSummaryBar();
   rendercoverage();
-  if(daysSinceFirst>=3){
-    // Only re-queue if dream count or statuses changed since last AI analysis
-    const _gapKey = dreams.map(d=>d.domain).sort().join(',');
-    const _tensionKey = dreams.map(d=>d.id+d.status).join(',');
-    if(_lastRenderGapKey!==_gapKey){
-      _lastRenderGapKey=_gapKey;
-      queueAiCall(()=>computeGapInsight()).catch(err=>{
-        reportDebug('info','Deferred gap insight queue failed',{error:err?.message});
-      });
-    }
-    if(_lastRenderTensionKey!==_tensionKey&&dreams.length>=8){
-      _lastRenderTensionKey=_tensionKey;
-      queueAiCall(()=>maybeSurfaceTension()).catch(err=>{
-        reportDebug('info','Deferred tension queue failed',{error:err?.message});
-      });
-    }
-  }else{
-    getUI('gapInsight')?.classList.remove('visible','gap-insight-dismissing');
-    hideTensionCard(true);
-  }
-  renderSynGate();
   renderRecommendations();
   renderImageJournal();
   syncRecPanelState();
@@ -14607,7 +13911,6 @@ function renderDreamDashboard(){
     body.innerHTML='<div class="dd-empty">Pick a dream above to start shaping it.</div>';
     return;
   }
-  syncDreamWoopUi(dream);
   const dom=DomainRegistry.get(dream.domain);
   const statusLabel={dreaming:'Dreaming',active:'In progress',done:'Achieved'}[dream.status||'dreaming']||'Dreaming';
   const dreamAddedStamp=dream.createdAt?new Date(dream.createdAt).toLocaleString('en-US',{month:'short',day:'numeric',year:'numeric',hour:'numeric',minute:'2-digit'}):'';
@@ -14616,9 +13919,6 @@ function renderDreamDashboard(){
   const dreamDiveSessions=getDeepDiveSessionsForDream(dream.id);
   const deepDiveAction=['dreaming','active'].includes(dream.status||'dreaming')
     ? `<button class="dd-action feature deep" onclick="startDeepDive('${dream.id}')"><span class="dd-feature-kicker">✦ Deep Dive</span><span class="dd-feature-copy">A guided reflection for going a little deeper.</span></button>`
-    : '';
-  const preMortemAction=['dreaming','active'].includes(dream.status||'dreaming')
-    ? `<div class="dd-premortem-wrap"><button class="dd-action feature premortem" onclick="startPreMortemFromDreambox('${dream.id}')"><span class="dd-feature-kicker">⚠ Pre-mortem</span><span class="dd-feature-copy">Imagine it failed. Find the blockers before they find you.</span></button></div>`
     : '';
   const deepDiveHistoryHtml=dreamDiveSessions.length
     ? `<div class="dd-history-list">${dreamDiveSessions.slice(0,3).map(session=>{
@@ -14683,49 +13983,6 @@ function renderDreamDashboard(){
       </div>`;
   }).join(''):`<div class="dd-empty">Add images, audio, video, or small files to make this dream feel like its own little Dreambox.</div>`;
 
-  const woopUnlocked=true;
-  const woop=normalizeWoopState(dream.woop||{});
-  const woopComplete=isDreamWoopComplete(dream);
-  const woopFeatureAction=woopUnlocked
-    ? `<button class="dd-action feature woop" onclick="toggleDreamWoopSection(true)"><span class="dd-feature-kicker">WOOP</span><span class="dd-feature-copy">${woopComplete?'Outcome, obstacle, and plan are saved here.':'Start with the obstacle, not just the wish.'}</span></button>`
-    : `<button class="dd-action feature woop" onclick="showAhaNudgeForGate('WOOP')"><span class="dd-feature-kicker">WOOP</span><span class="dd-feature-copy">Start with the obstacle, not just the wish.</span></button>`;
-  const woopSteps=[
-    {key:'wish',label:'Wish',prompt:'The dream in one sentence already stored.'},
-    {key:'outcome',label:'Outcome',prompt:'What is the best outcome if you achieve this? How would it feel?',placeholder:'The best outcome would feel like…'},
-    {key:'obstacle',label:'Obstacle',prompt:'What is the main inner obstacle? Not external circumstances, but something inside you',placeholder:'The main inner obstacle is usually…'},
-    {key:'plan',label:'Plan',prompt:'If [obstacle] happens, I will [specific response]',placeholder:'If that inner obstacle shows up, I will…'}
-  ];
-  const woopStepIndex=Math.max(0,Math.min(woopSteps.length-1,Number(dreamWoopUi.stepIndex)||0));
-  const currentWoopStep=woopSteps[woopStepIndex]||woopSteps[0];
-  const woopSavedCount=1+[woop.outcome,woop.obstacle,woop.plan].filter(item=>String(item||'').trim()).length;
-  const woopProgressDots=`<div class="deepdive-dots">${woopSteps.map((step,idx)=>`<span class="deepdive-dot ${idx<=woopStepIndex?'active':''}"></span>`).join('')}</div>`;
-  const woopStepHtml=woopStepIndex===0
-    ? `
-      ${woopProgressDots}
-      <div class="deepdive-progress">Step 1 of 4 · Wish</div>
-      <div class="deepdive-question">Wish</div>
-      <div class="dd-woop-wish">${esc(dream.text||'')}</div>
-      <div class="dd-woop-note">This is the wish you already named. The next steps turn it into a concrete inner plan.</div>
-      <div class="deepdive-actions">
-        <button class="deepdive-btn primary" type="button" onclick="saveDreamWoopStep()">Continue</button>
-      </div>`
-    : `
-      ${woopProgressDots}
-      <div class="deepdive-progress">Step ${woopStepIndex+1} of 4 · ${currentWoopStep.label}</div>
-      <div class="deepdive-question">${esc(currentWoopStep.prompt)}</div>
-      ${woopStepIndex===3&&woop.obstacle.trim()?`<div class="dd-inline-note">Inner obstacle to plan around: ${esc(woop.obstacle)}</div>`:''}
-      <textarea class="deepdive-textarea" id="dreamWoopInput" placeholder="${esc(currentWoopStep.placeholder||'')}">${esc(String(woop[currentWoopStep.key]||''))}</textarea>
-      <div class="deepdive-actions">
-        <button class="deepdive-btn" type="button" onclick="goToDreamWoopStep(${Math.max(0,woopStepIndex-1)})">Back</button>
-        <button class="deepdive-btn primary" type="button" onclick="saveDreamWoopStep()">${woopStepIndex===3?'Save plan':'Save & continue'}</button>
-      </div>`;
-  const woopSummaryHtml=woopComplete
-    ? `<div class="dd-woop-summary">
-        <div class="dd-woop-summary-item"><strong>Outcome</strong>${esc(woop.outcome)}</div>
-        <div class="dd-woop-summary-item"><strong>Obstacle</strong>${esc(woop.obstacle)}</div>
-        <div class="dd-woop-summary-item"><strong>Plan</strong>${esc(woop.plan)}</div>
-      </div>`
-    : '';
 
   body.innerHTML=`
     <div class="dd-section" id="dreamOverviewSection">
@@ -14736,7 +13993,6 @@ function renderDreamDashboard(){
         <span class="dd-chip">${statusLabel}</span>
         <span class="dd-chip">${formatHorizonDate(dream)}</span>
         ${dream.source==='image'?'<span class="dd-chip">From image</span>':''}
-        ${woopComplete?'<span class="dd-chip">Make it real ✓</span>':''}
       </div>
       <div class="dd-meta-row">
         ${dreamAddedStamp?`<span class="dd-chip">Added ${dreamAddedStamp}</span>`:''}
@@ -14744,8 +14000,6 @@ function renderDreamDashboard(){
       <div class="dd-actions feature-tools">
         <button class="dd-action feature ai" onclick="openDashboardChat('${dream.domain}')"><span class="dd-feature-kicker">${dreamboxChatOpen?'AI reflection open':'AI reflection chat'}</span><span class="dd-feature-copy">Talk it through and get perspective.</span></button>
         ${deepDiveAction}
-        ${woopFeatureAction}
-        ${preMortemAction}
       </div>
       <div class="dd-actions secondary-tools">
         <button class="dd-action" onclick="scrollDreamboxTo('dreamAttachmentSection')">Attachments</button>
@@ -14753,19 +14007,6 @@ function renderDreamDashboard(){
         <button class="dd-action" onclick="closeModal();openEditRow('${dream.id}','${String(dream.text||'').replace(/'/g,"\\'")}')">Edit text</button>
         <button class="dd-action" onclick="closeModal();setView('timeline');requestAnimationFrame(()=>document.getElementById('timelineView')?.scrollIntoView({behavior:'smooth',block:'start'}));">Open timeline</button>
       </div>
-    </div>
-    <div class="dd-section feature-tone-woop${dreamWoopUi.expanded&&woopUnlocked?' open':''}" id="dreamWoopSection" style="${woopUnlocked?'':'display:none;'}">
-      <button class="dd-woop-toggle" type="button" aria-expanded="${dreamWoopUi.expanded?'true':'false'}" onclick="toggleDreamWoopSection()">
-        <div class="dd-woop-toggle-main">
-          <div class="dd-label">WOOP</div>
-          <div class="dd-woop-note">Start with the wish, then pressure-test it with the outcome, the inner obstacle, and an if-then plan.</div>
-        </div>
-        <div class="dd-woop-toggle-meta">
-          <span class="dd-woop-status ${woopComplete?'complete':''}">${woopComplete?'✓ Complete':`${woopSavedCount} of 4`}</span>
-          <span class="dd-woop-chevron">▾</span>
-        </div>
-      </button>
-      ${dreamWoopUi.expanded?`<div class="dd-woop-body">${woopStepHtml}${woopComplete?'<div class="dd-inline-note">✓ This dream now has a full WOOP reflection saved.</div>':''}${woopSummaryHtml}</div>`:''}
     </div>
     <div class="dd-section" id="dreamAttachmentSection">
       <div class="dd-attach-top">
@@ -14810,8 +14051,6 @@ function renderDreamDashboard(){
     requestAnimationFrame(()=>scrollDreamboxTo('dreamAttachmentSection'));
   }else if(dreamDashboardFocusSection==='notes'){
     requestAnimationFrame(()=>scrollDreamboxTo('dreamNoteSection',`#dreamNoteTitle-${dream.id}`));
-  }else if(dreamDashboardFocusSection==='woop'){
-    requestAnimationFrame(()=>scrollDreamboxTo('dreamWoopSection','#dreamWoopInput'));
   }else if(dreamDashboardFocusSection==='chat'){
     requestAnimationFrame(()=>scrollDreamboxTo('chatArea','#modalInput'));
   }
@@ -15018,10 +14257,6 @@ function startPreMortemFromLauncher(){
   if(!select?.value)return;
   closePreMortemLauncher();
   startPreMortem(select.value);
-}
-
-function startPreMortemFromDreambox(dreamId){
-  startPreMortem(dreamId);
 }
 
 function startPreMortem(dreamId){
@@ -15854,7 +15089,7 @@ function formatHorizonDate(d){
 
 function removeDream(id,dk){
   const row=document.getElementById(`row-${id}`);
-  if(row){row.style.animation='fadeMoveOut 0.25s ease forwards';setTimeout(()=>{removeDreamEntry(id);document.getElementById('synOut').classList.remove('visible');},250);}
+  if(row){row.style.animation='fadeMoveOut 0.25s ease forwards';setTimeout(()=>{removeDreamEntry(id);document.getElementById('synOut')?.classList.remove('visible');},250);}
   else{removeDreamEntry(id);}
 }
 
@@ -15899,7 +15134,6 @@ function submitQuickAdd(dk){
       },900);
     }
   }
-  showMicroInsight(t,dk);
 }
 
 function showAddDreamSuccess(){
@@ -15934,14 +15168,6 @@ async function addDream(){
   showAddDreamSuccess();
   maybeShowFirstDreamNote(prevCount);inp.value='';rotateSeed();
   const card=document.querySelector(`.cat-card[data-domkey="${dk}"]`);if(card)card.classList.add('expanded');
-  showMicroInsight(t,dk);
-  // Nudge after first dream
-  if(dreams.length===1){
-    setTimeout(()=>{
-      const mi=document.getElementById('microInsightText');
-      if(mi&&mi.textContent)mi.textContent+=' One down. What\'s something completely different you want?';
-    },3000);
-  }
 }
 
 async function expandDream(){
@@ -16437,7 +15663,6 @@ function addFromImage(){
   maybeShowFirstDreamNote(prevCount);
   clearImageResult();
   const card=document.querySelector(`.cat-card[data-domkey="${dk}"]`);if(card)card.classList.add('expanded');
-  showMicroInsight(t,dk);
 }
 
 // ═══════════════════════════════════════════════════
@@ -16515,14 +15740,12 @@ function addFromDiscover(dk,btn,text){
   addDreamEntry({id:Date.now().toString(),text,domain:dk,status:'dreaming',horizon:'someday',nextAction:'',nextActionSaved:false,createdAt:new Date().toISOString()});
   maybeShowFirstDreamNote(prevCount);
   btn.textContent='✓ Added';btn.classList.add('done');btn.closest('.discover-item').classList.add('added');
-  showMicroInsight(text,dk);
 }
 function addDreamFromRec(dk,text){
   const prevCount=dreams.length;
   addDreamEntry({id:Date.now().toString(),text,domain:dk,status:'dreaming',horizon:'someday',nextAction:'',nextActionSaved:false,createdAt:new Date().toISOString()});
   maybeShowFirstDreamNote(prevCount);
   const card=document.querySelector(`.cat-card[data-domkey="${dk}"]`);if(card)card.classList.add('expanded');
-  showMicroInsight(text,dk);
 }
 function closeDiscover(){document.getElementById('discoverOverlay').classList.remove('open');}
 function closeDiscoverOnBg(e){if(e.target===document.getElementById('discoverOverlay'))closeDiscover();}
@@ -16735,88 +15958,6 @@ function scrollChat(){const ca=document.getElementById('chatArea');setTimeout(()
 function modalInputKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();guardedSendModalMessage();}}
 function autoResize(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,100)+'px';}
 
-// ═══════════════════════════════════════════════════
-// SYNTHESIS
-// ═══════════════════════════════════════════════════
-let synContent='';
-
-function renderSynDisclaimer(){
-  const txt=document.getElementById('synText');
-  if(!txt)return;
-  txt.querySelector('.syn-disclaimer')?.remove();
-  const disclaimer=document.createElement('p');
-  disclaimer.className='syn-disclaimer';
-  disclaimer.textContent='This is a generated interpretation from your own words. Keep what resonates, and discard what doesn’t.';
-  txt.appendChild(disclaimer);
-}
-
-async function synthesize(){
-  if(!guardPaidFeature('synthesis','Synthesis'))return;
-  if(isSynthesizing)return;
-  const out=document.getElementById('synOut');
-  const txt=document.getElementById('synText');
-  const btn=document.getElementById('synBtn');
-  const btnTextEl=btn?.querySelector('.btn-syn-text');
-  const originalBtnText=btnTextEl?.textContent||'Generate my reflection';
-  isSynthesizing=true;
-  if(btn){
-    btn.classList.add('loading');
-    btn.disabled=true;
-  }
-  if(btnTextEl)btnTextEl.textContent='Generating…';
-  out.classList.add('visible');
-  txt.innerHTML=`<div class="p-loading">Reading your dreams<div class="chrome-dots" role="status" aria-label="Loading"><span></span><span></span><span></span></div></div>`;
-  const list=dreams.map(d=>`- ${d.text} (${DomainRegistry.get(d.domain).label}, status: ${d.status})`).join('\n');
-  try{
-    const raw=await callClaude(
-      `You are a perceptive reflective assistant inside COVE. This tool is for reflection and general assistance only, not professional advice. Read this collection of life dreams and write a brief, honest reflection on what they might reveal about who this person is and what they might want. Format as HTML using <h3> for 2-3 section titles and <p> for prose. Be honest, not a cheerleader. Notice patterns, tensions, the thread. Speak directly to them. Frame insights as possibilities, not certainties. Do not use definitive language about the user's identity, psychology, or future. End with a possible important question you might ask them.`,
-      `My dreams:\n${list}`
-    );
-    synContent=raw||'';
-    txt.innerHTML=sanitizeAiHtml(raw)||'<p>Unable to generate reflection.</p>';
-    if(raw){
-      renderSynDisclaimer();
-      markSynthesisSeenInSession();
-      if(getDaysSinceFirstSession()>=7)safeLocalStorageSet(STORAGE_KEY_WEEK_ONE_SYNTH_SEEN,'1');
-      synthesisCount=Math.max(0,synthesisCount)+1;
-      safeLocalStorageSet(STORAGE_KEY_SYNTHESIS_COUNT,String(synthesisCount));
-      markDataUpdated();
-      queueCloudSync(0);
-    }
-    document.getElementById('synActions').style.display='flex';
-  }catch(err){
-    if(err?.code==='CRISIS_BLOCKED')return;
-    txt.innerHTML=`
-      <p class="api-error" role="alert" aria-live="assertive">${esc(getFriendlyError(err))}</p>
-      <div style="margin-top:14px;">
-        <button class="btn-syn" onclick="synthesize()" style="width:auto;padding:12px 20px;">
-          <span class="btn-syn-icon">↺</span>
-          <span class="btn-syn-text">Try again</span>
-        </button>
-      </div>`;
-    showToast(getFriendlyError(err), 'error');
-  }finally{
-    if(btn){
-      btn.classList.remove('loading');
-      btn.disabled=false;
-    }
-    if(btnTextEl)btnTextEl.textContent=originalBtnText;
-    isSynthesizing=false;
-  }
-}
-
-function copySynthesis(){
-  safeClipboardWrite(synContentToPlainText(synContent));
-  const btn=document.querySelector('.syn-copy-btn');
-  if(btn){btn.textContent='Copied ✓';setTimeout(()=>btn.textContent='Copy ↗',2000);}
-}
-
-function synContentToPlainText(html){
-  const tmp=document.createElement('div');
-  tmp.innerHTML=html||'';
-  return tmp.innerText||tmp.textContent||'';
-}
-
 function exportData(){
   const payload={dreams,exportedAt:new Date().toISOString(),coverage:computecoverage()+'%'};
   const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});
@@ -16824,41 +15965,6 @@ function exportData(){
   a.href=URL.createObjectURL(blob);
   a.download=`coves-${new Date().toISOString().slice(0,10)}.json`;
   a.click();
-}
-
-// ═══════════════════════════════════════════════════
-// LIFE LETTER
-// ═══════════════════════════════════════════════════
-async function openLifeLetter(){
-  if(!tryOpenPaidGate('Life Letter'))return;
-  document.getElementById('llOverlay').classList.add('open');
-  document.body.style.overflow='hidden';
-  const txt=document.getElementById('llText');
-  txt.innerHTML=`<div class="p-loading">Writing your letter<div class="chrome-dots" role="status" aria-label="Loading"><span></span><span></span><span></span></div></div>`;
-  await generateLetter(false);
-}
-async function generateLetter(forceRegen=false){
-  const txt=document.getElementById('llText');
-  if(!forceRegen&&txt.textContent&&!txt.querySelector('.p-loading'))return;
-  txt.innerHTML=`<div class="p-loading">Writing your letter<div class="chrome-dots" role="status" aria-label="Loading"><span></span><span></span><span></span></div></div>`;
-  const dreamList=dreams.map(d=>`- ${d.text} (${DomainRegistry.get(d.domain).label})`).join('\n');
-  try{
-    const raw=await callClaude(
-      `This tool is for reflection and general assistance only. Write a personal letter from this person's future self, as though they are writing from 10 years in the future, having achieved or grown through everything they dreamed of. Write in first person as the future self writing to the present self. Make it feel lived-in, specific to their actual dreams, warm but honest. 3-4 paragraphs. Use plain text, no headers. Present as a possible future scenario, not a guaranteed outcome. Frame insights as possibilities, not certainties. Do not use definitive language about the user's identity, psychology, or future.`,
-      `Their current dreams:\n${dreamList}`
-    );
-    txt.innerHTML=sanitizeAiHtml(String(raw||'').split('\n\n').map(p=>`<p>${esc(p)}</p>`).join(''));
-  }catch(err){
-    if(err?.code==='CRISIS_BLOCKED')return;
-    txt.innerHTML=`<p class="api-error" role="alert" aria-live="assertive">${esc(getFriendlyError(err))}</p>`;
-    showToast(getFriendlyError(err), 'error');
-  }
-}
-function closeLetter(){document.getElementById('llOverlay').classList.remove('open');document.body.style.overflow='';maybeOpenDeferredPaywall();}
-function copyLetter(){
-  const txt=document.getElementById('llText');
-  safeClipboardWrite(txt.innerText||'');
-  const btn=document.querySelector('.ll-copy');if(btn){btn.textContent='Copied ✓';setTimeout(()=>btn.textContent='Copy letter',2000);}
 }
 
 // ═══════════════════════════════════════════════════
@@ -16960,7 +16066,7 @@ function confirmDate(){
   updateDreamEntry(dpId,{targetDate:dt.toISOString().slice(0,10),horizon:diff<=14?'this year':diff<=42?'3 years':'someday'});
   closeDatepick();
 }
-function closeDatepick(){cleanupDatepickDrums();document.getElementById('datepickOverlay').classList.remove('open');const anyOverlayOpen=document.getElementById('modalOverlay')?.classList.contains('open')||document.getElementById('dreamDashboardOverlay')?.classList.contains('open')||document.getElementById('deepDiveOverlay')?.classList.contains('open')||document.getElementById('capsuleOverlay')?.classList.contains('open')||document.getElementById('capsuleRevealOverlay')?.classList.contains('open')||document.getElementById('llOverlay')?.classList.contains('open')||document.getElementById('discoverOverlay')?.classList.contains('open')||document.getElementById('discoveryOverlay')?.classList.contains('open');if(!anyOverlayOpen)document.body.style.overflow='';dpId=null;}
+function closeDatepick(){cleanupDatepickDrums();document.getElementById('datepickOverlay').classList.remove('open');const anyOverlayOpen=document.getElementById('modalOverlay')?.classList.contains('open')||document.getElementById('dreamDashboardOverlay')?.classList.contains('open')||document.getElementById('deepDiveOverlay')?.classList.contains('open')||document.getElementById('capsuleOverlay')?.classList.contains('open')||document.getElementById('capsuleRevealOverlay')?.classList.contains('open')||document.getElementById('discoverOverlay')?.classList.contains('open')||document.getElementById('discoveryOverlay')?.classList.contains('open');if(!anyOverlayOpen)document.body.style.overflow='';dpId=null;}
 function closeDatepickOnBg(e){if(e.target===document.getElementById('datepickOverlay'))closeDatepick();}
 
 // ═══════════════════════════════════════════════════
@@ -17102,7 +16208,7 @@ document.addEventListener('keydown',e=>{
   if(e.key==='Escape'){
     closeLegalDoc();
     if(document.activeElement?.id==='catsSearch')debounceFilterDreams();
-    closeModal();closeDiscover();closeDatepick();closeLetter();closeDreamDashboard();requestCloseDiscovery();requestCloseCapsuleCreation();comeBackToCapsuleLater();
+    closeModal();closeDiscover();closeDatepick();closeDreamDashboard();requestCloseDiscovery();requestCloseCapsuleCreation();comeBackToCapsuleLater();
     closeWanderingPrompt();
     document.getElementById('checkinOverlay').classList.remove('open');
     document.getElementById('achievedOverlay').classList.remove('show');
