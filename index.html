@@ -12,7 +12,7 @@
 <title>COVE</title>
 
 <!-- SEO & Social Metadata -->
-<meta name="description" content="COVE — a quiet place for your dreams and reflections.">
+<meta name="description" content="COVE — a blunt little place for half-formed dreams and ongoing questions.">
 <meta name="theme-color" content="#C8766A">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <link rel="icon" href="favicon.ico" type="image/x-icon">
@@ -20,14 +20,14 @@
 <!-- Open Graph -->
 <meta property="og:type" content="website">
 <meta property="og:title" content="COVE">
-<meta property="og:description" content="COVE — a quiet place for your dreams and reflections.">
+<meta property="og:description" content="COVE — a blunt little place for half-formed dreams and ongoing questions.">
 <meta property="og:url" content="https://trycove.app">
 <meta property="og:image" content="https://trycove.app/og-image.png">
 
 <!-- Twitter Card -->
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="COVE">
-<meta name="twitter:description" content="COVE — a quiet place for your dreams and reflections.">
+<meta name="twitter:description" content="COVE — a blunt little place for half-formed dreams and ongoing questions.">
 <meta name="twitter:image" content="https://trycove.app/og-image.png">
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -59,64 +59,64 @@ try {
 }
 </script>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700;9..40,800&family=Lora:ital,wght@0,400;1,400&family=Syne:wght@600;700;800&display=swap');
 
 :root {
-  --bg: #F4F4F2;
-  --bg2: #EEEEEB;
-  --surface: #FFFFFF;
-  --surface2: #F9F9F8;
-  --surface3: #F2F2F0;
-  --border: #E0E0DC;
-  --border-hi: #CACAC4;
-  --rose: #C8766A;
-  --rose-deep: #A85348;
-  --blush: #E8A89E;
-  --blush-light: #F2C5BE;
-  --petal: #FAF0EE;
-  --warm: #E8C4A0;
-  --cream: #F5F2EE;
-  --text: #17171A;
-  --text-mid: #38383E;
-  --text-dim: #65656E;
-  --text-muted: #70707A;
-  --text-faint: #85858F;
-  --green: #4E9666;
-  --amber: #C8904A;
-  --blue: #4E7EA8;
-  --shadow: rgba(0,0,0,0.055);
-  --shadow-md: rgba(0,0,0,0.10);
-  --chrome: linear-gradient(135deg,#C8766A 0%,#E8A89E 35%,#D4A898 55%,#A85348 75%,#E8A89E 100%);
-  --glow-rose: 0 0 16px rgba(200,118,106,0.35), 0 0 32px rgba(200,118,106,0.15);
-  --glow-rose-sm: 0 0 8px rgba(200,118,106,0.28), 0 0 16px rgba(200,118,106,0.12);
-  --glow-green: 0 0 10px rgba(78,150,102,0.3), 0 0 20px rgba(78,150,102,0.12);
+  --bg: #F6F4F0;
+  --bg2: #ECE9E4;
+  --surface: #FFFDFB;
+  --surface2: #F4F1EC;
+  --surface3: #ECE7E0;
+  --border: #D8D2CB;
+  --border-hi: #BEB6AE;
+  --rose: #B85A50;
+  --rose-deep: #8E3931;
+  --blush: #D8A39C;
+  --blush-light: #E7C5BF;
+  --petal: #F2ECE6;
+  --warm: #C79A69;
+  --cream: #F7F1EA;
+  --text: #111114;
+  --text-mid: #2A2A30;
+  --text-dim: #4E4E57;
+  --text-muted: #60606A;
+  --text-faint: #74747E;
+  --green: #3F8D5A;
+  --amber: #B87B34;
+  --blue: #3E719D;
+  --shadow: rgba(0,0,0,0.045);
+  --shadow-md: rgba(0,0,0,0.08);
+  --chrome: linear-gradient(135deg,#B85A50 0%,#D8A39C 35%,#C79A69 55%,#8E3931 75%,#D8A39C 100%);
+  --glow-rose: 0 0 14px rgba(184,90,80,0.22), 0 0 28px rgba(184,90,80,0.10);
+  --glow-rose-sm: 0 0 6px rgba(184,90,80,0.18), 0 0 12px rgba(184,90,80,0.08);
+  --glow-green: 0 0 10px rgba(63,141,90,0.22), 0 0 20px rgba(63,141,90,0.10);
   --scene-glow-a: rgba(200,118,106,0.06);
   --scene-glow-b: rgba(0,0,0,0.018);
   --scene-glow-c: rgba(200,118,106,0.03);
   --grain-opacity: 0.4;
-  --auth-overlay-top: rgba(232,168,158,0.18);
-  --auth-overlay-bottom: rgba(255,249,245,0.56);
-  --auth-card-bg: linear-gradient(180deg, rgba(255,255,255,0.84), rgba(249,243,240,0.76));
-  --auth-card-border: rgba(255,255,255,0.82);
+  --auth-overlay-top: rgba(232,168,158,0.14);
+  --auth-overlay-bottom: rgba(255,249,245,0.42);
+  --auth-card-bg: linear-gradient(180deg, rgba(255,255,255,0.96), rgba(247,243,239,0.92));
+  --auth-card-border: rgba(184,90,80,0.14);
   --auth-card-highlight: linear-gradient(180deg, rgba(255,255,255,0.34), rgba(255,255,255,0.08) 40%, transparent 100%);
   --auth-card-glow: rgba(232,168,158,0.22);
-  --auth-kicker-bg: rgba(255,255,255,0.56);
-  --auth-kicker-border: rgba(200,118,106,0.18);
-  --auth-kicker-color: #A85348;
-  --auth-note-color: #6d6661;
-  --auth-title-gradient: linear-gradient(90deg, #7e3d51 0%, #f0c5cf 32%, #be6c80 58%, #7e3d51 100%);
-  --auth-welcome-color: #2b2322;
-  --auth-welcome-plate: rgba(255,255,255,0.20);
-  --auth-welcome-ring: rgba(255,255,255,0.28);
-  --field-text: #17171A;
-  --field-bg: rgba(255,255,255,0.96);
-  --field-bg-soft: rgba(255,255,255,0.78);
-  --field-placeholder: #8d8681;
-  --glass-panel-bg: rgba(255,255,255,0.82);
-  --glass-panel-strong: rgba(255,255,255,0.94);
-  --floating-control-bg: rgba(255,255,255,0.92);
-  --auth-surface-bg: linear-gradient(180deg, rgba(250,240,238,0.95), rgba(255,255,255,0.92));
-  --auth-surface-border: rgba(232,168,158,0.16);
+  --auth-kicker-bg: rgba(255,255,255,0.72);
+  --auth-kicker-border: rgba(184,90,80,0.16);
+  --auth-kicker-color: #8E3931;
+  --auth-note-color: #5c5550;
+  --auth-title-gradient: linear-gradient(90deg, #1d1d22 0%, #4a4a53 25%, #b85a50 58%, #111114 100%);
+  --auth-welcome-color: #111114;
+  --auth-welcome-plate: rgba(255,255,255,0.10);
+  --auth-welcome-ring: rgba(17,17,20,0.16);
+  --field-text: #111114;
+  --field-bg: rgba(255,255,255,0.98);
+  --field-bg-soft: rgba(255,255,255,0.84);
+  --field-placeholder: #7e7873;
+  --glass-panel-bg: rgba(255,255,255,0.94);
+  --glass-panel-strong: rgba(255,255,255,0.98);
+  --floating-control-bg: rgba(255,255,255,0.96);
+  --auth-surface-bg: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(247,242,237,0.94));
+  --auth-surface-border: rgba(184,90,80,0.14);
   --ambient-cloud-color: rgba(255,255,255,0.62);
   --ambient-cloud-shadow: rgba(200,118,106,0.14);
   --ambient-bird-color: rgba(126,91,84,0.34);
@@ -222,42 +222,42 @@ try {
 }
 
 :root[data-ui-theme="night"] {
-  --bg: #2B2A2F;
-  --bg2: #333137;
-  --surface: #3A383F;
-  --surface2: #433F47;
-  --surface3: #4B4650;
-  --border: #5C555F;
-  --border-hi: #6A626D;
-  --rose: #D3A29C;
-  --rose-deep: #BE7B75;
-  --blush: #E1B7B1;
-  --blush-light: #EBCDC8;
-  --petal: #413C44;
-  --warm: #CCAB90;
-  --cream: #3D3940;
-  --text: #F4F1EE;
-  --text-mid: #DDD5CF;
-  --text-dim: #CFC5BF;
-  --text-muted: #C0B6B0;
-  --text-faint: #ADA39D;
-  --shadow: rgba(0,0,0,0.18);
-  --shadow-md: rgba(0,0,0,0.28);
-  --chrome: linear-gradient(135deg,#C9877F 0%,#E1B7B1 35%,#D7A9A2 55%,#AF716C 75%,#E1B7B1 100%);
-  --glow-rose: 0 0 16px rgba(211,162,156,0.20), 0 0 32px rgba(211,162,156,0.08);
-  --glow-rose-sm: 0 0 8px rgba(211,162,156,0.16), 0 0 16px rgba(211,162,156,0.06);
-  --scene-glow-a: rgba(172,145,168,0.14);
-  --scene-glow-b: rgba(110,102,118,0.12);
-  --scene-glow-c: rgba(211,162,156,0.06);
-  --grain-opacity: 0.18;
-  --auth-overlay-top: rgba(155,130,150,0.22);
-  --auth-overlay-bottom: rgba(48,45,52,0.82);
-  --auth-card-bg: linear-gradient(180deg, rgba(63,59,68,0.90), rgba(52,48,57,0.86));
-  --auth-card-border: rgba(118,109,121,0.50);
-  --auth-card-highlight: linear-gradient(180deg, rgba(255,255,255,0.07), rgba(255,255,255,0.02) 40%, transparent 100%);
-  --auth-card-glow: rgba(211,162,156,0.12);
-  --auth-kicker-bg: rgba(70,65,75,0.68);
-  --auth-kicker-border: rgba(211,162,156,0.16);
+  --bg: #17171B;
+  --bg2: #1F1F24;
+  --surface: #232329;
+  --surface2: #2A2A31;
+  --surface3: #32323A;
+  --border: #464650;
+  --border-hi: #5A5A65;
+  --rose: #D37A6E;
+  --rose-deep: #F0A39A;
+  --blush: #C47E77;
+  --blush-light: #8F6A67;
+  --petal: #2B2B32;
+  --warm: #D8A067;
+  --cream: #2E2E35;
+  --text: #F6F3F0;
+  --text-mid: #E1D9D3;
+  --text-dim: #C8BEB8;
+  --text-muted: #B4ABA5;
+  --text-faint: #9C938D;
+  --shadow: rgba(0,0,0,0.16);
+  --shadow-md: rgba(0,0,0,0.26);
+  --chrome: linear-gradient(135deg,#D37A6E 0%,#E1B7B1 35%,#C79A69 55%,#A24F47 75%,#E1B7B1 100%);
+  --glow-rose: 0 0 14px rgba(211,122,110,0.20), 0 0 28px rgba(211,122,110,0.08);
+  --glow-rose-sm: 0 0 6px rgba(211,122,110,0.14), 0 0 12px rgba(211,122,110,0.06);
+  --scene-glow-a: rgba(172,145,168,0.10);
+  --scene-glow-b: rgba(110,102,118,0.10);
+  --scene-glow-c: rgba(211,162,156,0.05);
+  --grain-opacity: 0.14;
+  --auth-overlay-top: rgba(155,130,150,0.18);
+  --auth-overlay-bottom: rgba(24,22,28,0.90);
+  --auth-card-bg: linear-gradient(180deg, rgba(34,34,40,0.98), rgba(27,27,32,0.96));
+  --auth-card-border: rgba(118,109,121,0.42);
+  --auth-card-highlight: linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02) 40%, transparent 100%);
+  --auth-card-glow: rgba(211,162,156,0.08);
+  --auth-kicker-bg: rgba(42,42,48,0.86);
+  --auth-kicker-border: rgba(211,162,156,0.14);
   --auth-kicker-color: #E9C8C2;
   --auth-note-color: #c1b7b0;
   --auth-title-gradient: linear-gradient(90deg, #f2dbd5 0%, #faefeb 32%, #dfb9b2 58%, #f2dbd5 100%);
@@ -5896,6 +5896,156 @@ body::before { animation: ambientDrift 18s ease-in-out infinite; }
   #afterglowOverlay { transition: none; }
   #afterglowOverlay.active { opacity: 0; }
 }
+
+body,
+button,
+input,
+textarea,
+select {
+  font-family:'DM Sans',sans-serif;
+}
+
+.h1,
+.h1-chrome,
+.section-label,
+.onboard-title,
+.auth-gate-title,
+.checkin-title,
+.rec-title,
+.dd-label,
+.deepdive-question,
+.discovery-intro-title,
+.capsule-reveal-title,
+.paywall-title,
+.legal-title,
+.crisis-title {
+  font-family:'Syne','DM Sans',sans-serif;
+  font-weight:800;
+  letter-spacing:-0.03em;
+}
+
+.dream-card-text,
+.cdr-text,
+.cdr-pop-desc,
+.cdr-hz-desc,
+.onboard-body,
+.checkin-sub,
+.checkin-list-note,
+.achieved-dream,
+.discovery-intro-copy,
+.discovery-step-note,
+.capsule-subtitle,
+.capsule-observation-text,
+.dd-woop-wish,
+.memory-card-quote,
+.dd-note-area,
+.dd-note-preview-title,
+.dd-note-status,
+.paywall-copy,
+.legal-body p,
+.legal-body li,
+.modal-dream-select,
+.modal-input,
+.chat-system,
+.msg-bubble,
+.datepick-dream {
+  font-family:'DM Sans',sans-serif;
+  font-style:normal;
+}
+
+.auth-gate-card,
+.onboard-inner,
+.input-card,
+.summary-bar,
+.community-dream-stream,
+.cat-card,
+.dream-card,
+.rec-card,
+.dd-section,
+.checkin-modal,
+.achieved-card,
+.modal,
+.deepdive-card,
+.deepdive-step-shell,
+.discovery-intro,
+.discovery-step-shell,
+.capsule-step-shell,
+.cdr-status-pop,
+.cdr-horizon-pop,
+.cov-info-popover,
+.cov-info-panel,
+.paywall-modal,
+.legal-card,
+.datepick-sheet,
+.modal-chat-sidebar,
+.chat-system,
+.modal-input-area {
+  background:var(--surface) !important;
+  border:1px solid var(--border) !important;
+  box-shadow:none !important;
+  backdrop-filter:none !important;
+  -webkit-backdrop-filter:none !important;
+}
+
+.dream-card,
+.cat-card,
+.auth-gate-card,
+.onboard-inner,
+.input-card,
+.summary-bar,
+.community-dream-stream,
+.rec-card,
+.dd-section,
+.checkin-modal,
+.achieved-card,
+.paywall-modal,
+.legal-card,
+.datepick-sheet {
+  border-radius:16px;
+}
+
+.cdr-status-custom-wrap {
+  padding:8px 10px 4px;
+  border-top:1px solid var(--border);
+  margin-top:4px;
+}
+
+.cdr-status-custom {
+  width:100%;
+  border:1px solid var(--border);
+  border-radius:8px;
+  background:var(--surface2);
+  color:var(--text);
+  padding:8px 10px;
+  font-size:12px;
+  line-height:1.3;
+}
+
+.cdr-status-custom::placeholder {
+  color:var(--text-faint);
+}
+
+.cdr-status-custom:focus {
+  outline:1px solid var(--rose);
+  outline-offset:1px;
+}
+
+.achieved-overlay,
+.checkin-overlay,
+.modal-overlay,
+.dreamdash-overlay,
+.discover-overlay,
+.discovery-overlay,
+.capsule-overlay,
+.capsule-reveal-overlay,
+.capsule-empty-overlay,
+.datepick-overlay,
+.paywall-overlay,
+.ll-overlay,
+.auth-gate {
+  backdrop-filter:none;
+  -webkit-backdrop-filter:none;
+}
 </style>
 </head>
 <body class="auth-gate-active">
@@ -6424,10 +6574,10 @@ body::before { animation: ambientDrift 18s ease-in-out infinite; }
     <div class="onboard-inner">
       <button class="onboard-dismiss" onclick="dismissBanner()">✕</button>
       <div class="onboard-title">
-        What makes a life feel whole?
+        Self, but with the side quests intact.
         <span class="onboard-badge">COVE framing</span>
       </div>
-      <p class="onboard-body">COVE organizes dreams across seven life areas to help you notice what your current picture emphasizes and what it leaves out. This is a reflective map, not a scientific score or a diagnosis. It works best if you bring your own skepticism to it.</p>
+      <p class="onboard-body">COVE keeps seven life areas on the page so you can notice what is loud, what is missing, and what is still a draft. <strong>Self + ongoing questions about who I am</strong> is one of those lanes, not a bonus feature. This is a reflective map, not a score, and it works best when you keep a little skepticism in the room.</p>
       <div class="onboard-sources">
         <span class="onboard-src">Research informs parts of the product</span>
         <span class="onboard-src">The seven-area map is COVE's own model</span>
@@ -6438,7 +6588,7 @@ body::before { animation: ambientDrift 18s ease-in-out infinite; }
 
   <div class="header" id="mainHeader">
     <h1 class="h1">What does your<br><span class="h1-chrome">life feel like?</span></h1>
-    <p class="h-sub">Bring any vision here, whether it is half-formed, enormous, quiet, or impossible. We'll help you understand it and build toward it.</p>
+    <p class="h-sub">Start messy. You can refine it later. Bring whatever is half-formed, contradictory, or a little embarrassing. COVE will not pretend that ambiguity is a problem to solve.</p>
   </div>
 
   <button class="rec-toggle-btn rec-menu-btn" id="recToggleBtn" type="button" onclick="toggleRecPanel()" title="Open recommendations and settings" aria-label="Open recommendations and settings" aria-expanded="false">
@@ -6510,11 +6660,11 @@ body::before { animation: ambientDrift 18s ease-in-out infinite; }
     <div class="input-card">
       <div class="onboard-path-row" id="onboardPathRow" style="display:none;">
         <div class="onboard-path-shell">
-          <div class="onboard-path-title">Start wherever feels easiest</div>
-          <div class="onboard-path-sub">Write what is already clear, or use a short guided flow to explore.</div>
+          <div class="onboard-path-title">Start wherever feels least fake</div>
+          <div class="onboard-path-sub">Write what is already true, or use a short guided flow to sit with the messy part.</div>
           <div class="onboard-path-actions">
-            <button class="btn onboard-path-btn onboard-path-direct" type="button" onclick="chooseOnboardPath('direct')">I know what I want →</button>
-            <button class="btn onboard-path-btn onboard-path-guide" type="button" onclick="chooseOnboardPath('discovery')">Help me figure it out →</button>
+            <button class="btn onboard-path-btn onboard-path-direct" type="button" onclick="chooseOnboardPath('direct')">I know the shape of it →</button>
+            <button class="btn onboard-path-btn onboard-path-guide" type="button" onclick="chooseOnboardPath('discovery')">Help me stay with it →</button>
           </div>
         </div>
       </div>
@@ -6560,7 +6710,7 @@ body::before { animation: ambientDrift 18s ease-in-out infinite; }
           <button class="hz-btn" data-hz="3 years" onclick="selectHorizon(this)">3 years</button>
           <button class="hz-btn" data-hz="someday" onclick="selectHorizon(this)">Someday</button>
         </div>
-        <div class="input-disclaimer">AI responses here are reflective prompts, not facts or professional advice. Keep what fits. <button class="auth-text-link" type="button" onclick="showCrisisOverlay()">Crisis resources</button></div>
+        <div class="input-disclaimer">AI responses here are reflective prompts, not facts or professional advice. It is fine if the answer stays unfinished. <button class="auth-text-link" type="button" onclick="showCrisisOverlay()">Crisis resources</button></div>
       </div>
     </div>
     <div class="first-dream-note" id="firstDreamNote" aria-live="polite"></div>
@@ -6568,11 +6718,11 @@ body::before { animation: ambientDrift 18s ease-in-out infinite; }
 
   <!-- Seed chips: only shown when no dreams -->
   <div class="seed-chips" id="seedChips">
-    <span class="seed-chip" onclick="prefill('Write a novel someday')">Write a novel</span>
-    <span class="seed-chip" onclick="prefill('Feel financially free')">Feel financially free</span>
-    <span class="seed-chip" onclick="prefill('Build a company')">Build a company</span>
-    <span class="seed-chip" onclick="prefill('Find my people')">Find my people</span>
-    <span class="seed-chip" onclick="prefill('Feel at home in my body')">Feel at home in my body</span>
+    <span class="seed-chip" onclick="prefill('I cannot tell if I want this career or just want to stop feeling behind')">Career or relief?</span>
+    <span class="seed-chip" onclick="prefill('I keep saying I want stability, but I also want more room')">Stability, maybe</span>
+    <span class="seed-chip" onclick="prefill('I want to be known, but only in ways that feel safe')">Known, not exposed</span>
+    <span class="seed-chip" onclick="prefill('I am not sure if this is a dream or just a coping strategy')">Dream or coping?</span>
+    <span class="seed-chip" onclick="prefill('I want something bigger, and I also want less noise')">Bigger, quieter</span>
   </div>
   <div class="discovery-start-wrap">
     <button class="btn btn-expand discovery-start-btn" id="discoveryStartBtn" onclick="openDiscoveryFlow()">Not sure what you want? Start here →</button>
@@ -6660,7 +6810,7 @@ body::before { animation: ambientDrift 18s ease-in-out infinite; }
       </div>
       <div class="cat-filter-bar" id="catFilterBar">
         <button class="cf-tab active" data-filter="all" onclick="filterCats(this,'all')">All</button>
-        <button class="cf-tab" data-filter="dreaming" onclick="filterCats(this,'dreaming')">Dreaming</button>
+        <button class="cf-tab" data-filter="dreaming" onclick="filterCats(this,'dreaming')">Alive</button>
         <button class="cf-tab" data-filter="active" onclick="filterCats(this,'active')">Active</button>
         <button class="cf-tab" data-filter="done" onclick="filterCats(this,'done')">Done</button>
         <button class="cf-tab" data-filter="stale" onclick="filterCats(this,'stale')">Stale</button>
@@ -6744,9 +6894,9 @@ body::before { animation: ambientDrift 18s ease-in-out infinite; }
   <div class="achieved-card" onclick="event.stopPropagation()">
     <div class="confetti-wrap" id="confettiWrap"></div>
     <span class="achieved-icon">✨</span>
-    <div class="achieved-title">Pause with what changed.</div>
+    <div class="achieved-title">Pause with what landed.</div>
     <div class="achieved-dream" id="achievedDreamText"></div>
-    <div class="achieved-sub">Some dreams are milestones. Some are ongoing ways of living. What feels true about this one now?</div>
+    <div class="achieved-sub">Some things settle. Some keep moving. What feels true about this one now?</div>
   </div>
 </div>
 
@@ -6755,8 +6905,8 @@ body::before { animation: ambientDrift 18s ease-in-out infinite; }
   <div class="checkin-modal">
     <div class="checkin-head">
       <div class="checkin-eyebrow">Weekly check-in</div>
-      <div class="checkin-title">Which dream felt most present this week?</div>
-      <div class="checkin-sub">Pick one if it helps you notice where your attention has been. This is for reflection, not streaks or scoring.</div>
+      <div class="checkin-title">Which dream kept hanging around this week?</div>
+      <div class="checkin-sub">Pick one if it helps you notice what kept surfacing. This is for reflection, not streaks, scoring, or catching up.</div>
     </div>
     <div class="checkin-list-note">You can also skip this entirely.</div>
     <div class="checkin-list" id="checkinList"></div>
@@ -7406,10 +7556,10 @@ function getAuthDisplayName(){
 
 function getTimeOfDayGreeting(){
   const theme=getUiTimeTheme();
-  if(theme==='morning') return 'Good morning';
-  if(theme==='evening') return 'Good evening';
-  if(theme==='night') return 'Good night';
-  return 'Good afternoon';
+  if(theme==='night') return 'You\'re up late';
+  if(theme==='morning') return 'Morning';
+  if(theme==='evening') return 'Evening';
+  return 'Back in COVE';
 }
 
 function getAuthWelcomeLine(prefix='Welcome'){
@@ -9629,105 +9779,40 @@ const STORAGE_CHAT_ENTRY_MAX_CHARS = 1800;
 const GUEST_PREVIEW_MS = 10 * 60 * 1000;
 
 const DAILY_PULSE_QUESTIONS = [
-  { category:'present', question:'What is the emotional weather inside you today?' },
-  { category:'dreams', question:'Which of your dreams felt most alive this week?' },
-  { category:'identity', question:'What belief about yourself are you ready to let go of?' },
-  { category:'present', question:'What are you avoiding thinking about right now?' },
-  { category:'dreams', question:'Which dream are you secretly avoiding and why?' },
-  { category:'identity', question:'What are you becoming that you have not named yet?' },
-  { category:'present', question:'What has your attention today that probably should not?' },
-  { category:'dreams', question:'If you did one thing today toward any dream, what would it be?' },
-  { category:'identity', question:'What pattern keeps showing up in your life that you have not addressed?' },
-  { category:'present', question:'What feels unfinished that is quietly taking up space?' },
-  { category:'dreams', question:'What dream are you starting to doubt and what is the doubt actually about?' },
-  { category:'identity', question:'Who do you want to be in 5 years and what does that person do differently today?' },
-  { category:'present', question:'On a scale of drifting to deliberate, where are you today?' },
-  { category:'dreams', question:'Which chapter of your life feels most neglected right now?' },
-  { category:'identity', question:'What version of yourself are you most afraid of becoming?' },
-  { category:'present', question:'What would you need to feel ten percent better today?' },
-  { category:'dreams', question:'What would the version of you who has achieved your dreams do differently today?' },
-  { category:'identity', question:'What are you tolerating that you should not be?' },
-  { category:'present', question:'What are you pretending is fine?' },
-  { category:'dreams', question:'What are you waiting for before you start moving on something?' },
-  { category:'identity', question:'What do you know about yourself now that you did not a year ago?' },
-  { category:'present', question:'What are you most resistant to doing today and why?' },
-  { category:'dreams', question:'Which dream has changed since you first wrote it down?' },
-  { category:'identity', question:'What are you pretending not to want because it feels too big?' },
-  { category:'present', question:'What does today need from you that you have not given it yet?' },
-  { category:'dreams', question:'What would you add to your dreams if you knew you could not fail?' },
-  { category:'identity', question:'What would you need to believe about yourself to pursue your hardest dream?' },
-  { category:'present', question:'What would you do today if no one was watching or judging?' },
-  { category:'dreams', question:'What dream are you pursuing for someone else more than yourself?' },
-  { category:'identity', question:'What part of your identity is holding you back from what you actually want?' },
-  { category:'present', question:'What feeling have you been pushing down this week?' },
-  { category:'dreams', question:'What is the smallest possible movement you could make on your hardest dream?' },
-  { category:'identity', question:'What are you outgrowing?' },
-  { category:'present', question:'What is the kindest thing you could do for yourself today?' },
-  { category:'dreams', question:'Which dream scares you the most and why?' },
-  { category:'identity', question:'What does the gap between who you are and who you want to be feel like right now?' },
-  { category:'present', question:'Where are you spending energy that is not returning anything?' },
-  { category:'dreams', question:'What does your most important dream need from you this month?' },
-  { category:'identity', question:'What would you do differently if you fully believed in yourself?' },
-  { category:'present', question:'What conversation are you putting off?' },
-  { category:'dreams', question:'If you could only keep three dreams which would they be and why?' },
-  { category:'identity', question:'What are you most proud of about who you are becoming?' },
-  { category:'present', question:'What would make today feel like it mattered?' },
-  { category:'dreams', question:'What dream would your 10-years-ago self be most surprised by?' },
-  { category:'identity', question:'What is the most honest sentence you could say about your life right now?' },
-  { category:'present', question:'What are you asking today to carry that belongs to this whole week?' },
-  { category:'dreams', question:'What dream keeps asking for courage you have not offered yet?' },
-  { category:'identity', question:'Where are you still performing a version of yourself you no longer trust?' },
-  { category:'present', question:'What part of today felt heavier than it should have?' },
-  { category:'dreams', question:'Which dream has become clearer because of what disappointed you?' },
-  { category:'identity', question:'What are you still trying to prove, and to whom?' },
-  { category:'present', question:'If you slowed down for five minutes, what feeling would catch up with you?' },
-  { category:'dreams', question:'What have you mistaken for preparation that is really avoidance?' },
-  { category:'identity', question:'What kind of person are your recent choices quietly shaping?' },
-  { category:'present', question:'What are you carrying today that is not fully yours?' },
-  { category:'dreams', question:'Which dream deserves more tenderness and less pressure from you?' },
-  { category:'identity', question:'What part of your self-story feels stale now?' },
-  { category:'present', question:'What are you hoping nobody asks you about today?' },
-  { category:'dreams', question:'What dream has been waiting for a smaller, truer version of effort?' },
-  { category:'identity', question:'What are you still using as an excuse to stay familiar?' },
-  { category:'present', question:'Where have you been saying yes while your body keeps saying no?' },
-  { category:'dreams', question:'If one dream actually worked out, what else in your life would have to change?' },
-  { category:'identity', question:'Who are you when you are not trying to be impressive?' },
-  { category:'present', question:'What keeps leaking into today from yesterday?' },
-  { category:'dreams', question:'What dream feels quiet right now, but still true?' },
-  { category:'identity', question:'What part of you wants a different standard than the one you inherited?' },
-  { category:'present', question:'What would today feel like if you stopped bracing for it?' },
-  { category:'dreams', question:'Which dream has enough clarity already and just needs a beginning?' },
-  { category:'identity', question:'What have you learned about yourself from what you keep returning to?' },
-  { category:'present', question:'What are you making harder than it needs to be today?' },
-  { category:'dreams', question:'What dream are you protecting by keeping it vague?' },
-  { category:'identity', question:'Where are you still waiting for permission from a life you have already outgrown?' },
-  { category:'present', question:'What truth is quietly asking for your attention today?' },
-  { category:'dreams', question:'What would it look like to take one dream seriously without making it your whole identity?' },
-  { category:'identity', question:'What would be left of you if the old coping version loosened its grip?' },
-  { category:'present', question:'What part of you feels underfed today?' },
-  { category:'dreams', question:'What dream keeps surviving your bad moods, busy weeks, and excuses?' },
-  { category:'identity', question:'What are you finally too tired to keep pretending about?' },
-  { category:'present', question:'What are you trying to outrun by staying busy?' },
-  { category:'dreams', question:'Which dream would change the texture of your days, not just your future?' },
-  { category:'identity', question:'What do you owe the person you say you are becoming?' },
-  { category:'present', question:'What would your day reveal if you stopped narrating it as fine?' },
-  { category:'dreams', question:'What dream deserves a decision more than another round of thinking?' },
-  { category:'identity', question:'Where are you stronger than the identity you still speak from?' },
-  { category:'present', question:'What has been quietly asking for rest instead of more discipline?' },
-  { category:'dreams', question:'What dream would feel more possible if you let it be imperfect?' },
-  { category:'identity', question:'What identity are you rehearsing that no longer feels like home?' },
-  { category:'present', question:'What would being honest about today force you to admit?' },
-  { category:'dreams', question:'Which dream has become more honest lately, even if less glamorous?' },
-  { category:'identity', question:'What are you ready to stop apologizing for wanting?' },
-  { category:'present', question:'What is one thing your inner life is asking you not to ignore tonight?' },
-  { category:'dreams', question:'What dream is asking for faith before it gives you proof?' },
-  { category:'identity', question:'What kind of honesty would change the way you see yourself this month?' }
+  { category:'identity', question:'What version of yourself are you living with right now?' },
+  { category:'present', question:'What are you avoiding naming, and does it actually need naming yet?' },
+  { category:'dreams', question:'Which dream still feels real even if you are not acting on it?' },
+  { category:'identity', question:'What do you keep implying about yourself that you are not sure you believe?' },
+  { category:'present', question:'What feels unfinished but not urgent?' },
+  { category:'dreams', question:'What dream are you half-avoiding because it would change things?' },
+  { category:'identity', question:'What belief about yourself is getting a lot of airtime lately?' },
+  { category:'present', question:'What is taking up space in your head that probably should not?' },
+  { category:'dreams', question:'What would you want if you stopped trying to make it sensible?' },
+  { category:'identity', question:'What are you still performing because it is familiar?' },
+  { category:'present', question:'What are you pretending is fine because it is easier?' },
+  { category:'dreams', question:'Which dream feels embarrassing in a way that makes it more honest?' },
+  { category:'identity', question:'What identity are you using that feels slightly outdated?' },
+  { category:'present', question:'Where are you saying yes while your body is already no?' },
+  { category:'dreams', question:'What dream keeps showing up when you are tired?' },
+  { category:'identity', question:'Who are you when nobody is assigning you a role?' },
+  { category:'present', question:'What would you rather not admit about today?' },
+  { category:'dreams', question:'What are you calling later that might actually be not yet?' },
+  { category:'identity', question:'What are you pretending not to want because it complicates the story?' },
+  { category:'present', question:'What has your attention that is probably just noise?' },
+  { category:'dreams', question:'What feels unresolved in your dream list, and can it stay unresolved for now?' },
+  { category:'identity', question:'What part of being you feels under-described?' },
+  { category:'present', question:'What would make today feel less like a performance?' },
+  { category:'dreams', question:'If this stays vague for another month, what does that protect?' },
+  { category:'identity', question:'What do you know about yourself that is still in draft form?' },
+  { category:'present', question:'What are you holding that is not fully yours?' },
+  { category:'dreams', question:'What would it mean if this dream is a preference, not a plan?' },
+  { category:'identity', question:'What part of your self-story feels borrowed?' }
 ];
 
 const DAILY_PULSE_STOP_WORDS = new Set([
   'a','about','actually','after','again','all','almost','also','am','an','and','any','are','as','at','be','because','been','before','being','but','by','can','could','did','do','does','doing','done','down','each','even','feel','feels','for','from','get','give','go','had','has','have','having','here','how','i','if','in','into','is','it','its','itself','just','kind','like','lot','made','make','maybe','me','more','most','much','my','no','not','now','of','off','on','one','only','or','other','our','out','over','probably','really','right','say','should','so','some','something','still','than','that','the','their','them','then','there','these','they','thing','this','those','through','to','today','too','up','very','want','was','way','week','what','when','where','which','who','why','will','with','would','you','your'
 ]);
-const DAILY_PULSE_CATEGORY_ORDER = ['present','dreams','identity'];
+const DAILY_PULSE_CATEGORY_ORDER = ['identity','present','dreams'];
 const DAILY_PULSE_BY_CATEGORY = DAILY_PULSE_QUESTIONS.reduce((acc,item,index)=>{
   if(!acc[item.category])acc[item.category]=[];
   acc[item.category].push({ ...item, index });
@@ -9743,7 +9828,7 @@ const DomainRegistry=(()=>{
     {key:'career',label:'Purpose & Work',emoji:'💼',weight:.18,color:'#9888C4',why:'Purpose and work are weighted heavily in COVE because many people organize identity, meaning, and time around them.'},
     {key:'freedom',label:'Financial Security',emoji:'💰',weight:.13,color:'#C8904A',why:'COVE includes financial security because money stress can constrain choice, safety, and room to act.'},
     {key:'creative',label:'Creative Expression',emoji:'🎨',weight:.10,color:'#A890CC',why:'Creative expression is included because many people feel flatter when they have no outlet for making, shaping, or expressing.'},
-    {key:'mind',label:'Growth & Learning',emoji:'🧠',weight:.07,color:'#4E7EA8',why:'Growth and learning stay on the map because curiosity and challenge often matter even when they are not urgent.'},
+    {key:'mind',label:'Self + Questions',emoji:'🧠',weight:.07,color:'#4E7EA8',why:'COVE keeps this lane for learning, identity drift, and the questions that do not neatly resolve into achievement.'},
     {key:'home',label:'Home & Belonging',emoji:'🏠',weight:.04,color:'#C4A87A',why:'Home and belonging are part of COVE because the spaces and communities around you affect how grounded life feels.'},
   ];
 
@@ -9759,23 +9844,23 @@ const DomainRegistry=(()=>{
 
   const seedMap={
     people:['Build a friendship circle that genuinely feels like chosen family','Be truly known, not just liked, by at least one person','Create a relationship where both people actively make each other better'],
-    growth:["Build a body I feel genuinely strong and at home in","Find a form of movement I actually enjoy enough to keep","Get to a place of real mental stability, not just coping"],
-    career:["Do work that would matter to me even if I wasn't paid for it","Build something of my own, even small and even slow","Be known for something I'm genuinely proud of"],
-    freedom:['Never lie awake worrying about rent or a bill again','Have enough financial room to say no to things that compromise my values','Build savings that give me actual options, not just security'],
-    creative:["Finish one creative project from beginning to a real ending","Share something I made and not immediately want to hide it","Build a creative practice that's just mine, and not for anyone else"],
-    mind:['Read deeply in a field I currently know nothing about','Learn something difficult enough to require real sustained effort','Develop a point of view I can actually defend'],
-    home:['Have a space that feels like it was built around how I actually live','Create a home people genuinely want to gather in','Design at least one room completely to my own taste, without compromise'],
+    growth:['What do you keep calling self-improvement that is really just pressure?','Where do you need less fixing?','What would rest change?'],
+    career:['Is this about work, identity, or relief?','What part of this job story feels borrowed?','What are you hoping the career will protect you from?'],
+    freedom:['What does enough feel like?','What are you trying to buy back?','What kind of freedom is this, really?'],
+    creative:['What are you making that feels alive, not impressive?','What are you avoiding finishing?','What form actually fits?'],
+    mind:['What are you still trying to understand about yourself?','What keeps refusing a neat answer?','What are you curious about without wanting it to become a goal?'],
+    home:['What would feel less staged in your space?','What are you tolerating at home?','What makes a place feel like yours?'],
   };
 
   const seedPrompts=[
-    "If fear wasn't a factor, what would you do?",
-    "What's been quietly calling you for years?",
-    "What might you want to look back on in 10 years?",
-    "What would more of your days look like, if you could choose?",
-    "What would your life feel like if nothing was holding you back?",
-    "What would you hope your life adds up to?",
-    "What's the version of your life that feels most like you?",
-    "Where does your current life feel most hollow?",
+    "Start messy. You can refine it later.",
+    "What are you circling without naming?",
+    "What feels true even if it is inconvenient?",
+    "What do you not want to decide yet?",
+    "Where is this unresolved on purpose?",
+    "What are you treating like a plan when it is mostly a feeling?",
+    "What would be okay to leave blurry for now?",
+    "What are you pretending is simple?",
   ];
 
   const suggestionMap={
@@ -9783,9 +9868,9 @@ const DomainRegistry=(()=>{
     creative:['What medium fits me?','How do I start?','Making time for this','Turn it into income'],
     mind:['Best learning path','How to go deeper','Academic vs self-taught','Make it a habit'],
     career:['Map my next 5 years','Skills I need','How to make the leap','Build or stay?'],
-    people:['What am I really seeking?','Remove the barriers','How to build community','The relationship I want'],
-    growth:['Start small','Mental blocks','Build the habit','Accountability plan'],
-    freedom:["Where do I start?","Reality check my timeline","Passive income ideas","What freedom actually costs"],
+    people:['What is the cost of being understood?','What kind of closeness is this?','What keeps repeating here?','What am I hoping for without naming it?'],
+      growth:['What do I keep calling self-improvement?','Where do I need less fixing?','What would rest change?','What am I not ready to call a problem?'],
+      freedom:["What does enough feel like?","What am I trying to buy back?","What kind of freedom is this?","What is the price I am not naming?"],
   };
 
   const matchesKeyword=(text,kw)=>{
@@ -9820,14 +9905,14 @@ const GAP_INSIGHTS={
   career:`You\'ve named what matters, and none of these touch <strong>Purpose & Work</strong>. Something worth noticing. What do you make of that?`,
   freedom:`These dreams point somewhere, and none of them are in <strong>Financial Security</strong>. Something worth noticing. What do you make of that?`,
   creative:`You\'ve put real wants on the page, and none of them touch <strong>Creative Expression</strong>. Something worth noticing. What do you make of that?`,
-  mind:`There\'s clear momentum here, and none of these touch <strong>Growth & Learning</strong>. Something worth noticing. What do you make of that?`,
+  mind:`There\'s clear momentum here, and none of these touch <strong>Self + Questions</strong>. Something worth noticing. What do you make of that?`,
   home:`You\'ve named a lot that matters, and none of these touch <strong>Home & Belonging</strong>. Something worth noticing. What do you make of that?`,
   people_identity:`You\'ve named several directions, and none of them touch <strong>Relationships</strong>. Something worth noticing. What do you make of that?`,
   growth_identity:`You\'ve named several directions, and none of them touch <strong>Health & Wellbeing</strong>. Something worth noticing. What do you make of that?`,
   career_identity:`You\'ve named several directions, and none of them touch <strong>Purpose & Work</strong>. Something worth noticing. What do you make of that?`,
   freedom_identity:`You\'ve named several directions, and none of them touch <strong>Financial Security</strong>. Something worth noticing. What do you make of that?`,
   creative_identity:`You\'ve named several directions, and none of them touch <strong>Creative Expression</strong>. Something worth noticing. What do you make of that?`,
-  mind_identity:`You\'ve named several directions, and none of them touch <strong>Growth & Learning</strong>. Something worth noticing. What do you make of that?`,
+  mind_identity:`You\'ve named several directions, and none of them touch <strong>Self + Questions</strong>. Something worth noticing. What do you make of that?`,
   home_identity:`You\'ve named several directions, and none of them touch <strong>Home & Belonging</strong>. Something worth noticing. What do you make of that?`,
 };
 
@@ -10286,6 +10371,8 @@ function normalizeDreamEntry(d){
     createdAt:String(base.createdAt||base.updatedAt||new Date().toISOString()),
     updatedAt:String(base.updatedAt||base.createdAt||new Date().toISOString()),
     statusUpdatedAt:String(base.statusUpdatedAt||''),
+    statusLabelCustom:trimText(base.statusLabelCustom||'',20),
+    statusLabelCustomUpdatedAt:String(base.statusLabelCustomUpdatedAt||''),
     attachments,
     dashboardNote:String(base.dashboardNote||''),
     dashboardNoteTitle:String(base.dashboardNoteTitle||''),
@@ -10293,6 +10380,20 @@ function normalizeDreamEntry(d){
     savedNotes,
     woop:normalizeWoopState(base.woop)
   };
+}
+
+function getPhenomenologicalStatusLabel(status='dreaming', customLabel=''){
+  const custom=trimText(customLabel||'',20);
+  if(custom)return custom;
+  return ({dreaming:'alive',active:'moving',done:'landed'}[String(status||'dreaming')]||'alive');
+}
+
+function getStatusLabelMeta(status='dreaming'){
+  return ({
+    dreaming:{label:'alive',desc:'still taking shape'},
+    active:{label:'moving',desc:'has momentum now'},
+    done:{label:'landed',desc:'feels settled for now'}
+  }[String(status||'dreaming')]||{label:'alive',desc:'still taking shape'});
 }
 
 // ── NEW: Ambient Dream Stream ──
@@ -12443,16 +12544,16 @@ function showOnboarding(){
 }
 
 const ASPIRATIONAL_SEED_CHIPS = [
-  {label:'Write a novel',value:'Write a novel someday'},
-  {label:'Feel financially free',value:'Feel financially free'},
-  {label:'Build a company',value:'Build a company'},
-  {label:'Find my people',value:'Find my people'},
-  {label:'Feel at home in my body',value:'Feel at home in my body'}
+  {label:'Career or relief?',value:'I cannot tell if I want this career or just want to stop feeling behind'},
+  {label:'Stability, maybe',value:'I keep saying I want stability, but I also want more room'},
+  {label:'Known, not exposed',value:'I want to be known, but only in ways that feel safe'},
+  {label:'Dream or coping?',value:'I am not sure if this is a dream or just a coping strategy'},
+  {label:'Bigger, quieter',value:'I want something bigger, and I also want less noise'}
 ];
 const CONFESSIONAL_SEED_CHIPS = [
-  {id:'gave-up',label:'A dream I gave up on',value:'A dream I gave up on'},
-  {id:'embarrassing',label:'Something I want that feels embarrassing',value:'Something I want that feels embarrassing'},
-  {id:'unwatched',label:'What I\'d want if no one was watching',value:'What I\'d want if no one was watching'}
+  {id:'gave-up',label:'I keep pretending I am over this',value:'I keep pretending I am over this'},
+  {id:'embarrassing',label:'This feels embarrassing but true',value:'This feels embarrassing but true'},
+  {id:'unwatched',label:'What I would admit if nobody was watching',value:'What I would admit if nobody was watching'}
 ];
 let seedIdx=Math.floor(Math.random()*DomainRegistry.seedPrompts.length);
 let seedPlaceholderLockedByConfessional=false;
@@ -12523,7 +12624,7 @@ function getFeltProgressLine(){
   if(getDaysSinceFirstSession()<2)return '';
   const moved=getMovedDreamsSinceStartCount();
   if(moved<1)return '';
-  return `${moved} of your dreams have moved since you started.`;
+  return 'Some of your dreams have shifted since you started.';
 }
 function pickNextConfessionalSeed(){
   const usedSet=new Set(confessionalSeedUsedOrder);
@@ -12635,25 +12736,14 @@ function getNightReturnGreetingLine(){
   const nightKey=getNightVisitKey();
   const lastShown=String(safeLocalStorageGet(STORAGE_KEY_NIGHT_GREETING_SEEN,'')||'').trim();
   if(lastShown===nightKey)return '';
-  const variants=[
-    'You\'re here late.',
-    'Late is a good time for this.',
-    'This hour can make things clearer.',
-    'Quiet hours can hold honest things.'
-  ];
-  const line=variants[Math.floor(Math.random()*variants.length)]||variants[0];
+  const line='You\'re up late. Whatever\'s on your mind, it\'s safe here.';
   safeLocalStorageSet(STORAGE_KEY_NIGHT_GREETING_SEEN,nightKey);
   return line;
 }
 
 function getNightDreamboxOpenerClause(){
   if(!isNightVisitWindow())return '';
-  const variants=[
-    'Late can be a reflective hour. ',
-    'The hour is quiet, which can help. ',
-    'Night can make some things easier to name. '
-  ];
-  return variants[Math.floor(Math.random()*variants.length)]||variants[0];
+  return 'You\'re up late. Whatever\'s on your mind, it\'s safe here. ';
 }
 
 function buildReturnGreeting(){
@@ -12667,8 +12757,9 @@ function buildReturnGreeting(){
   const hl=document.getElementById('rgHeadline');
   const sub=document.getElementById('rgSub');
   const displayName=getAuthDisplayName();
-  const timeGreeting=getTimeOfDayGreeting();
-  const welcomeLead=displayName ? `${timeGreeting}, ${displayName}.` : `${timeGreeting}.`;
+  const welcomeLead=isNightVisitWindow()
+    ? (displayName ? `You\'re up late, ${displayName}.` : 'You\'re up late.')
+    : (displayName ? `Back in COVE, ${displayName}.` : 'Back in COVE.');
   const groups=groupedDreams();
   const primaryGap=getPrimaryMissingDomain(groups);
   const feltProgressLine=getFeltProgressLine();
@@ -12676,7 +12767,7 @@ function buildReturnGreeting(){
   if(daysSince<1){
     if(!nightLine)return;
     hl.textContent=welcomeLead;
-    sub.textContent=[`You\'ve got ${dreams.length} dreams on the page already.`,nightLine].filter(Boolean).join(' ');
+    sub.textContent=nightLine;
     rg.style.display='block';
     return;
   }
@@ -12684,7 +12775,7 @@ function buildReturnGreeting(){
   if(daysSinceFirst===2){
     const mostRecent=dreams[0]?.text||'that dream';
     hl.textContent=welcomeLead;
-    sub.textContent=[`Yesterday you wrote ${mostRecent}. How does that feel today?`,feltProgressLine,nightLine].filter(Boolean).join(' ');
+    sub.textContent=[`Yesterday you wrote ${mostRecent}. How does that sit today?`,feltProgressLine,nightLine].filter(Boolean).join(' ');
     rg.style.display='block';
     return;
   }
@@ -12704,7 +12795,7 @@ function buildReturnGreeting(){
       const firstMs=new Date(firstSessionAt||0).getTime()||0;
       const addedSince=firstMs?dreams.filter(d=>new Date(d?.createdAt||0).getTime()>firstMs).length:0;
       hl.textContent=welcomeLead;
-      sub.textContent=[`A week ago you wrote ${snippet||'a hard honest pulse'}. You\'ve added ${addedSince} dreams since then.`,feltProgressLine,nightLine].filter(Boolean).join(' ');
+      sub.textContent=[`A week ago you wrote ${snippet||'a hard honest pulse'}.`,feltProgressLine,nightLine].filter(Boolean).join(' ');
       rg.style.display='block';
       return;
     }
@@ -12712,13 +12803,13 @@ function buildReturnGreeting(){
 
   if(daysSince>=1){
     hl.textContent=welcomeLead;
-    sub.textContent=[`You\'ve got ${dreams.length} dreams in motion already. There\'s room to keep shaping them in your own way.`,feltProgressLine,nightLine].filter(Boolean).join(' ');
+    sub.textContent=['Everything you left here is still here.',feltProgressLine,nightLine].filter(Boolean).join(' ');
     rg.style.display='block';
   }
 }
 
 function getPersonalizedHeaderCopy(){
-  const defaultSub="Bring any vision here, whether it is half-formed, enormous, quiet, or impossible. We'll help you understand it and build toward it.";
+  const defaultSub="Start messy. You can refine it later. Bring whatever is half-formed, contradictory, or a little embarrassing. COVE will not pretend that ambiguity is a problem to solve.";
   if(!dreams.length){
     return { h1Line1:'What does your', h1Chrome:'life feel like?', hSub:defaultSub };
   }
@@ -13653,7 +13744,7 @@ function getPulseMostCommonCategory(){
     ? 'You most often answer from where today actually hurts, pulls, or asks something of you.'
     : best[0]==='dreams'
       ? 'You most often answer in relation to where your life is trying to move next.'
-      : 'You most often answer from the deeper question of who you are becoming.';
+      : 'You most often answer from the ongoing question of who you are, not just what you are doing.';
 }
 
 function getPulseHeatmapDays(total=90){
@@ -13700,17 +13791,17 @@ async function maybeRunMilestoneEvents(){
   const hasCapsule=hasLifeCapsule();
 
   if(days>=30&&safeLocalStorageGet(STORAGE_KEY_MILESTONE_DAY30_SHOWN,'0')!=='1'&&hasCapsule){
-    showMilestoneBanner('Your 30-day capsule is ready to open.','Open now','maybePromptCapsuleReveal(true)');
+    showMilestoneBanner('A month has passed. If you want, there is a note waiting for you.','Open now','maybePromptCapsuleReveal(true)');
     safeLocalStorageSet(STORAGE_KEY_MILESTONE_DAY30_SHOWN,'1');
   }else if(days>=30&&safeLocalStorageGet(STORAGE_KEY_MILESTONE_DAY30_NO_CAPSULE_SHOWN,'0')!=='1'&&!hasCapsule){
-    showMilestoneBanner('30 days in. Want to leave a note for yourself to read at 60?','Create capsule','openCapsuleCreationFlow()');
+    showMilestoneBanner('A month in. Want to leave yourself a note for later?','Create capsule','openCapsuleCreationFlow()');
     safeLocalStorageSet(STORAGE_KEY_MILESTONE_DAY30_NO_CAPSULE_SHOWN,'1');
   }
 
   if(days>=90&&safeLocalStorageGet(STORAGE_KEY_MILESTONE_DAY90_SHOWN,'0')!=='1'){
     maybePromptCapsuleReveal(true);
     if(safeLocalStorageGet(STORAGE_KEY_THREE_MONTH_SYNTH_SEEN,'0')!=='1'&&dreams.length>=3){
-      showMilestoneBanner('3 months in. You have stayed in relationship with your dreams.','Continue','this.closest("#milestoneBanner")?.remove()');
+      showMilestoneBanner('A few months in. Your drafts are still here if you want to revisit them.','Continue','this.closest("#milestoneBanner")?.remove()');
       safeLocalStorageSet(STORAGE_KEY_THREE_MONTH_SYNTH_SEEN,'1');
     }
     safeLocalStorageSet(STORAGE_KEY_MILESTONE_DAY90_SHOWN,'1');
@@ -13726,7 +13817,7 @@ async function maybeRunMilestoneEvents(){
       const raw=await callClaude('Write one sentence (max 20 words) about this dream map pattern. Observation only, no advice.',`Domains touched: ${touched}\nDreams done: ${movedDone}\nTotal dreams: ${dreams.length}`);
       aiLine=trimText(raw||aiLine,180)||aiLine;
     }catch(_){ }
-    showMilestoneBanner(`Your year so far: ${touched} life areas touched, ${movedDone} dreams moved to done. ${aiLine}`,'Close','this.closest("#milestoneBanner")?.remove()');
+    showMilestoneBanner(`Half a year in. ${aiLine}`,'Close','this.closest("#milestoneBanner")?.remove()');
     safeLocalStorageSet(STORAGE_KEY_MILESTONE_DAY180_SHOWN,'1');
   }
 }
@@ -14302,7 +14393,8 @@ function renderRecommendations(){
 /** Builds the HTML string for a single dream row inside a chapter card. */
 function buildDreamRowHTML(d,dom,now){
   const st=d.status||'dreaming';
-  const stLabel={dreaming:'Dreaming',active:'In progress',done:'Achieved'}[st]||'Dreaming';
+  const statusMeta=getStatusLabelMeta(st);
+  const stLabel=getPhenomenologicalStatusLabel(st,d.statusLabelCustom);
   const hLabel=d.targetDate?formatHorizonDate(d):getHorizonLabel(d.horizon);
   const showNA=st==='active'||st==='done';
   const age=(now-new Date(d.createdAt).getTime())/(1000*60*60*24);
@@ -14336,15 +14428,18 @@ function buildDreamRowHTML(d,dom,now){
                 <div class="cdr-status-pop" id="sp-${d.id}">
                   <div class="cdr-pop-opt ${st==='dreaming'?'selected':''}" onclick="setStatus('${d.id}','dreaming')">
                     <span class="cdr-pop-dot dot-dreaming"></span>
-                    <div><div class="cdr-pop-label">Dreaming</div><div class="cdr-pop-desc">Still an aspiration</div></div>
+                    <div><div class="cdr-pop-label">Alive</div><div class="cdr-pop-desc">Still taking shape</div></div>
                   </div>
                   <div class="cdr-pop-opt ${st==='active'?'selected':''}" onclick="setStatus('${d.id}','active')">
                     <span class="cdr-pop-dot dot-active"></span>
-                    <div><div class="cdr-pop-label">In progress</div><div class="cdr-pop-desc">Actively working on this</div></div>
+                    <div><div class="cdr-pop-label">Moving</div><div class="cdr-pop-desc">Has momentum now</div></div>
                   </div>
                   <div class="cdr-pop-opt ${st==='done'?'selected':''}" onclick="setStatus('${d.id}','done')">
                     <span class="cdr-pop-dot dot-done"></span>
-                    <div><div class="cdr-pop-label">Achieved</div><div class="cdr-pop-desc">This one is real now</div></div>
+                    <div><div class="cdr-pop-label">Landed</div><div class="cdr-pop-desc">Feels settled for now</div></div>
+                  </div>
+                  <div class="cdr-status-custom-wrap">
+                    <input class="cdr-status-custom" maxlength="20" placeholder="how does this feel right now?" value="${esc(d.statusLabelCustom||'')}" oninput="setDreamStatusLabel('${d.id}', this.value)">
                   </div>
                 </div>
               </div>
@@ -14397,7 +14492,7 @@ function buildDreamRowHTML(d,dom,now){
 
 function buildDreamCardHTML(d,dom,now,delay=0){
   const st=d.status||'dreaming';
-  const stLabel={dreaming:'Dreaming',active:'In progress',done:'Achieved'}[st]||'Dreaming';
+  const stLabel=getPhenomenologicalStatusLabel(st,d.statusLabelCustom);
   const horizonLabel=d.targetDate?formatHorizonDate(d):getHorizonLabel(d.horizon);
   const age=(now-new Date(d.createdAt).getTime())/(1000*60*60*24);
   const isStale=age>30&&st==='dreaming';
@@ -14423,15 +14518,18 @@ function buildDreamCardHTML(d,dom,now,delay=0){
             <div class="cdr-status-pop" id="sp-${d.id}">
               <div class="cdr-pop-opt ${st==='dreaming'?'selected':''}" onclick="setStatus('${d.id}','dreaming')">
                 <span class="cdr-pop-dot dot-dreaming"></span>
-                <div><div class="cdr-pop-label">Dreaming</div><div class="cdr-pop-desc">Still an aspiration</div></div>
+                <div><div class="cdr-pop-label">Alive</div><div class="cdr-pop-desc">Still taking shape</div></div>
               </div>
               <div class="cdr-pop-opt ${st==='active'?'selected':''}" onclick="setStatus('${d.id}','active')">
                 <span class="cdr-pop-dot dot-active"></span>
-                <div><div class="cdr-pop-label">In progress</div><div class="cdr-pop-desc">Actively working on this</div></div>
+                <div><div class="cdr-pop-label">Moving</div><div class="cdr-pop-desc">Has momentum now</div></div>
               </div>
               <div class="cdr-pop-opt ${st==='done'?'selected':''}" onclick="setStatus('${d.id}','done')">
                 <span class="cdr-pop-dot dot-done"></span>
-                <div><div class="cdr-pop-label">Achieved</div><div class="cdr-pop-desc">This one is real now</div></div>
+                <div><div class="cdr-pop-label">Landed</div><div class="cdr-pop-desc">Feels settled for now</div></div>
+              </div>
+              <div class="cdr-status-custom-wrap">
+                <input class="cdr-status-custom" maxlength="20" placeholder="how does this feel right now?" value="${esc(d.statusLabelCustom||'')}" oninput="setDreamStatusLabel('${d.id}', this.value)">
               </div>
             </div>
           </div>
@@ -15049,7 +15147,7 @@ function renderDreamDashboard(){
     return;
   }
   const dom=DomainRegistry.get(dream.domain);
-  const statusLabel={dreaming:'Dreaming',active:'In progress',done:'Achieved'}[dream.status||'dreaming']||'Dreaming';
+  const statusLabel=getPhenomenologicalStatusLabel(dream.status||'dreaming',dream.statusLabelCustom);
   const dreamAddedStamp=dream.createdAt?new Date(dream.createdAt).toLocaleString('en-US',{month:'short',day:'numeric',year:'numeric',hour:'numeric',minute:'2-digit'}):'';
   const attachments=getDreamDashboardAttachments(dream);
   const savedNotes=Array.isArray(dream.savedNotes)?[...dream.savedNotes].sort((a,b)=>new Date(b.savedAt||0)-new Date(a.savedAt||0)):[];
@@ -16184,6 +16282,13 @@ function setStatus(id,newStatus){
   if(newStatus==='done'&&prevStatus!=='done'&&updated)showAchieved(updated.text);
 }
 
+function setDreamStatusLabel(id,value){
+  const nextLabel=trimText(value||'',20);
+  updateDreamEntry(id,{statusLabelCustom:nextLabel,statusLabelCustomUpdatedAt:nextLabel?new Date().toISOString():'',updatedAt:new Date().toISOString()});
+  const btn=document.getElementById(`status-${id}`);
+  if(btn)btn.textContent=`${getPhenomenologicalStatusLabel(dreams.find(x=>x.id===id)?.status||'dreaming',nextLabel)} ▾`;
+}
+
 function toggleHorizonPop(id,event){
   const wrap=document.getElementById(`hw-${id}`);
   const btn=document.getElementById(`horizon-${id}`);
@@ -16340,7 +16445,7 @@ async function expandDream(){
   const btn=document.getElementById('expandBtn');btn.textContent='…';btn.disabled=true;
   inp.disabled=true;
   try{
-    const r=await callClaude('This tool is for reflection and general assistance only. Expand this half-formed life dream into a richer, more vivid version in 1-2 sentences. Stay true to their voice and intent. Present as a possible expansion, not definitive. Frame insights as possibilities, not certainties. Return ONLY the expanded text.',t);
+    const r=await callClaude('This tool is for reflection and general assistance only. Expand this half-formed life dream into a richer, more vivid version in 1-2 sentences. Stay true to their voice and intent. Present it as a possible continuation, not a verdict. Leave room for ambiguity. Return ONLY the expanded text.',t);
     if(r.trim())inp.value=r.trim();
   }catch{}
   finally{
@@ -17120,7 +17225,7 @@ async function exploreImageInsight(){
   if(!btn||!resultEl)return;
   btn.disabled=true;btn.textContent='Thinking…';
   try{
-    const prompt=`You are a reflective assistant. This tool is for reflection and general assistance only, not professional advice. Expand on this image insight and ask one thoughtful follow-up question. Frame suggestions as options. Frame insights as possibilities, not certainties.`;
+    const prompt=`You are a reflective assistant. This tool is for reflection and general assistance only, not professional advice. Expand on this image insight and ask one thoughtful follow-up question. Frame suggestions as options. Frame insights as possibilities, not certainties. Leave room for what is still unclear.`;
     const raw=await callClaude(prompt,`Title: ${currentImageScan.result.title}\nDescription: ${currentImageScan.result.description}\nHidden desire: ${currentImageScan.result.hiddenDesire}\nTension: ${currentImageScan.result.tension}\nAction hint: ${currentImageScan.result.actionHint}`);
     resultEl.style.display='block';
     resultEl.textContent=raw.trim();
@@ -17210,7 +17315,7 @@ async function openDiscover(dk){
   const existingDreams=dreams.filter(d=>d.domain===dk).map(d=>`"${d.text}"`).join(', ');
   try{
     const raw=await callClaude(
-      `This tool is for reflection and general assistance only. Generate 6 specific, personal, evocative life dreams for the "${dom.label}" chapter. Each should feel like something a real person would genuinely want in real life, not motivational poster content. First-person voice, one sentence each.${existingDreams?` The user already has: ${existingDreams}. Generate complementary dreams that don't overlap.`:''} Frame insights as possibilities, not certainties. Return ONLY a valid JSON array of 6 strings.`,
+      `This tool is for reflection and general assistance only. Generate 6 specific, personal, evocative life dreams for the "${dom.label}" chapter. Each should feel like something a real person would genuinely want in real life, not motivational poster content. First-person voice, one sentence each.${existingDreams?` The user already has: ${existingDreams}. Generate complementary dreams that don't overlap.`:''} Keep the tone honest and open-ended. Do not force a clean conclusion or pretend uncertainty is a problem. Return ONLY a valid JSON array of 6 strings.`,
       `Research context: ${dom.why}`
     );
     let items;
@@ -17385,7 +17490,7 @@ ETHICAL CONSTRAINTS:
           `Current ${dom.label} dreams:\n${dl}${checkinNote}${memoryNote}`
         )
       : await callClaude(
-          `You are a warm, grounded reflective assistant inside COVE. This tool is for reflection and general assistance only, not professional advice. Research context: ${dom.why}\n\nWrite a brief opening (2-3 short paragraphs, plain text):\n1) Name a possible deeper desire beneath their dreams, not just what they want, but what having it might mean\n2) Surface one potential tension, whether practical or identity-based\n3) If useful, gently invite them to question their first framing by asking what they might be leaving out or what someone who loves them but disagrees might notice\n4) End with ONE short, specific question that opens the conversation\n\nNo headers. Be direct, warm, a little unexpected. Speak to them directly. Frame as possibilities, encourage critical thinking. Frame insights as possibilities, not certainties.`,
+          `You are a warm, grounded reflective assistant inside COVE. This tool is for reflection and general assistance only, not professional advice. Research context: ${dom.why}\n\nWrite a brief opening (2-3 short paragraphs, plain text):\n1) Name a possible deeper desire beneath their dreams, not just what they want, but what having it might mean\n2) Surface one potential tension, whether practical or identity-based\n3) If useful, gently name what remains unresolved or what they may be trying not to rush into a conclusion about\n4) End with ONE short, specific question that opens the conversation\n\nNo headers. Be direct, warm, a little unexpected. Speak to them directly. Treat ambivalence as valid. Frame insights as possibilities, not certainties.`,
           `Their ${dom.label} dreams:\n${dl}${checkinNote}`
         );
     const cleaned=String(raw||'').trim();
@@ -17431,7 +17536,7 @@ function buildThinking(){
   w.appendChild(av);w.appendChild(b);return w;
 }
 function buildSuggestions(dk){
-  const pills=DomainRegistry.get(dk).suggestions||["Tell me more","What's first?","Reality check","What would someone who loves me disagree with?","Make a plan"];
+  const pills=DomainRegistry.get(dk).suggestions||["What feels unresolved?","What are you not saying yet?","What part is real?","What are you trying not to decide?","What can stay blurry?"];
   const w=document.createElement('div');w.className='suggestions';
   for(const p of pills){
     const btn=document.createElement('button');btn.className='suggest-pill';btn.textContent=p;
@@ -17457,7 +17562,7 @@ async function sendModalMessage(){
   const history=chatHistories[currentCategory].map(m=>({role:m.role==='ai'?'assistant':'user',content:m.content}));
   try{
     const raw=await callClaudeConvo(
-      `You are a warm, insightful reflective assistant inside COVE. This tool is for reflection and general assistance only, not professional advice. User is in their "${dom.label}" Dreambox. Current focus dream: ${selectedDream?`"${selectedDream.text}"`:'none selected'}. Dreams:\n${dl}\n\nBe direct, specific, genuinely helpful. Frame suggestions as options. Frame insights as possibilities, not certainties. Do not only mirror the user's current framing. When useful, gently ask what they may be leaving out or what someone who loves them but disagrees might notice. At most one follow-up question. 1-3 paragraphs.`,
+      `You are a warm, insightful reflective assistant inside COVE. This tool is for reflection and general assistance only, not professional advice. User is in their "${dom.label}" Dreambox. Current focus dream: ${selectedDream?`"${selectedDream.text}"`:'none selected'}. Dreams:\n${dl}\n\nBe direct, specific, genuinely helpful. Frame suggestions as options. Frame insights as possibilities, not certainties. Do not only mirror the user's current framing. When useful, gently ask what they may be leaving out, what they may be avoiding resolving, or what someone who loves them but disagrees might notice. At most one follow-up question. 1-3 paragraphs.`,
       history
     );
     th.remove();chatHistories[currentCategory].push({role:'ai',content:raw});
