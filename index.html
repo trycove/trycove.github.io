@@ -17368,7 +17368,12 @@ function fileToDataUrl(file){
     const reader=new FileReader();
     reader.onload=()=>{
       const rawUrl=String(reader.result||'');
-      if(!String(file?.type||'').startsWith('image/')){
+      const fileType=String(file?.type||'').toLowerCase();
+      if(!fileType.startsWith('image/')){
+        resolve(rawUrl);
+        return;
+      }
+      if(fileType==='image/gif'){
         resolve(rawUrl);
         return;
       }
@@ -17386,11 +17391,13 @@ function fileToDataUrl(file){
           resolve(rawUrl);
           return;
         }
-        ctx.fillStyle='#fff';
-        ctx.fillRect(0,0,width,height);
         ctx.drawImage(img,0,0,width,height);
         try{
-          const optimized=canvas.toDataURL('image/jpeg',0.74);
+          const outputType=fileType==='image/png'?'image/png':(fileType==='image/webp'?'image/webp':'image/jpeg');
+          const outputQuality=outputType==='image/jpeg'||outputType==='image/webp'?0.9:undefined;
+          const optimized=outputQuality===undefined
+            ? canvas.toDataURL(outputType)
+            : canvas.toDataURL(outputType,outputQuality);
           resolve(optimized.length<rawUrl.length?optimized:rawUrl);
         }catch{
           resolve(rawUrl);
